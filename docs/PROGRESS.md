@@ -4,7 +4,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 
 | Phase | Name | Status |
 |---|---|---|
-| 0 | Setup: scaffold, git, GitHub, Vercel | 🟡 In progress |
+| 0 | Setup: scaffold, git, GitHub, Vercel | ✅ Done (19 Oct 2026) |
 | 1 | The look (demo data only) | ⬜ Not started |
 | 2 | Database + login + daily check-in | ⬜ Not started |
 | 3 | Real dashboard | ⬜ Not started |
@@ -25,7 +25,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] `.env.example` created
 - [x] `docs/PROGRESS.md` created
 - [x] Placeholder home page says "Winter Arc Dashboard"
-- [ ] Pushed to GitHub (watyasir/winter-arc-dashboard)
-- [ ] Deployed on Vercel, live link works
+- [x] Pushed to GitHub (watyasir/winter-arc-dashboard)
+- [x] Deployed on Vercel, live link works: https://winter-arc-dashboard-drab.vercel.app
 
 **Next up:** Phase 1, the look.
