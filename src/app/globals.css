@@ -1,24 +1,87 @@
 @import "tailwindcss";
 
-/* Light theme only. Catppuccin Latte basics; the full token set arrives in Phase 1 (docs/DESIGN.md). */
-:root {
-  --background: #dce0e8; /* crust */
-  --surface: #eff1f5;    /* base */
-  --foreground: #4c4f69; /* text */
-  --muted: #6c6f85;      /* subtext0 */
+/*
+  Design tokens. Light theme only. Catppuccin Latte palette (MIT), see docs/DESIGN.md §2.
+  Every colour and font lives here. Components use the Tailwind classes these create
+  (bg-base, text-subtext1, stroke-blue, ...) and never a raw hex value.
+*/
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-transparent: transparent;
+
+  /* Surfaces and text */
+  --color-crust: #dce0e8;
+  --color-mantle: #e6e9ef;
+  --color-base: #eff1f5;
+  --color-surface0: #ccd0da;
+  --color-surface1: #bcc0cc;
+  --color-overlay0: #9ca0b0;
+  --color-overlay1: #8c8fa1;
+  --color-subtext1: #5c5f77;
+  --color-text: #4c4f69;
+  --color-fill: rgba(140, 143, 161, 0.16);
+  --color-fill-strong: rgba(140, 143, 161, 0.26);
+
+  /* Colours with one meaning each. "-text" = text-safe variant for small text on base. */
+  --color-blue: #2a6ef5;
+  --color-blue-text: #1f5bd8;
+  --color-blue-hover: #1747b0;
+  --color-green: #40a02b;
+  --color-green-text: #2e7a1e;
+  --color-green-light: #a6d79a;
+  --color-peach: #fe640b;
+  --color-peach-text: #b8460b;
+  --color-red: #d20f39;
+  --color-red-text: #b00d30;
+  --color-mauve: #8839ef;
+  --color-mauve-text: #7029d0;
+  --color-pink: #ec83d0;
+  --color-pink-text: #a3218e;
+  --color-teal: #179299;
+  --color-yellow: #e49320;
+  --color-sky: #04a5e5;
+  --color-sapphire: #209fb5;
+  --color-lavender: #7287fd;
+
+  /* Type */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  --font-rounded: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --animate-indeterminate: indeterminate 1.4s ease-in-out infinite;
+
+  @keyframes indeterminate {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(250%);
+    }
+  }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-surface: var(--surface);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html {
+  background: var(--color-crust);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  margin: 0;
+  background: var(--color-crust);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Visible focus on every button, link and input (DESIGN.md §5). */
+:where(button, a, input, [role="switch"]):focus-visible {
+  outline: 2px solid var(--color-blue-text);
+  outline-offset: 2px;
+}
+
+a {
+  color: var(--color-blue-text);
+}
+a:hover {
+  color: var(--color-blue-hover);
 }

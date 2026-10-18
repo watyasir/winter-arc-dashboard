@@ -33,3 +33,21 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **What Yasir had to do himself:** install Node.js, approve the GitHub CLI login (device code), approve the Vercel GitHub app (this repo only). GitHub profile set to private.
 **Screenshot to take:** the live placeholder page next to the GitHub repo.
 **Next:** Phase 1, the look (demo data only).
+
+## Session 3 — 19 Oct 2026 — Phase 1: The look
+**Goal:** The full dashboard, visually finished, on fake data at `/demo`.
+**What I asked Claude Code to do:** "Do Phase 1 from docs/BUILD_PLAN.md": build the Catppuccin Latte tokens and rebuild the design mockups as a real dashboard at /demo.
+**What got built:**
+- All colours and fonts as tokens in one file; components only use token names, never raw colours.
+- Small shared pieces (cards, rounded-square checkboxes, chips, switches, sparklines, progress bars).
+- A tile registry: every Overview tile is one line in `src/modules/registry.ts`, so new modules plug in without touching the layout.
+- `/demo`: sidebar with rainbow folders and a trackers tree, header card with the dashed rule, Overview (season strip, stats, Today, Inbox preview, Money, Weight chart, Goals, Habits, In progress), plus Inbox, Board and Instinct views. Today's checklist, mailboxes, switches and the Instinct pill all work on fake data.
+- The home page now links to the demo.
+**What broke and how we fixed it:**
+- On a phone the 30-per-row season strip turned into tiny dots, so phones show 15 per row (6 rows).
+- The weight chart's labels shrank below 11px on a phone; they now scale up on small screens.
+- An empty status slot in the header pushed the search box sideways on a phone; it now hides when empty.
+- Switching views kept the old scroll position; views now open at the top.
+**What Yasir had to do himself:** nothing.
+**Screenshot to take:** `/demo` Overview on a laptop, and the Instinct view with the status pill showing (click "Send to Instinct").
+**Next:** Phase 2: Supabase, login, and the daily check-in at `/log` (including the phone check-in sheet from the design).
