@@ -48,6 +48,8 @@ export interface Account {
 
 export interface DashboardData {
   ownerLine: string;
+  /** Where "Log Today" goes: /demo/log on the demo, /log for real. */
+  logHref: string;
   views: Record<ViewId, { title: string; subtitle: string }>;
   navBadges: Partial<Record<ViewId, string>>;
   trackers: { label: string; done: boolean; value: string }[];

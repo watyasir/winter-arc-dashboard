@@ -1,12 +1,23 @@
-/** iOS-style switch row: the whole row toggles. Green when on. */
-export function SwitchRow({ label, on, onToggle }: { label: string; on: boolean; onToggle: () => void }) {
+/** iOS-style switch row: the whole row toggles. Sage when on. */
+export function SwitchRow({
+  label,
+  on,
+  onToggle,
+  large,
+}: {
+  label: string;
+  on: boolean;
+  onToggle: () => void;
+  /** Phone check-in size: 52px row, 17px text. */
+  large?: boolean;
+}) {
   return (
     <button
       type="button"
       role="switch"
       aria-checked={on}
       onClick={onToggle}
-      className="flex min-h-11 w-full cursor-pointer items-center justify-between border-0 border-t border-solid border-sep bg-transparent p-0 text-left text-sm text-ink"
+      className={`flex w-full cursor-pointer items-center justify-between border-0 border-t border-solid border-sep bg-transparent p-0 text-left text-ink ${large ? "min-h-[52px] text-[17px]" : "min-h-11 text-sm"}`}
     >
       <span>{label}</span>
       <span

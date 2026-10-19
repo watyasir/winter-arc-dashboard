@@ -1,24 +1,14 @@
 "use client";
 
-import { Button } from "@/components/Button";
+import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { useDashboard } from "./DashboardContext";
 import { InstinctPill } from "./InstinctPill";
 
 /** Page header card with the dashed bottom rule. */
 export function Header() {
-  const { data, view, setView } = useDashboard();
+  const { data, view } = useDashboard();
   const { title, subtitle } = data.views[view];
-
-  // Demo: "Log Today" jumps to the Today checklist. The real check-in (/log) arrives in Phase 2.
-  const logToday = () => {
-    setView("overview");
-    requestAnimationFrame(() => {
-      const el = document.getElementById("today");
-      el?.scrollIntoView({ block: "center" });
-      el?.focus({ preventScroll: true });
-    });
-  };
 
   return (
     <header className="flex flex-wrap items-center justify-between gap-3.5 rounded-t-2xl rounded-b-md border border-b-2 border-sep border-b-rule [border-bottom-style:dashed] bg-base px-5 py-4">
@@ -37,9 +27,12 @@ export function Header() {
             className="w-[170px] border-0 bg-transparent text-[13px] text-ink outline-none placeholder:text-sub"
           />
         </label>
-        <Button variant="primary" onClick={logToday}>
+        <Link
+          href={data.logHref}
+          className="flex min-h-11 items-center rounded-full bg-brand px-4 text-[13px] font-semibold text-white no-underline hover:bg-brand-hover hover:text-white sm:min-h-9"
+        >
           Log Today
-        </Button>
+        </Link>
       </div>
     </header>
   );

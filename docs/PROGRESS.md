@@ -6,7 +6,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 |---|---|---|
 | 0 | Setup: scaffold, git, GitHub, Vercel | ✅ Done (19 Oct 2026) |
 | 1 | The look (demo data only) | ✅ Done (19 Oct 2026) |
-| 2 | Database + login + daily check-in | ⬜ Not started |
+| 2 | Database + login + daily check-in | 🟡 Code done, waiting on Supabase keys |
 | 3 | Real dashboard | ⬜ Not started |
 | 4 | Workouts + body | ⬜ Not started |
 | 5 | Tasks + goals | ⬜ Not started |
@@ -45,6 +45,14 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Wallet stack in the Money tile (fake accounts, tab opens account detail)
 - [x] Checked at 1440px and 375px; `npx hig-doctor .` clean
 - [x] Pre-commit privacy check (`scripts/privacy-check.mjs`, turned on by `npm install` via `prepare`)
-- [ ] Phase 2
 
-**Next up:** Phase 2 (database + login + daily check-in).
+## Phase 2 checklist
+- [x] Migration: trackers, entries, seasons + row-level security (`supabase/migrations/`)
+- [x] Login: email sign-in link, only `ALLOWED_EMAIL` gets in (`/login`, `/auth/confirm`, `src/proxy.ts`)
+- [x] Default trackers added on first visit: sleep, water, workout, steps, skincare, hair, study, mood
+- [x] `/log` check-in sheet (steppers, switches, segments, Done → Saved ✓), plus `/demo/log` on fake data
+- [ ] Yasir: create Supabase project, run the migration, set email template + URLs, paste keys into `.env.local` and Vercel
+- [ ] Test: sign in on the phone and save today's check-in (Phase 2 "done when")
+- [ ] Moved to Phase 3: phone home screen with the tab bar (`Phone.dc.html`), since it shows real dashboard data
+
+**Next up:** Yasir's Supabase steps, then test sign-in + saving on the phone.

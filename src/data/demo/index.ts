@@ -34,6 +34,7 @@ const weights = [70.3, 70.6, 70.9, 71.2, 71.4, 71.9, 72.1, 72.4];
 
 export const demoData: DashboardData = {
   ownerLine: "Yasir's life dashboard",
+  logHref: "/demo/log",
   views: {
     overview: {
       title: "Sunday, 18 October",
