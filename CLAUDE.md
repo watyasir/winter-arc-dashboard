@@ -56,7 +56,7 @@ Workouts, tasks, goals and money get their own tables because their shape is dif
 **Read `docs/DESIGN.md` before any UI work.** It is the full spec (tokens, layout, components, states, copy) and has a changelog: if the code doesn't match the latest changelog entry, update the code to match, without waiting to be asked. The exact mockup markup is in `docs/design-reference/` (Main = dashboard, Phone, CheckIn). Rebuild it as React + Tailwind; don't paste the mockup code.
 
 Short version:
-- **Light theme only.** No dark mode, no theme toggle.
+- **Light theme only, "Teal and grey" (v6).** Grey frame, white cards, deep teal `#0F4C4A` brand colour, one dark teal gradient hero card, pill controls, wallet-stack Money tile. No dark mode. All values in DESIGN.md §2b (they override §2 and the older notes below).
 - **Look:** Yasir's Obsidian theme AnuPpuccin, light card layout. Flat `base #EFF1F5` cards with 16px corners on a `crust #DCE0E8` frame, no shadows, rainbow-folder colours in the sidebar, dashed rule under the page header, rounded-square checkboxes. Never copy AnuPpuccin's CSS (GPL-3.0); use only the Catppuccin Latte palette (MIT) and rebuild the look.
 - **One fluid layout** for laptop and 24" monitor; sidebar stacks on top under 980px.
 - **Colour has one meaning each:** blue interactive, green done, peach due soon, red overdue, mauve Winter Arc, pink Claude. Small coloured text uses the text-safe variants in DESIGN.md. Never colour alone.

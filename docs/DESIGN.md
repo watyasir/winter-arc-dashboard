@@ -1,6 +1,6 @@
 # Design spec: Winter Arc Dashboard
 
-**Status:** v4, approved direction 19 Oct 2026. The look is Yasir's Obsidian theme **AnuPpuccin** in its **light card layout**, on the **Catppuccin Latte** palette, with Apple HIG rules for controls, accessibility and charts.
+**Status:** v6 "Teal and grey", 20 Oct 2026. §2b overrides all colours in §2; §2 is kept only for history. The look is Yasir's Obsidian theme **AnuPpuccin** in its **light card layout**, on the **Catppuccin Latte** palette, with Apple HIG rules for controls, accessibility and charts.
 **Source of truth:** the Claude Design canvas "Winter Arc Dashboard". Its exact markup is copied into `docs/design-reference/` (`Main.dc.html` is the dashboard, `Phone.dc.html` the phone home screen, `CheckIn.dc.html` the daily check-in). Open those files to match spacing, copy and sample data exactly. They are design mockups, not production code: rebuild them as React components with Tailwind.
 
 > **Licence note:** AnuPpuccin's CSS is GPL-3.0. Do **not** copy any of its code. Only the Catppuccin palette (MIT) and the general look (cards on a frame, rainbow folders, dashed header rule) are used, rebuilt from scratch.
@@ -9,7 +9,7 @@
 
 ## 1. Look in one paragraph
 
-A light "paper on a desk" feel. The window background is the Latte **crust** grey-blue. Every area of the app (sidebar, page header, each tile) is a flat **base**-coloured card with 16px corners, no shadows and 10–16px gaps of crust between cards, the way AnuPpuccin's card layout floats Obsidian panes. Navigation looks like an Obsidian file tree with **rainbow folders**: each section gets its own Catppuccin colour, in rainbow order. The page title card has a **dashed bottom rule**. Section headings carry a small 4px coloured bar in their section's colour. Checkboxes are rounded squares. Light theme only.
+A light "paper on a desk" feel. The window background is the Latte **crust** grey-blue. Every area of the app (sidebar, page header, each tile) is a flat **base**-coloured card with 16px corners, no shadows and 10–16px gaps of crust between cards, the way AnuPpuccin's card layout floats Obsidian panes. Navigation looks like an Obsidian file tree with **rainbow folders**: each section gets its own Catppuccin colour, in rainbow order. The page title card has a **dashed bottom rule**. Section headings carry a small 4px coloured bar in their section's colour. Checkboxes are rounded squares. Light theme only. From v6 the colours are "Teal and grey" (§2b): grey frame, white cards, deep teal brand colour, one dark teal hero card, pill controls.
 
 ## 2. Tokens (put all of these in `tailwind.config` + CSS variables)
 
@@ -55,6 +55,52 @@ Overview `red` · Inbox `peach` · Board `yellow` · Instinct `green` · Tracker
 - App padding 16px; gap between cards 10px (rows) / 16px (sections).
 - Page header card: radius `16px 16px 6px 6px`, `border-bottom: 2px dashed surface1`.
 
+## 2b. v6 "Teal and grey" theme (CURRENT, overrides all §2 colours)
+
+Yasir's call (20 Oct 2026), from a reference dashboard he liked: calm greys, white cards, one deep teal as the brand colour, sage and soft yellow as supporting colours, a dark teal gradient "hero" card, and pill-shaped controls. No dark mode, no toggle. The mockups in `docs/design-reference/` (Main, Phone, CheckIn) are already in this theme: match them.
+
+### Neutrals
+Pure neutral greys (R = G = B). No blue, violet or pink cast anywhere in the greys.
+| Token | Hex | Contrast on white | Use |
+|---|---|---|---|
+| `frame` | `linear-gradient(160deg, #F2F2F2 0%, #E6E6E6 55%, #D4D4D4 100%)`, `background-attachment: fixed` | | App background |
+| `card` | `linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%)` + 1px `sep` border, radius 20 | | Every card |
+| `base` | `#FFFFFF` | | Sidebar, header, inputs, small board cards, plain buttons (with 1px `sep` border) |
+| `mantle` | `#F5F5F5` / board columns `#F3F3F3` | | Secondary panels |
+| `crust` | `#EDEDED` | | Empty habit cells, hover-ish fills |
+| `sep` | `#E5E5E5` | | Borders, separators, chart grid |
+| `rule` | `#C8C8C8` | | Dashed header rule |
+| `overlay` | `#848F99` | 3.3 | Checkbox outline (never text) |
+| `sub` | `#666C70` | 5.3 | Secondary text |
+| `ink` | `#16191B` | 17.7 | Primary text |
+| `fill` | `rgba(22,25,27,.05)` | | Hover, segmented track |
+
+### Colours with meaning (fill / text-safe)
+| Token | Fill | Text-safe | Meaning |
+|---|---|---|---|
+| `teal` (brand) | `#0F4C4A` | `#0F4C4A` (9.8) | Interactive: selected nav pill, selected segment, primary button, links, focus ring, chart line. White text on it (9.8). Hover `#0A3533` |
+| `sage` | `#6E9C93` | `#3D6E64` (5.8) | Done / on target / saved money |
+| `yellow` | `#F2C230` | `#8A6200` (5.5) | Due soon / warning / missed-day outline. Dark text on it, never white |
+| `coral` | `#E0684B` | `#B4432A` (5.6) | Overdue / errors / money out |
+| `arc` | `#155A63` | `#155A63` (7.9) | Winter Arc identity (logo tile, Instinct pill) |
+| `cyan` | `#4FB3BF` | `#1A6A70` (6.3) | Claude (owner chips) |
+| others | `#3D8A80`, `#6FA8B6`, `#8FB3AA`, `#4F8F9A` | not for text | Section bars, extra series |
+Chips: fill at 12–16% alpha with the text-safe colour, fully rounded (999px), like the reference's "Urgent / Non urgent" pills.
+
+### Hero card (the one dark card)
+The Winter Arc season card uses `linear-gradient(135deg, #0B2C33 0%, #11414A 45%, #2B6F84 100%)`, no border, white text, secondary text `rgba(255,255,255,.74)`, sage numbers `#A8D5CC`, yellow `#F5D96B`. Season cells on it: all targets `#7FB0A6`, most `#9CC3BB`, missed = 1.5px `#F2D54E` outline, today `#FFFFFF`, upcoming `rgba(255,255,255,.13)`. Only one hero card per view.
+
+### Navigation and controls
+- Sidebar items are pills (radius 999, 38px tall). Selected = teal fill, white text, icon tile `rgba(255,255,255,.16)`. Icon tiles use the teal ramp `#0F4C4A`, `#2D6E6A`, `#4F8780`, `#6E9C93` (replaces the rainbow folders).
+- Buttons, segmented controls and chips are fully rounded. Selected segment = teal fill, white text.
+
+### Wallet stack (Money tile, from Yasir's reference)
+Show bank accounts and cards as a stack of coloured tabs above a white front card, so each account's balance is visible at a glance:
+- Each account is a tab (50px tall, radius `16px 16px 0 0`, overlapping the next by 14px): name on the left, balance on the right (₹ Indian format). Colours by type: savings teal (white text), salary/current sage (ink text), credit card yellow (ink text, shows due date and amount owed as −₹), extra accounts use `#3D8A80`, `#8FB3AA`.
+- Front card: white, 1px `sep` border, radius 16, with a 26px semicircle notch cut at top centre (`mask: radial-gradient(circle 26px at 50% 0, transparent 25px, #000 26px)`). Shows "N accounts" chip, "Total balance" label, total in 32px rounded bold, and "+ ₹X saved this month" in sage text-safe.
+- Clicking a tab opens that account's detail (balance, last 5 transactions, due date for cards) in the same tile; Escape or clicking the front card goes back. Tabs are real buttons with labels like "Savings account, ₹48,200".
+- Data comes read-only from the Personal Finance sheet (Phase 6). Until then /demo uses fake accounts. Never put real bank names or amounts in the repo.
+
 ## 3. Layout (laptop and 24" monitor use the same fluid layout)
 ```
 ┌ crust frame ──────────────────────────────────────────────────────────┐
@@ -97,6 +143,8 @@ Same tokens: `crust` background, `base` cards, large title "Today", Winter Arc c
 Sentence case, plain verbs, no ALL-CAPS labels. Buttons say what happens ("Send to Instinct", "Log Today", "Open Inbox"). Empty states give the next step ("No workouts yet. Log your first one.").
 
 ## 8. Changelog (Claude Code: apply the latest entry if the code doesn't match)
+- **v6, 20 Oct 2026:** "Teal and grey" per §2b. Replaces the Catppuccin accents and rainbow folders with deep teal `#0F4C4A` + sage + yellow + coral; pill-shaped nav, buttons, segments and chips; Winter Arc season card becomes the dark teal gradient hero; Money tile gets the wallet stack of account tabs. Mockups updated. Supersedes v5.
+- **v5, 20 Oct 2026:** "Grey gradient". Neutrals switched to Zendesk Garden greys per §2b; soft grey gradients on frame, sidebar, header, cards, board columns and plain buttons; 1px `#D8DCDE` card borders; text `#293239`, secondary `#5C6970`. Accents, layout and components unchanged. No dark mode.
 - **v4, 19 Oct 2026:** switched from Apple "Winter dawn" glass to the AnuPpuccin Latte card layout. Removed the gradient wallpaper and all glass blur and shadows; cards are flat `base` on `crust`; rainbow folder colours in the sidebar and section bars; rounded-square checkboxes; dashed header rule; whole palette moved to Catppuccin Latte with text-safe variants.
 - v3, 19 Oct 2026: light theme only; added Inbox, Board, Instinct views, the season strip hero and the Instinct status pill.
 - v2, 18 Oct 2026: Apple HIG structure (sidebar, segmented control, one primary button).

@@ -12,40 +12,40 @@
 body{margin:0}
 </style>
 </helmet>
-<div style="width: 390px; height: 1100px; box-sizing: border-box; position: relative; overflow: hidden; background: #DCE0E8; color: #4C4F69; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased">
+<div style="width: 390px; height: 1100px; box-sizing: border-box; position: relative; overflow: hidden; background: linear-gradient(160deg, #F2F2F2 0%, #E6E6E6 55%, #D4D4D4 100%) fixed; color: #16191B; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased">
 <div style="padding: 54px 16px 120px; display: flex; flex-direction: column; gap: 20px">
 
 <header style="display: flex; justify-content: space-between; align-items: flex-end">
-<div><div style="font-size: 13px; font-weight: 600; color: #5C5F77; text-transform: uppercase">Sunday, 18 October</div><h1 style="margin: 2px 0 0; font-size: 34px; font-weight: 700; letter-spacing: -0.02em">Today</h1></div>
-<div aria-label="Yasir" style="width: 36px; height: 36px; border-radius: 50%; background: #8839EF; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600">Y</div>
+<div><div style="font-size: 13px; font-weight: 600; color: #666C70; text-transform: uppercase">Sunday, 18 October</div><h1 style="margin: 2px 0 0; font-size: 34px; font-weight: 700; letter-spacing: -0.02em">Today</h1></div>
+<div aria-label="Yasir" style="width: 36px; height: 36px; border-radius: 50%; background: #155A63; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600">Y</div>
 </header>
 
-<div style="background: #EFF1F5; border-radius: 22px; padding: 16px; display: flex; align-items: center; gap: 16px">
+<div style="background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%); border: 1px solid #E5E5E5; border-radius: 22px; padding: 16px; display: flex; align-items: center; gap: 16px">
 <svg width="84" height="84" viewBox="0 0 84 84" role="img" aria-label="Winter Arc day 23 of 90">
 <circle cx="42" cy="42" r="34" fill="none" stroke="rgba(97,85,245,0.16)" stroke-width="11"></circle>
-<circle cx="42" cy="42" r="34" fill="none" stroke="#8839EF" stroke-width="11" stroke-linecap="round" stroke-dasharray="54.6 213.6" transform="rotate(-90 42 42)"></circle>
-<text x="42" y="49" text-anchor="middle" font-family="ui-rounded, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#4C4F69">23</text>
+<circle cx="42" cy="42" r="34" fill="none" stroke="#155A63" stroke-width="11" stroke-linecap="round" stroke-dasharray="54.6 213.6" transform="rotate(-90 42 42)"></circle>
+<text x="42" y="49" text-anchor="middle" font-family="ui-rounded, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#16191B">23</text>
 </svg>
 <div style="display: flex; flex-direction: column; gap: 3px">
-<span style="font-size: 13px; font-weight: 600; color: #8839EF">Winter Arc</span>
+<span style="font-size: 13px; font-weight: 600; color: #155A63">Winter Arc</span>
 <span style="font-family: ui-rounded, -apple-system, sans-serif; font-size: 22px; font-weight: 700">Day 23 of 90</span>
-<span style="font-size: 13px; color: #5C5F77">12-day streak · 78% targets hit</span>
+<span style="font-size: 13px; color: #666C70">12-day streak · 78% targets hit</span>
 </div>
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
 <sc-for list="{{stats}}" as="s" hint-placeholder-count="4">
-<div style="background: #EFF1F5; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 4px">
+<div style="background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%); border: 1px solid #E5E5E5; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 4px">
 <span style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{s.dot}}"></span>{{s.label}}</span>
-<span style="display: flex; align-items: baseline; gap: 3px"><span style="font-family: ui-rounded, -apple-system, sans-serif; font-size: 28px; font-weight: 700">{{s.value}}</span><span style="font-size: 13px; font-weight: 600; color: #5C5F77">{{s.unit}}</span></span>
-<span style="font-size: 12px; color: #5C5F77">{{s.note}}</span>
+<span style="display: flex; align-items: baseline; gap: 3px"><span style="font-family: ui-rounded, -apple-system, sans-serif; font-size: 28px; font-weight: 700">{{s.value}}</span><span style="font-size: 13px; font-weight: 600; color: #666C70">{{s.unit}}</span></span>
+<span style="font-size: 12px; color: #666C70">{{s.note}}</span>
 </div>
 </sc-for>
 </div>
 
 <section style="display: flex; flex-direction: column; gap: 6px">
-<h2 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 600; color: #5C5F77; text-transform: uppercase">Focus · 4 of 6</h2>
-<div style="background: #EFF1F5; border-radius: 18px; padding: 0 16px">
+<h2 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 600; color: #666C70; text-transform: uppercase">Focus · 4 of 6</h2>
+<div style="background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%); border: 1px solid #E5E5E5; border-radius: 18px; padding: 0 16px">
 <sc-for list="{{focus}}" as="f" hint-placeholder-count="6">
 <div style="display: flex; align-items: center; gap: 12px; min-height: 46px; border-top: {{f.border}}">
 <span style="width: 22px; height: 22px; border-radius: 50%; box-sizing: border-box; border: {{f.ring}}; background: {{f.fill}}; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{f.check}}"></path></svg></span>
@@ -56,11 +56,11 @@ body{margin:0}
 </section>
 
 <section style="display: flex; flex-direction: column; gap: 6px">
-<h2 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 600; color: #5C5F77; text-transform: uppercase">Money · October</h2>
-<div style="background: #EFF1F5; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
-<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 15px">Saved</span><span style="font-family: ui-rounded, -apple-system, sans-serif; font-size: 22px; font-weight: 700; color: #2E7A1E">₹18,200</span></div>
-<div style="display: flex; height: 8px; border-radius: 999px; overflow: hidden; gap: 2px"><div style="width: 48%; background: #2A6EF5"></div><div style="width: 15%; background: #FE640B"></div><div style="width: 37%; background: #40A02B"></div></div>
-<div style="display: flex; justify-content: space-between; font-size: 13px; color: #5C5F77"><span>Needs 48%</span><span>Wants 15%</span><span>Savings 37%</span></div>
+<h2 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 600; color: #666C70; text-transform: uppercase">Money · October</h2>
+<div style="background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%); border: 1px solid #E5E5E5; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 15px">Saved</span><span style="font-family: ui-rounded, -apple-system, sans-serif; font-size: 22px; font-weight: 700; color: #3D6E64">₹18,200</span></div>
+<div style="display: flex; height: 8px; border-radius: 999px; overflow: hidden; gap: 2px"><div style="width: 48%; background: #0F4C4A"></div><div style="width: 15%; background: #F2C230"></div><div style="width: 37%; background: #6E9C93"></div></div>
+<div style="display: flex; justify-content: space-between; font-size: 13px; color: #666C70"><span>Needs 48%</span><span>Wants 15%</span><span>Savings 37%</span></div>
 </div>
 </section>
 
@@ -73,7 +73,7 @@ body{margin:0}
 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{t.icon}}"></path></svg>{{t.label}}</a>
 </sc-for>
 </div>
-<a href="CheckIn.dc.html" aria-label="Log today" style="width: 62px; height: 62px; flex-shrink: 0; border-radius: 50%; background: #2A6EF5; color: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(0,136,255,0.4); text-decoration: none">
+<a href="CheckInGrey.dc.html" aria-label="Log today" style="width: 62px; height: 62px; flex-shrink: 0; border-radius: 50%; background: #0F4C4A; color: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(0,136,255,0.4); text-decoration: none">
 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></a>
 </nav>
 </div>
@@ -83,20 +83,20 @@ class Component extends DCLogic {
   renderVals() {
     const ck = 'M5 12.5l4.5 4.5L19 7.5';
     const focus = [['Gym · push day', true], ['High-protein breakfast', true], ['Study 90 min', true], ['Skincare AM', true], ['German · 20 min', false], ['Hair routine PM', false]]
-      .map(([label, done], i) => ({ label, border: i === 0 ? '0' : '0.5px solid rgba(60,60,67,0.29)', ring: done ? '0' : '1.5px solid #AEAEB2', fill: done ? '#40A02B' : 'transparent', check: done ? ck : '', text: done ? '#5C5F77' : '#4C4F69' }));
+      .map(([label, done], i) => ({ label, border: i === 0 ? '0' : '0.5px solid rgba(60,60,67,0.29)', ring: done ? '0' : '1.5px solid #848F99', fill: done ? '#6E9C93' : 'transparent', check: done ? ck : '', text: done ? '#666C70' : '#16191B' }));
     return {
       focus,
       stats: [
-        { label: 'Sleep', value: '7.2', unit: 'hr', note: 'On target', dot: '#8839EF' },
-        { label: 'Workouts', value: '3', unit: 'of 5', note: 'This week', dot: '#40A02B' },
-        { label: 'Study', value: '6.5', unit: 'of 10 hr', note: '3.5 hr to go', dot: '#FE640B' },
-        { label: 'Weight', value: '72.4', unit: 'kg', note: '▲ 2.1 in 8 wks', dot: '#2A6EF5' }
+        { label: 'Sleep', value: '7.2', unit: 'hr', note: 'On target', dot: '#155A63' },
+        { label: 'Workouts', value: '3', unit: 'of 5', note: 'This week', dot: '#6E9C93' },
+        { label: 'Study', value: '6.5', unit: 'of 10 hr', note: '3.5 hr to go', dot: '#F2C230' },
+        { label: 'Weight', value: '72.4', unit: 'kg', note: '▲ 2.1 in 8 wks', dot: '#0F4C4A' }
       ],
       tabs: [
-        { label: 'Today', href: '#', icon: 'M12 4v2M12 18v2M4 12h2M18 12h2M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z', bg: 'rgba(0,136,255,0.12)', color: '#1F5BD8' },
-        { label: 'Arc', href: '#', icon: 'M12 2v20M4.9 6.9l14.2 10.2M19.1 6.9 4.9 17.1', bg: 'transparent', color: '#4C4F69' },
-        { label: 'Board', href: '#', icon: 'M4 5h4v14H4zM10 5h4v9h-4zM16 5h4v6h-4z', bg: 'transparent', color: '#4C4F69' },
-        { label: 'Money', href: '#', icon: 'M7 5h10M7 9h10M7 5c6 0 6 8 0 8l7 6', bg: 'transparent', color: '#4C4F69' }
+        { label: 'Today', href: '#', icon: 'M12 4v2M12 18v2M4 12h2M18 12h2M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z', bg: 'rgba(0,136,255,0.12)', color: '#0F4C4A' },
+        { label: 'Arc', href: '#', icon: 'M12 2v20M4.9 6.9l14.2 10.2M19.1 6.9 4.9 17.1', bg: 'transparent', color: '#16191B' },
+        { label: 'Board', href: '#', icon: 'M4 5h4v14H4zM10 5h4v9h-4zM16 5h4v6h-4z', bg: 'transparent', color: '#16191B' },
+        { label: 'Money', href: '#', icon: 'M7 5h10M7 9h10M7 5c6 0 6 8 0 8l7 6', bg: 'transparent', color: '#16191B' }
       ]
     };
   }

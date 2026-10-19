@@ -12,36 +12,36 @@
 body{margin:0}
 </style>
 </helmet>
-<div style="width: 390px; height: 844px; box-sizing: border-box; background: rgba(0,0,0,0.35); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; color: #4C4F69; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; justify-content: flex-end">
-<div style="height: 790px; box-sizing: border-box; background: #DCE0E8; border-radius: 28px 28px 0 0; padding: 8px 16px 24px; display: flex; flex-direction: column; gap: 18px">
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: rgba(0,0,0,0.35); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif; color: #16191B; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; justify-content: flex-end">
+<div style="height: 790px; box-sizing: border-box; background: linear-gradient(160deg, #F2F2F2 0%, #E6E6E6 55%, #D4D4D4 100%) fixed; border-radius: 28px 28px 0 0; padding: 8px 16px 24px; display: flex; flex-direction: column; gap: 18px">
 <div aria-hidden="true" style="width: 36px; height: 5px; border-radius: 999px; background: #C7C7CC; align-self: center"></div>
 <header style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center">
-<a href="Phone.dc.html" style="font-size: 17px; color: #1F5BD8; text-decoration: none; min-height: 44px; display: flex; align-items: center">Cancel</a>
+<a href="Phone.dc.html" style="font-size: 17px; color: #0F4C4A; text-decoration: none; min-height: 44px; display: flex; align-items: center">Cancel</a>
 <h1 style="margin: 0; font-size: 17px; font-weight: 600">Check-in</h1>
 <button onClick="{{save}}" style="justify-self: end; font: 600 17px -apple-system, sans-serif; border: 0; background: {{doneBg}}; color: {{doneFg}}; border-radius: 999px; padding: 0 16px; min-height: 36px">{{doneLabel}}</button>
 </header>
 
 <section style="display: flex; flex-direction: column; gap: 6px">
-<h2 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 400; color: #5C5F77; text-transform: uppercase">Body</h2>
-<div style="background: #EFF1F5; border-radius: 14px; padding: 0 16px">
+<h2 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 400; color: #666C70; text-transform: uppercase">Body</h2>
+<div style="background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%); border: 1px solid #E5E5E5; border-radius: 14px; padding: 0 16px">
 <div style="display: flex; align-items: center; justify-content: space-between; min-height: 52px">
-<div><div style="font-size: 17px">Sleep</div><div style="font-size: 13px; color: #5C5F77">{{sleepLabel}} · goal 7 hr</div></div>
+<div><div style="font-size: 17px">Sleep</div><div style="font-size: 13px; color: #666C70">{{sleepLabel}} · goal 7 hr</div></div>
 <div role="group" aria-label="Sleep hours" style="display: flex; align-items: center; background: rgba(120,120,128,0.12); border-radius: 999px; height: 34px">
-<button aria-label="Less sleep" onClick="{{sleepDown}}" style="width: 46px; height: 34px; border: 0; background: transparent; font-size: 20px; color: #4C4F69">−</button>
+<button aria-label="Less sleep" onClick="{{sleepDown}}" style="width: 46px; height: 34px; border: 0; background: transparent; font-size: 20px; color: #16191B">−</button>
 <span aria-hidden="true" style="width: 1px; height: 18px; background: rgba(60,60,67,0.29)"></span>
-<button aria-label="More sleep" onClick="{{sleepUp}}" style="width: 46px; height: 34px; border: 0; background: transparent; font-size: 20px; color: #4C4F69">+</button>
+<button aria-label="More sleep" onClick="{{sleepUp}}" style="width: 46px; height: 34px; border: 0; background: transparent; font-size: 20px; color: #16191B">+</button>
 </div>
 </div>
 <div style="display: flex; align-items: center; justify-content: space-between; min-height: 52px; border-top: 0.5px solid rgba(60,60,67,0.29)">
-<div><div style="font-size: 17px">Water</div><div style="font-size: 13px; color: #5C5F77">{{waterLabel}} · goal 3 L</div></div>
+<div><div style="font-size: 17px">Water</div><div style="font-size: 13px; color: #666C70">{{waterLabel}} · goal 3 L</div></div>
 <div role="group" aria-label="Water glasses" style="display: flex; align-items: center; background: rgba(120,120,128,0.12); border-radius: 999px; height: 34px">
-<button aria-label="Less water" onClick="{{waterDown}}" style="width: 46px; height: 34px; border: 0; background: transparent; font-size: 20px; color: #4C4F69">−</button>
+<button aria-label="Less water" onClick="{{waterDown}}" style="width: 46px; height: 34px; border: 0; background: transparent; font-size: 20px; color: #16191B">−</button>
 <span aria-hidden="true" style="width: 1px; height: 18px; background: rgba(60,60,67,0.29)"></span>
-<button aria-label="More water" onClick="{{waterUp}}" style="width: 46px; height: 34px; border: 0; background: transparent; font-size: 20px; color: #4C4F69">+</button>
+<button aria-label="More water" onClick="{{waterUp}}" style="width: 46px; height: 34px; border: 0; background: transparent; font-size: 20px; color: #16191B">+</button>
 </div>
 </div>
 <sc-for list="{{toggles}}" as="t" hint-placeholder-count="3">
-<button onClick="{{t.flip}}" role="switch" aria-checked="{{t.on}}" style="width: 100%; display: flex; align-items: center; justify-content: space-between; min-height: 52px; border: 0; border-top: 0.5px solid rgba(60,60,67,0.29); background: transparent; padding: 0; font: 17px -apple-system, sans-serif; color: #4C4F69; text-align: left">
+<button onClick="{{t.flip}}" role="switch" aria-checked="{{t.on}}" style="width: 100%; display: flex; align-items: center; justify-content: space-between; min-height: 52px; border: 0; border-top: 0.5px solid rgba(60,60,67,0.29); background: transparent; padding: 0; font: 17px -apple-system, sans-serif; color: #16191B; text-align: left">
 <span>{{t.label}}</span>
 <span style="width: 51px; height: 31px; border-radius: 999px; background: {{t.track}}; display: flex; align-items: center; padding: 2px; box-sizing: border-box; justify-content: {{t.justify}}"><span style="width: 27px; height: 27px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 2px 6px rgba(0,0,0,0.2)"></span></span>
 </button>
@@ -50,22 +50,22 @@ body{margin:0}
 </section>
 
 <section style="display: flex; flex-direction: column; gap: 6px">
-<h2 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 400; color: #5C5F77; text-transform: uppercase">Study</h2>
+<h2 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 400; color: #666C70; text-transform: uppercase">Study</h2>
 <div role="group" aria-label="Study time" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 2px; background: rgba(120,120,128,0.12); border-radius: 10px">
 <sc-for list="{{study}}" as="s" hint-placeholder-count="5">
-<button onClick="{{s.pick}}" aria-pressed="{{s.on}}" style="min-height: 36px; border: 0; border-radius: 8px; background: {{s.bg}}; box-shadow: {{s.shadow}}; font: {{s.weight}} 13px -apple-system, sans-serif; color: #4C4F69">{{s.label}}</button>
+<button onClick="{{s.pick}}" aria-pressed="{{s.on}}" style="min-height: 36px; border: 0; border-radius: 8px; background: {{s.bg}}; box-shadow: {{s.shadow}}; font: {{s.weight}} 13px -apple-system, sans-serif; color: #16191B">{{s.label}}</button>
 </sc-for>
 </div>
 </section>
 
 <section style="display: flex; flex-direction: column; gap: 6px">
-<h2 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 400; color: #5C5F77; text-transform: uppercase">Mood</h2>
+<h2 style="margin: 0 0 0 16px; font-size: 13px; font-weight: 400; color: #666C70; text-transform: uppercase">Mood</h2>
 <div role="group" aria-label="Mood" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 2px; background: rgba(120,120,128,0.12); border-radius: 10px">
 <sc-for list="{{moods}}" as="m" hint-placeholder-count="5">
-<button onClick="{{m.pick}}" aria-pressed="{{m.on}}" aria-label="{{m.aria}}" style="min-height: 36px; border: 0; border-radius: 8px; background: {{m.bg}}; box-shadow: {{m.shadow}}; font: {{m.weight}} 13px -apple-system, sans-serif; color: #4C4F69">{{m.label}}</button>
+<button onClick="{{m.pick}}" aria-pressed="{{m.on}}" aria-label="{{m.aria}}" style="min-height: 36px; border: 0; border-radius: 8px; background: {{m.bg}}; box-shadow: {{m.shadow}}; font: {{m.weight}} 13px -apple-system, sans-serif; color: #16191B">{{m.label}}</button>
 </sc-for>
 </div>
-<p style="margin: 2px 16px 0; font-size: 13px; color: #5C5F77">Saving updates your streak and the Winter Arc ring. Money logs itself from your bank alerts.</p>
+<p style="margin: 2px 16px 0; font-size: 13px; color: #666C70">Saving updates your streak and the Winter Arc ring. Money logs itself from your bank alerts.</p>
 </section>
 
 </div>
@@ -80,7 +80,7 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state;
     const set = patch => this.setState(Object.assign({ saved: false }, patch));
-    const tg = (key, label) => ({ label, on: s[key] ? 'true' : 'false', track: s[key] ? '#40A02B' : 'rgba(120,120,128,0.16)', justify: s[key] ? 'flex-end' : 'flex-start', flip: () => set({ [key]: !s[key] }) });
+    const tg = (key, label) => ({ label, on: s[key] ? 'true' : 'false', track: s[key] ? '#6E9C93' : 'rgba(120,120,128,0.16)', justify: s[key] ? 'flex-end' : 'flex-start', flip: () => set({ [key]: !s[key] }) });
     const seg = (on) => ({ bg: on ? '#FFFFFF' : 'transparent', shadow: on ? '0 3px 8px rgba(0,0,0,0.12)' : 'none', weight: on ? '600' : '400', on: on ? 'true' : 'false' });
     const study = [0, 30, 60, 90, 120].map(v => Object.assign({ label: v === 0 ? 'None' : (v === 120 ? '2h+' : v + 'm'), pick: () => set({ study: v }) }, seg(s.study === v)));
     const faces = ['Rough', 'Low', 'Okay', 'Good', 'Great'];
@@ -95,7 +95,7 @@ class Component extends DCLogic {
       toggles: [tg('workout', 'Workout done'), tg('skincare', 'Skincare'), tg('hair', 'Hair routine')],
       study, moods,
       doneLabel: s.saved ? 'Saved ✓' : 'Done',
-      doneBg: s.saved ? '#40A02B' : '#2A6EF5',
+      doneBg: s.saved ? '#6E9C93' : '#0F4C4A',
       doneFg: '#FFFFFF',
       save: () => this.setState({ saved: true })
     };

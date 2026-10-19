@@ -24,7 +24,7 @@ One phase = one Claude Code session. Each phase ends with something that works a
 Build the full dashboard **visually**, on fake data. It's the most satisfying phase and your first portfolio screenshot.
 
 **Kickoff prompt:**
-> Phase 1. Read docs/DESIGN.md and the files in docs/design-reference/. Build the design tokens (Catppuccin Latte, light only) and the full dashboard at /demo with fake data from src/data/demo: sidebar with rainbow folders and trackers tree, header card with dashed rule, Overview (season strip, stats with sparklines, Today, Inbox preview, Money, Weight, Goals, Habits, In progress), plus Inbox, Board and Instinct views switched from the sidebar, all on fake data. Match the reference files exactly. Show me how to view it.
+> Phase 1. Read docs/DESIGN.md and the files in docs/design-reference/. Build the design tokens (v6 "Teal and grey", see DESIGN.md §2b) and the full dashboard at /demo with fake data from src/data/demo: sidebar with rainbow folders and trackers tree, header card with dashed rule, Overview (season strip, stats with sparklines, Today, Inbox preview, Money, Weight, Goals, Habits, In progress), plus Inbox, Board and Instinct views switched from the sidebar, all on fake data. Match the reference files exactly. Show me how to view it.
 
 **Done when:** `/demo` looks finished on phone and laptop.
 
