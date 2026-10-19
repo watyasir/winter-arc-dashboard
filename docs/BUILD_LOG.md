@@ -78,3 +78,17 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **What Yasir had to do himself:** sign in to Supabase, create the Supabase project (Mumbai), click the sign-in link in his email.
 **Screenshot to take:** `/demo` Overview on a laptop (hero card + wallet stack), and the Money tile with an account opened.
 **Next:** sign in on the phone at the live link, then Phase 3 (real dashboard, including the phone home screen).
+
+## Session 5 — 20 Oct 2026 — Phase 3: Real dashboard
+**Goal:** Show real data on `/` using the same tiles as `/demo`, plus the phone home screen with the tab bar.
+**What I asked Claude Code to do:** "Tick off Phase 2 if the phone check-in is confirmed, then do Phase 3: my real data on / with the same tiles as /demo, plus the phone home screen with the tab bar. Keep /demo on fake data."
+**What got built:**
+- One builder (`src/lib/dashboard/build.ts`) turns trackers, entries and the active season into the exact data shape the demo uses, so real and demo share every tile. It works out each day's status (all / most / missed targets), the streak, 7-day averages, this week against weekly targets, and a 4-week habit grid.
+- `/` shows the real dashboard when you're signed in, and the welcome card otherwise. First visit adds the default trackers, same as `/log`.
+- Tapping a yes/no row in Today saves it right away and the numbers refresh. Saving on `/log` refreshes `/` too.
+- Empty states that say what to do next for things not connected yet: season, money, weight, goals, inbox, board.
+- Phone home screen under 640px (on `/` and `/demo`): large "Today" title, Winter Arc ring, 2×2 stats, Focus list, Money, and a floating tab bar (Today, Arc, Board, Money) with the round Log button.
+**What broke and how we fixed it:** The "Log Today" button text was teal on a teal button (also on the live site). A global "links are teal" rule beat the button's white text. Now only plain links get the teal default. Moving the rule into a CSS layer didn't work because the build flattened it.
+**What Yasir had to do himself:** Nothing yet. Still to do: the phone sign-in test (Phase 2), then check `/` signed in.
+**Screenshot to take:** `/demo` at phone width: Today tab, then the Arc tab with the season grid.
+**Next:** Phone test, then confirm `/` with real data. Then Phase 4 (workouts + body), which fills the Weight tile.
