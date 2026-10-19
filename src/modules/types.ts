@@ -46,8 +46,29 @@ export interface Account {
   transactions: { label: string; date: string; amount: number }[];
 }
 
+/** One row in the Today checklist (desktop) and Focus list (phone). */
+export interface TodayItem {
+  label: string;
+  /** Right-hand text: the area on the demo, today's value on the real dashboard. */
+  area: string;
+  done: boolean;
+  /** Real dashboard: a yes/no tracker the row saves when tapped. */
+  trackerId?: string;
+  /** Real dashboard: number trackers open the check-in instead of toggling. */
+  href?: string;
+}
+
+/** Saves a tap on a Today row. Only the real dashboard passes one; the demo just flips the box. */
+export type ToggleTodayAction = (trackerId: string, done: boolean) => Promise<{ ok: boolean }>;
+
+/*
+  Real data can be missing while a source isn't connected or nothing is logged yet.
+  null / empty lists mean "show the empty state", which tells you what to log.
+*/
 export interface DashboardData {
   ownerLine: string;
+  /** Letter in the phone avatar. */
+  ownerInitial: string;
   /** Where "Log Today" goes: /demo/log on the demo, /log for real. */
   logHref: string;
   views: Record<ViewId, { title: string; subtitle: string }>;
@@ -64,9 +85,9 @@ export interface DashboardData {
     startLabel: string;
     endLabel: string;
     days: SeasonDay[];
-  };
+  } | null;
   stats: { label: string; value: string; unit: string; note: string; tone: Tone; trend: number[] }[];
-  today: { label: string; area: string; done: boolean }[];
+  today: TodayItem[];
   money: {
     month: string;
     updated: string;
@@ -75,7 +96,7 @@ export interface DashboardData {
     split: { needs: number; wants: number; savings: number };
     fund: { name: string; pct: number; target: number };
     accounts: Account[];
-  };
+  } | null;
   weight: {
     unit: string;
     goal: number;
@@ -85,7 +106,7 @@ export interface DashboardData {
     values: number[];
     /** Y axis bottom and top. */
     axis: [number, number];
-  };
+  } | null;
   goals: { name: string; progress: string; pct: number; by: string; tone: Tone }[];
   habits: { name: string; days: boolean[] }[];
   mailboxes: { label: string; tone: Tone; count: string }[];
@@ -99,4 +120,6 @@ export interface DashboardData {
     digest: string;
   };
   footnote: string;
+  /** True on /demo: pretend actions (Instinct replies) run instead of real ones. */
+  isDemo: boolean;
 }

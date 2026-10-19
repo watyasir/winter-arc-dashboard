@@ -6,6 +6,7 @@ import { Card } from "@/components/Card";
 import { Icon } from "@/components/Icon";
 import { CardHeader, SectionHeading } from "@/components/SectionHeading";
 import { SwitchRow } from "@/components/Switch";
+import { EmptyNote } from "@/components/EmptyNote";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 
 /** Ask box, recent exchanges | what Instinct can see, morning digest. Demo only; wiring arrives in Phase 8c. */
@@ -22,21 +23,24 @@ export function InstinctView() {
             className="flex flex-wrap gap-2.5"
             onSubmit={(e) => {
               e.preventDefault();
-              if (question.trim()) askInstinct();
+              if (question.trim() && data.isDemo) askInstinct();
             }}
           >
             <input
               aria-label="Question for Instinct"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
+              placeholder="Ask Instinct something"
               className="min-h-11 flex-[1_1_260px] rounded-xl border-0 bg-fill px-3.5 text-sm text-ink"
             />
-            <Button type="submit" variant="primary" className="min-h-11 sm:min-h-11" disabled={instinct.status === "waiting"}>
+            <Button type="submit" variant="primary" className="min-h-11 sm:min-h-11" disabled={!data.isDemo || instinct.status === "waiting"}>
               Send to Instinct
             </Button>
           </form>
           <span className="text-xs text-sub">
-            Goes to Instinct by email. A status pill shows at the top while it works and disappears when the reply lands.
+            {data.isDemo
+              ? "Goes to Instinct by email. A status pill shows at the top while it works and disappears when the reply lands."
+              : "Sending to Instinct isn't switched on yet. Once it is, questions go by email and the reply lands here."}
           </span>
         </Card>
 
@@ -44,6 +48,7 @@ export function InstinctView() {
           <div className="pb-2">
             <SectionHeading>Recent exchanges</SectionHeading>
           </div>
+          {data.instinct.exchanges.length === 0 && <EmptyNote>No questions sent yet.</EmptyNote>}
           {data.instinct.exchanges.map((x) => (
             <div key={x.question} className="flex items-start gap-3 border-t border-sep py-3">
               <span

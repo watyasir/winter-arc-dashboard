@@ -1,7 +1,9 @@
 "use client";
 
 import { useDashboard } from "@/components/dashboard/DashboardContext";
+import { Card } from "@/components/Card";
 import { Chip } from "@/components/Chip";
+import { EmptyNote } from "@/components/EmptyNote";
 import { toneBg } from "@/lib/tones";
 import type { BoardCard } from "@/modules/types";
 import { OwnerChip } from "./OwnerChip";
@@ -11,6 +13,13 @@ const dueColor = { soon: "text-yellow-text", overdue: "text-coral-text" };
 /** Four columns on mantle. Demo only; real tasks arrive in Phase 5. */
 export function BoardView() {
   const { board } = useDashboard().data;
+  if (board.length === 0) {
+    return (
+      <Card aria-label="Board">
+        <EmptyNote>No tasks yet. Once tasks are switched on, you&apos;ll add them here and move them from To do to Done.</EmptyNote>
+      </Card>
+    );
+  }
   return (
     <div className="grid grid-cols-[repeat(auto-fit,minmax(230px,1fr))] gap-3.5">
       {board.map((col) => (

@@ -3,12 +3,21 @@
 import { Card } from "@/components/Card";
 import { ProgressBar } from "@/components/ProgressBar";
 import { CardHeader, SectionHeading } from "@/components/SectionHeading";
+import { EmptyNote } from "@/components/EmptyNote";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 import { formatRupees } from "@/lib/format";
 import { WalletStack } from "./WalletStack";
 
 export function MoneyTile() {
   const { money } = useDashboard().data;
+  if (!money) {
+    return (
+      <Card aria-label="Money" className="flex flex-[1_1_280px] flex-col gap-3">
+        <SectionHeading tone="sage">Money</SectionHeading>
+        <EmptyNote>Your accounts and monthly split show here once the Personal Finance sheet is connected.</EmptyNote>
+      </Card>
+    );
+  }
   const { needs, wants, savings } = money.split;
   return (
     <Card aria-label="Money" className="flex flex-[1_1_280px] flex-col gap-3">

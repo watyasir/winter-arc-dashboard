@@ -7,7 +7,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 | 0 | Setup: scaffold, git, GitHub, Vercel | ✅ Done (19 Oct 2026) |
 | 1 | The look (demo data only) | ✅ Done (19 Oct 2026) |
 | 2 | Database + login + daily check-in | 🟡 Code done, waiting on Supabase keys |
-| 3 | Real dashboard | ⬜ Not started |
+| 3 | Real dashboard | 🟡 In progress |
 | 4 | Workouts + body | ⬜ Not started |
 | 5 | Tasks + goals | ⬜ Not started |
 | 6 | Money (read from the sheet) | ⬜ Not started |
@@ -57,5 +57,12 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [ ] Sign in on the phone at the live link (waiting for Supabase's 2-emails-per-hour limit to reset)
 - [ ] Test: sign in on the phone and save today's check-in (Phase 2 "done when")
 - [ ] Moved to Phase 3: phone home screen with the tab bar (`Phone.dc.html`), since it shows real dashboard data
+
+## Phase 3 checklist
+- [x] Real data on `/` with the same tiles as `/demo`: today's status, streak, 7-day averages, this week vs weekly targets, 4-week habit grid (`src/lib/dashboard/`)
+- [x] Empty states that say what to log (season, money, weight, goals, inbox, board)
+- [x] Tapping a yes/no row on Today saves it and the numbers update straight away; `/log` refreshes `/` on save
+- [ ] Phone home screen with the floating tab bar (`Phone.dc.html`)
+- [ ] Checked signed in on laptop and phone width; `npx hig-doctor .` clean
 
 **Next up:** the phone test, then Phase 3 (real dashboard). Note: Supabase's built-in email allows only 2 sign-in emails per hour; custom SMTP would lift that.

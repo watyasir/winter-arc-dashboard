@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/auth";
 import { assertValidValue, todayISO, type CheckInValues } from "@/lib/trackers";
 import type { SaveResult } from "@/components/checkin/CheckIn";
@@ -23,6 +24,8 @@ export async function saveCheckIn(values: CheckInValues): Promise<SaveResult> {
     });
     const { error } = await supabase.from("entries").upsert(rows, { onConflict: "tracker_id,entry_date" });
     if (error) return { ok: false, message: "Couldn't save. Check your connection and try again." };
+    // The dashboard shows the new numbers the moment you go back to it.
+    revalidatePath("/");
   } catch (e) {
     return { ok: false, message: e instanceof Error ? e.message : "Couldn't save." };
   }

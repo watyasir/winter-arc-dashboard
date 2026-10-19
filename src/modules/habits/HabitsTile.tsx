@@ -2,16 +2,19 @@
 
 import { Card } from "@/components/Card";
 import { CardHeader, SectionHeading } from "@/components/SectionHeading";
+import { EmptyNote } from "@/components/EmptyNote";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 
 /** Sheet-style grid: one row per habit, one cell per day for the last 4 weeks. */
 export function HabitsTile() {
   const { habits } = useDashboard().data;
+  const nothingYet = habits.every((h) => !h.days.some(Boolean));
   return (
     <Card aria-label="Habits" className="flex flex-[2_1_480px] flex-col gap-3">
       <CardHeader aside={<span className="text-xs text-sub">Filled = done</span>}>
         <SectionHeading tone="pine">Habits · last 4 weeks</SectionHeading>
       </CardHeader>
+      {nothingYet && <EmptyNote>Nothing ticked in the last 4 weeks. Hit a target on Log Today and its square fills in.</EmptyNote>}
       <div className="overflow-x-auto">
         <div className="flex min-w-[540px] flex-col gap-2">
           {habits.map((h) => {

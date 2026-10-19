@@ -34,6 +34,7 @@ const weights = [70.3, 70.6, 70.9, 71.2, 71.4, 71.9, 72.1, 72.4];
 
 export const demoData: DashboardData = {
   ownerLine: "Yasir's life dashboard",
+  ownerInitial: "Y",
   logHref: "/demo/log",
   views: {
     overview: {
@@ -298,4 +299,5 @@ export const demoData: DashboardData = {
   },
   footnote:
     "Sample data for the demo. The real app fills this from your check-ins, Gmail, the Personal Finance sheet and the Board.",
+  isDemo: true,
 };

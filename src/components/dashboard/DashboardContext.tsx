@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import type { DashboardData, ViewId } from "@/modules/types";
+import type { DashboardData, ToggleTodayAction, ViewId } from "@/modules/types";
 
 type InstinctState = { status: "idle" } | { status: "waiting"; secs: number } | { status: "done"; secs: number };
 
@@ -12,6 +12,8 @@ interface DashboardState {
   /** Today checklist: which rows are ticked. */
   todayDone: boolean[];
   toggleToday: (index: number) => void;
+  /** Set when saving a Today tap failed; cleared by the next tap. */
+  todayError: string | null;
   mailbox: string;
   setMailbox: (box: string) => void;
   selectedMailId: string;
@@ -34,7 +36,16 @@ export function useDashboard() {
 const DEMO_REPLY_SECS = 6;
 const REPLIED_PILL_MS = 3500;
 
-export function DashboardProvider({ data, children }: { data: DashboardData; children: ReactNode }) {
+export function DashboardProvider({
+  data,
+  onToggleToday,
+  children,
+}: {
+  data: DashboardData;
+  /** Real dashboard only: saves a tapped Today row. The server then sends fresh data. */
+  onToggleToday?: ToggleTodayAction;
+  children: ReactNode;
+}) {
   const [view, setViewState] = useState<ViewId>("overview");
   // View switches are instant and start at the top of the page (DESIGN.md §5).
   const setView = useCallback((next: ViewId) => {
@@ -42,6 +53,28 @@ export function DashboardProvider({ data, children }: { data: DashboardData; chi
     window.scrollTo({ top: 0 });
   }, []);
   const [todayDone, setTodayDone] = useState(() => data.today.map((t) => t.done));
+  const [todayError, setTodayError] = useState<string | null>(null);
+  // Fresh data from the server (after a save) replaces the local ticks.
+  const [shownToday, setShownToday] = useState(data.today);
+  if (shownToday !== data.today) {
+    setShownToday(data.today);
+    setTodayDone(data.today.map((t) => t.done));
+  }
+
+  const toggleToday = (i: number) => {
+    const next = !todayDone[i];
+    setTodayDone((d) => d.map((v, j) => (j === i ? next : v)));
+    setTodayError(null);
+    const trackerId = data.today[i]?.trackerId;
+    if (!onToggleToday || !trackerId) return;
+    onToggleToday(trackerId, next)
+      .catch(() => ({ ok: false }))
+      .then((res) => {
+        if (res.ok) return;
+        setTodayDone((d) => d.map((v, j) => (j === i ? !next : v)));
+        setTodayError(`Couldn't save ${data.today[i].label}. Check your connection and try again.`);
+      });
+  };
   const [mailbox, setMailbox] = useState("Inbox");
   const [selectedMailId, setSelectedMailId] = useState(data.mails[0]?.id ?? "");
   const [shares, setShares] = useState(() => Object.fromEntries(data.instinct.shares.map((s) => [s.key, s.on])));
@@ -75,7 +108,8 @@ export function DashboardProvider({ data, children }: { data: DashboardData; chi
     view,
     setView,
     todayDone,
-    toggleToday: (i) => setTodayDone((d) => d.map((v, j) => (j === i ? !v : v))),
+    toggleToday,
+    todayError,
     mailbox,
     setMailbox,
     selectedMailId,

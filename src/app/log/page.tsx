@@ -2,13 +2,11 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { CheckIn } from "@/components/checkin/CheckIn";
 import { requireUser } from "@/lib/auth";
-import { defaultTrackers } from "@/lib/default-trackers";
-import { addDays, formatDayLabel, startingValue, todayISO, type CheckInValues, type Tracker } from "@/lib/trackers";
+import { loadTrackers } from "@/lib/tracker-store";
+import { addDays, formatDayLabel, startingValue, todayISO, type CheckInValues } from "@/lib/trackers";
 import { saveCheckIn } from "./actions";
 
 export const metadata: Metadata = { title: "Check-in · Winter Arc Dashboard" };
-
-const TRACKER_COLUMNS = "id, slug, name, area, type, unit, step, scale_labels, target, target_period, sort_order";
 
 export default function LogPage() {
   return (
@@ -21,23 +19,7 @@ export default function LogPage() {
 async function TodayCheckIn() {
   const { supabase } = await requireUser();
 
-  let { data: trackers } = await supabase
-    .from("trackers")
-    .select(TRACKER_COLUMNS)
-    .eq("archived", false)
-    .order("sort_order")
-    .returns<Tracker[]>();
-
-  // First visit: start with the default trackers.
-  if (trackers && trackers.length === 0) {
-    const { data: seeded } = await supabase
-      .from("trackers")
-      .upsert(defaultTrackers, { onConflict: "user_id,slug", ignoreDuplicates: true })
-      .select(TRACKER_COLUMNS)
-      .order("sort_order")
-      .returns<Tracker[]>();
-    trackers = seeded;
-  }
+  const trackers = await loadTrackers(supabase);
   if (!trackers) {
     return <p className="p-6 text-center text-[15px] text-coral-text">Couldn&apos;t load your trackers. Refresh to try again.</p>;
   }

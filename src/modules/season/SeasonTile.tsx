@@ -24,6 +24,17 @@ const legend: SeasonDay[] = ["all", "most", "missed", "today"];
 /** The one dark hero card per view: big "23 of 90" plus the 90-cell season strip. */
 export function SeasonTile() {
   const { season } = useDashboard().data;
+  if (!season) {
+    return (
+      <section aria-label="Season" className="flex flex-col gap-1.5 rounded-[20px] bg-hero px-6 py-[22px] text-white">
+        <span className="text-[13px] font-semibold text-hero-label">Winter Arc · 90 days</span>
+        <span className="text-[22px] font-bold">No season running yet</span>
+        <span className="text-[15px] text-hero-sub">
+          Keep logging every day. Once Winter Arc has a start date, each day fills in here.
+        </span>
+      </section>
+    );
+  }
   return (
     <section
       aria-label={`${season.name} season`}

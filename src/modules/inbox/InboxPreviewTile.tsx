@@ -3,6 +3,7 @@
 import { Card } from "@/components/Card";
 import { CardHeader, SectionHeading } from "@/components/SectionHeading";
 import { TextButton } from "@/components/TextButton";
+import { EmptyNote } from "@/components/EmptyNote";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 import { MailRow } from "./MailRow";
 
@@ -15,6 +16,11 @@ export function InboxPreviewTile() {
           <SectionHeading tone="yellow">Inbox</SectionHeading>
         </CardHeader>
       </div>
+      {data.mails.length === 0 && (
+        <div className="px-2 pt-1 pb-2">
+          <EmptyNote>Gmail isn&apos;t connected yet. Your newest mail shows here once it is.</EmptyNote>
+        </div>
+      )}
       {data.mails.slice(0, 4).map((m) => (
         <MailRow
           key={m.id}

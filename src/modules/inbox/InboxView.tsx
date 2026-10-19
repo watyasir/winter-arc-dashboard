@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
+import { EmptyNote } from "@/components/EmptyNote";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 import { toneBg } from "@/lib/tones";
 import { MailRow } from "./MailRow";
@@ -11,6 +12,14 @@ export function InboxView() {
   const { data, mailbox, setMailbox, selectedMailId, openMail } = useDashboard();
   const list = mailbox === "Inbox" ? data.mails : data.mails.filter((m) => m.box === mailbox || m.label === mailbox);
   const sel = data.mails.find((m) => m.id === selectedMailId) ?? data.mails[0];
+
+  if (data.mailboxes.length === 0) {
+    return (
+      <Card aria-label="Inbox">
+        <EmptyNote>Gmail isn&apos;t connected yet. Once it is, you&apos;ll read, reply to and archive mail right here.</EmptyNote>
+      </Card>
+    );
+  }
 
   return (
     <div className="flex flex-wrap items-start gap-2.5">

@@ -2,6 +2,7 @@
 
 import { Card } from "@/components/Card";
 import { CardHeader, SectionHeading } from "@/components/SectionHeading";
+import { EmptyNote } from "@/components/EmptyNote";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 
 // Chart geometry (viewBox 560 x 180). Plot runs x 10..510, y 20 (top of axis) .. 150 (bottom).
@@ -13,6 +14,14 @@ const Y_BOTTOM = 150;
 /** Weight line chart: summary line above, Y labels on the right, dashed goal line. */
 export function WeightTile() {
   const { weight } = useDashboard().data;
+  if (!weight || weight.values.length < 2) {
+    return (
+      <Card aria-label="Weight" className="flex flex-[2_1_480px] flex-col gap-3">
+        <SectionHeading tone="mist">Weight</SectionHeading>
+        <EmptyNote>No weigh-ins yet. Your weight chart starts with your first two weekly weigh-ins.</EmptyNote>
+      </Card>
+    );
+  }
   const [lo, hi] = weight.axis;
   const y = (v: number) => Y_BOTTOM - ((v - lo) / (hi - lo)) * (Y_BOTTOM - Y_TOP);
   const x = (i: number) => X0 + (i * (X1 - X0)) / (weight.values.length - 1);
