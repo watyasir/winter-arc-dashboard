@@ -44,7 +44,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Tokens renamed to v6 meanings, grey frame, white cards, teal brand, dark teal hero, pill controls
 - [x] Wallet stack in the Money tile (fake accounts, tab opens account detail)
 - [x] Checked at 1440px and 375px; `npx hig-doctor .` clean
-- [ ] Pre-commit privacy check
+- [x] Pre-commit privacy check (`scripts/privacy-check.mjs`, turned on by `npm install` via `prepare`)
 - [ ] Phase 2
 
-**Next up:** pre-commit privacy check, then Phase 2 (database + login + daily check-in).
+**Next up:** Phase 2 (database + login + daily check-in).

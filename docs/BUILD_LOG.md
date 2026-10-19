@@ -65,6 +65,7 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **What broke and how we fixed it:**
 - A git lock file left over from the last session blocked the first commit; nothing was running, so it was removed.
 - hig-doctor flagged one plain hex colour in the CSS; it now uses a token.
-**What Yasir had to do himself:** nothing for the look.
+- Pre-commit privacy check (`scripts/privacy-check.mjs`): blocks any commit that adds an email address (example.com is fine), a phone number, a long account or card number, or a .env file. Tested in a scratch copy: real email, Indian and US phones, card and account numbers, and .env.local were all blocked; example.com, .env.example, dates, rupee amounts and SVG numbers went through. The whole existing repo passes. `npm install` switches it on automatically.
+**What Yasir had to do himself:** nothing for the look or the privacy check.
 **Screenshot to take:** `/demo` Overview on a laptop (hero card + wallet stack), and the Money tile with an account opened.
 **Next:** pre-commit privacy check, then Phase 2.
