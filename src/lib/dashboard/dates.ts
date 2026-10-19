@@ -1,4 +1,6 @@
-import { addDays } from "@/lib/trackers";
+import { addDays, shortDate } from "@/lib/trackers";
+
+export { shortDate };
 
 /* Date helpers for YYYY-MM-DD strings (India dates, already worked out by todayISO). */
 
@@ -15,11 +17,6 @@ export function daysBetween(from: string, to: string): number {
 export function weekStart(iso: string): string {
   const weekday = (utc(iso).getUTCDay() + 6) % 7; // Monday = 0
   return addDays(iso, -weekday);
-}
-
-/** "2026-09-26" -> "26 Sep" */
-export function shortDate(iso: string): string {
-  return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "UTC" }).format(utc(iso));
 }
 
 /** "2026-10-19" -> "Mon" */

@@ -44,13 +44,21 @@ export function addDays(iso: string, days: number): string {
   return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10);
 }
 
+// Written out because some browsers say "Sept"; the app always uses three letters.
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/** "2026-09-26" -> "26 Sep" */
+export function shortDate(iso: string): string {
+  const [, m, d] = iso.split("-").map(Number);
+  return `${d} ${MONTHS[m - 1]}`;
+}
+
 /** "2026-10-20" -> "Tuesday, 20 Oct 2026". */
 export function formatDayLabel(iso: string): string {
   const [y, m, d] = iso.split("-").map(Number);
   const date = new Date(Date.UTC(y, m - 1, d, 12));
   const weekday = new Intl.DateTimeFormat("en-GB", { weekday: "long", timeZone: "UTC" }).format(date);
-  const rest = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(date);
-  return `${weekday}, ${rest}`;
+  return `${weekday}, ${shortDate(iso)} ${y}`;
 }
 
 /** Number with up to 2 decimals and Indian grouping: 8000 -> "8,000", 2.5 -> "2.5". */
