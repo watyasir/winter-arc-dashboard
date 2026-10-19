@@ -62,7 +62,8 @@ export function shortDate(iso: string): string {
 
 /** "2026-10-20" -> "Tuesday, 20 October" */
 function headerDate(iso: string): string {
-  return new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }).format(utc(iso));
+  const part = (o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat("en-GB", { ...o, timeZone: "UTC" }).format(utc(iso));
+  return `${part({ weekday: "long" })}, ${part({ day: "numeric", month: "long" })}`;
 }
 
 function lastDays(today: string, n: number): string[] {
@@ -306,7 +307,9 @@ function digest(season: SeasonRow | null, today: string, streak: number, tracker
   const logged = trackers
     .map((t) => {
       const v = valueOn(t, yesterday);
-      return v === undefined ? null : `${t.name.toLowerCase()} ${formatValue(t, v).toLowerCase()}`;
+      if (v === undefined) return null;
+      if (t.type === "checkbox") return v >= 1 ? t.name.toLowerCase() : null;
+      return `${t.name.toLowerCase()} ${formatValue(t, v)}`;
     })
     .filter(Boolean);
   lines.push(logged.length ? `Yesterday: ${logged.join(", ")}` : "Yesterday: nothing logged");

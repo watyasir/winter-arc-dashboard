@@ -9,6 +9,9 @@ const paths = {
   alert: "M12 7v6M12 17h.01",
   chevronDown: "M6 9l6 6 6-6",
   search: "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-3.5-3.5",
+  sun: "M12 4v2M12 18v2M4 12h2M18 12h2M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z",
+  rupee: "M7 5h10M7 9h10M7 5c6 0 6 8 0 8l7 6",
+  plus: "M12 5v14M5 12h14",
 };
 
 export type IconName = keyof typeof paths;

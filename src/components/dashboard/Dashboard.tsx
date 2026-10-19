@@ -7,13 +7,17 @@ import type { DashboardData, ToggleTodayAction } from "@/modules/types";
 import { DashboardProvider, useDashboard } from "./DashboardContext";
 import { Header } from "./Header";
 import { OverviewView } from "./OverviewView";
+import { PhoneHome } from "./PhoneHome";
 import { Sidebar } from "./Sidebar";
 
-/** The whole app frame: sidebar + header + the selected view. */
+/** The whole app frame: the phone home screen under 640px, sidebar + header + the selected view from 640px up. */
 export function Dashboard({ data, onToggleToday }: { data: DashboardData; onToggleToday?: ToggleTodayAction }) {
   return (
     <DashboardProvider data={data} onToggleToday={onToggleToday}>
-      <div className="flex flex-wrap items-start gap-[18px] p-4 min-[980px]:flex-nowrap">
+      <div className="sm:hidden">
+        <PhoneHome />
+      </div>
+      <div className="hidden flex-wrap items-start gap-[18px] p-4 sm:flex min-[980px]:flex-nowrap">
         <Sidebar />
         <main className="flex min-w-0 flex-1 flex-col gap-4 pb-8 min-[980px]:px-1 min-[980px]:pt-1">
           <Header />

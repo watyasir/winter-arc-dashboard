@@ -62,7 +62,9 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Real data on `/` with the same tiles as `/demo`: today's status, streak, 7-day averages, this week vs weekly targets, 4-week habit grid (`src/lib/dashboard/`)
 - [x] Empty states that say what to log (season, money, weight, goals, inbox, board)
 - [x] Tapping a yes/no row on Today saves it and the numbers update straight away; `/log` refreshes `/` on save
-- [ ] Phone home screen with the floating tab bar (`Phone.dc.html`)
-- [ ] Checked signed in on laptop and phone width; `npx hig-doctor .` clean
+- [x] Phone home screen with the floating tab bar (`Phone.dc.html`): Today, Arc, Board, Money tabs + round Log button, shown under 640px on `/` and `/demo`
+- [x] Fixed: "Log Today" button text was teal on teal (global link colour won); plain links only get the teal now
+- [x] Checked at 375px and desktop on `/demo` and on the real builder with test rows; `npx hig-doctor .` clean
+- [ ] Yasir: sign in on the live site and check `/` shows his real numbers, and that ticking a row updates them (Phase 3 "done when")
 
-**Next up:** the phone test, then Phase 3 (real dashboard). Note: Supabase's built-in email allows only 2 sign-in emails per hour; custom SMTP would lift that.
+**Next up:** the phone test (closes Phase 2), then Yasir checks `/` signed in (closes Phase 3). Winter Arc shows "No season running yet" until a season row exists (start date is set in Phase 7). Note: Supabase's built-in email allows only 2 sign-in emails per hour; custom SMTP would lift that.

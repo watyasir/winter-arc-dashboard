@@ -48,7 +48,7 @@ function Welcome() {
         </Link>
         <p className="mt-4 mb-0 text-[13px] text-sub">
           It&apos;s you?{" "}
-          <Link href="/login" className="font-semibold">
+          <Link href="/login" className="font-semibold text-brand-text hover:text-brand-hover">
             Sign in
           </Link>
         </p>
