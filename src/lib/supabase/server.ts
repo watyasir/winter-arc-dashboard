@@ -1,14 +1,10 @@
 import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { supabaseKey, supabaseUrl } from "./config";
 
 export function supabaseEnv() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) {
-    throw new Error("Supabase isn't set up yet: add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.local");
-  }
-  return { url, key };
+  return { url: supabaseUrl, key: supabaseKey };
 }
 
 /** Supabase client for Server Components, Server Actions and Route Handlers, acting as the signed-in user. */
