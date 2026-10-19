@@ -1,8 +1,9 @@
 "use server";
 
+import { createClient } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 import { isAllowedEmail } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { supabaseEnv } from "@/lib/supabase/server";
 
 export type LoginState = { status: "idle" } | { status: "sent"; email: string } | { status: "error"; message: string };
 
@@ -19,10 +20,15 @@ export async function sendMagicLink(_prev: LoginState, form: FormData): Promise<
 
   const h = await headers();
   const origin = h.get("origin") ?? `${h.get("x-forwarded-proto") ?? "https"}://${h.get("host")}`;
-  const supabase = await createClient();
+  // "implicit" puts the login in the link itself, so it works in whichever browser opens the email
+  // (the default needs the same browser that asked). /auth/callback finishes the sign-in.
+  const { url, key } = supabaseEnv();
+  const supabase = createClient(url, key, {
+    auth: { flowType: "implicit", persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+  });
   const { error } = await supabase.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: `${origin}/auth/confirm` },
+    options: { emailRedirectTo: `${origin}/auth/callback` },
   });
   if (error) {
     return {

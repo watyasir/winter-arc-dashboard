@@ -12,7 +12,7 @@ export function LoginForm({ notice }: { notice?: string }) {
       <div role="status" className="flex flex-col gap-2">
         <h2 className="m-0 text-[17px] font-semibold">Check your email</h2>
         <p className="m-0 text-[15px] text-sub">
-          If {state.email} can sign in, a link is on its way. Open it on this device to finish signing in.
+          If {state.email} can sign in, a link is on its way. Open it to finish signing in.
         </p>
       </div>
     );

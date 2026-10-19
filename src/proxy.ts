@@ -26,7 +26,7 @@ export async function proxy(request: NextRequest) {
   const signedIn = !!data?.claims;
   const path = request.nextUrl.pathname;
 
-  if (!signedIn && path.startsWith("/log")) {
+  if (!signedIn && (path === "/log" || path.startsWith("/log/") || path.startsWith("/settings"))) {
     const to = request.nextUrl.clone();
     to.pathname = "/login";
     to.search = "";

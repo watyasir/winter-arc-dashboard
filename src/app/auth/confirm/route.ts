@@ -4,9 +4,9 @@ import { isAllowedEmail } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 /*
-  The sign-in email link lands here. Two link styles are handled:
-    ?token_hash=...&type=email  works from any browser (needs the custom email template, see docs)
-    ?code=...                   Supabase's default link; only works in the browser that asked for it
+  Fallback for other sign-in link styles (the normal link goes to /auth/callback):
+    ?token_hash=...&type=email  needs a custom email template (custom SMTP)
+    ?code=...                   only works in the browser that asked for it
 */
 export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;

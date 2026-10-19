@@ -60,10 +60,10 @@ Overview `red` · Inbox `peach` · Board `yellow` · Instinct `green` · Tracker
 Yasir's call (20 Oct 2026), from a reference dashboard he liked: calm greys, white cards, one deep teal as the brand colour, sage and soft yellow as supporting colours, a dark teal gradient "hero" card, and pill-shaped controls. No dark mode, no toggle. The mockups in `docs/design-reference/` (Main, Phone, CheckIn) are already in this theme: match them.
 
 ### Neutrals
-Pure neutral greys (R = G = B). No blue, violet or pink cast anywhere in the greys.
+Component greys are pure neutral (R = G = B). The app background is a cool grey Yasir picked (`#F6F8FA` → `#E9ECED`); never a violet or pink cast.
 | Token | Hex | Contrast on white | Use |
 |---|---|---|---|
-| `frame` | `linear-gradient(160deg, #F2F2F2 0%, #E6E6E6 55%, #D4D4D4 100%)`, `background-attachment: fixed` | | App background |
+| `frame` | `linear-gradient(160deg, #F6F8FA 0%, #E9ECED 100%)`, `background-attachment: fixed` | | App background |
 | `card` | `linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%)` + 1px `sep` border, radius 20 | | Every card |
 | `base` | `#FFFFFF` | | Sidebar, header, inputs, small board cards, plain buttons (with 1px `sep` border) |
 | `mantle` | `#F5F5F5` / board columns `#F3F3F3` | | Secondary panels |
