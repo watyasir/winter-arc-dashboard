@@ -7,7 +7,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 | 0 | Setup: scaffold, git, GitHub, Vercel | ✅ Done (19 Oct 2026) |
 | 1 | The look (demo data only) | ✅ Done (19 Oct 2026) |
 | 2 | Database + login + daily check-in | ✅ Done (20 Oct 2026) |
-| 3 | Real dashboard | 🟡 In progress |
+| 3 | Real dashboard | ✅ Done (20 Oct 2026) |
 | 4 | Workouts + body | 🟡 Live, waiting on Yasir's first real workout |
 | 5 | Tasks + goals | ⬜ Not started |
 | 6 | Money (read from the sheet) | ⬜ Not started |
@@ -64,7 +64,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Phone home screen with the floating tab bar (`Phone.dc.html`): Today, Arc, Board, Money tabs + round Log button, shown under 640px on `/` and `/demo`
 - [x] Fixed: "Log Today" button text was teal on teal (global link colour won); plain links only get the teal now
 - [x] Checked at 375px and desktop on `/demo` and on the real builder with test rows; `npx hig-doctor .` clean
-- [ ] Yasir: sign in on the live site and check `/` shows his real numbers, and that ticking a row updates them (Phase 3 "done when")
+- [x] Live check (20 Oct): Yasir's real rows give 8 of 8 logged and correct stats; tapping Hair routine on the phone ticks/unticks and saves straight to the database
 
 ## Phase 4 checklist
 - [x] Migration: workouts, workout_sets (saved together by `save_workout`), body_checks, user_settings (goal weight), each locked to its owner. Run on Supabase (20 Oct)
