@@ -15,7 +15,7 @@ export function InProgressTile() {
         <SectionHeading tone="yellow">In progress</SectionHeading>
       </CardHeader>
       {doing.map((k) => (
-        <div key={k.title} className="flex items-center gap-2.5 border-t border-surface0 py-2">
+        <div key={k.title} className="flex items-center gap-2.5 border-t border-sep py-2">
           <span className="flex-1 text-[13px]">{k.title}</span>
           <OwnerChip owner={k.owner} />
         </div>

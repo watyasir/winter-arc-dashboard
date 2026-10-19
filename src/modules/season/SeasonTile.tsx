@@ -1,15 +1,14 @@
 "use client";
 
-import { Card } from "@/components/Card";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 import type { SeasonDay } from "@/modules/types";
 
 const cellStyle: Record<SeasonDay, string> = {
-  all: "bg-green",
-  most: "bg-green-light",
-  missed: "border-[1.5px] border-peach bg-transparent",
-  today: "bg-mauve",
-  upcoming: "bg-crust",
+  all: "bg-hero-all",
+  most: "bg-hero-most",
+  missed: "border-[1.5px] border-hero-missed bg-transparent",
+  today: "bg-white",
+  upcoming: "bg-hero-upcoming",
 };
 
 const cellWords: Record<SeasonDay, string> = {
@@ -22,26 +21,29 @@ const cellWords: Record<SeasonDay, string> = {
 
 const legend: SeasonDay[] = ["all", "most", "missed", "today"];
 
-/** The hero: big "23 of 90" plus the 90-cell season strip. */
+/** The one dark hero card per view: big "23 of 90" plus the 90-cell season strip. */
 export function SeasonTile() {
   const { season } = useDashboard().data;
   return (
-    <Card aria-label={`${season.name} season`} className="flex flex-wrap items-center gap-7 px-6 py-[22px]">
+    <section
+      aria-label={`${season.name} season`}
+      className="flex min-w-0 flex-wrap items-center gap-7 rounded-[20px] bg-hero px-6 py-[22px] text-white"
+    >
       <div className="flex flex-[0_1_260px] flex-col gap-1.5">
-        <span className="text-[13px] font-semibold text-mauve-text">
+        <span className="text-[13px] font-semibold text-hero-label">
           {season.name} · {season.length} days
         </span>
         <div className="flex items-baseline gap-2">
           <span className="font-rounded text-[64px] leading-none font-bold tracking-[-0.03em]">{season.day}</span>
-          <span className="text-[17px] font-semibold text-subtext1">of {season.length}</span>
+          <span className="text-[17px] font-semibold text-hero-sub">of {season.length}</span>
         </div>
         <span className="text-[15px]">
           You&apos;re on a {season.streak}-day streak. {season.length - season.day} days to go.
         </span>
         <div className="flex gap-[18px] pt-2.5">
-          <Figure value={`${season.targetsHitPct}%`} label="targets hit" className="text-green-text" />
+          <Figure value={`${season.targetsHitPct}%`} label="targets hit" className="text-hero-sage" />
           <Figure value={String(season.bestStreak)} label="best streak" />
-          <Figure value={String(season.missed)} label="missed" className="text-peach-text" />
+          <Figure value={String(season.missed)} label="missed" className="text-hero-yellow" />
         </div>
       </div>
 
@@ -60,7 +62,7 @@ export function SeasonTile() {
             );
           })}
         </div>
-        <div className="flex flex-wrap justify-between gap-2.5 text-xs text-subtext1">
+        <div className="flex flex-wrap justify-between gap-2.5 text-xs text-hero-sub">
           <span>{season.startLabel}</span>
           <span className="order-last flex w-full flex-wrap gap-3 sm:order-none sm:w-auto">
             {legend.map((d) => (
@@ -73,7 +75,7 @@ export function SeasonTile() {
           <span>{season.endLabel}</span>
         </div>
       </div>
-    </Card>
+    </section>
   );
 }
 
@@ -81,7 +83,7 @@ function Figure({ value, label, className = "" }: { value: string; label: string
   return (
     <div>
       <div className={`font-rounded text-xl font-bold ${className}`}>{value}</div>
-      <div className="text-xs text-subtext1">{label}</div>
+      <div className="text-xs text-hero-sub">{label}</div>
     </div>
   );
 }

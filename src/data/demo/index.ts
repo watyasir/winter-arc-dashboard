@@ -64,11 +64,11 @@ export const demoData: DashboardData = {
     days: seasonDays,
   },
   stats: [
-    { label: "Sleep", value: "7.2", unit: "hr", note: "7-day average, on target", tone: "mauve", trend: [6.4, 7.1, 6.8, 7.5, 7.0, 7.4, 7.2] },
-    { label: "Workouts", value: "3", unit: "of 5", note: "This week", tone: "green", trend: [2, 4, 3, 5, 4, 4, 3] },
-    { label: "Study", value: "6.5", unit: "of 10 hr", note: "3.5 hr left this week", tone: "peach", trend: [8, 9, 7, 10, 9, 8, 6.5] },
-    { label: "Weight", value: "72.4", unit: "kg", note: "Up 2.1 kg in 8 weeks", tone: "blue", trend: weights },
-    { label: "Spent today", value: "₹425", unit: "", note: "Food ₹305 · Travel ₹120", tone: "teal", trend: [900, 300, 650, 120, 480, 220, 425] },
+    { label: "Sleep", value: "7.2", unit: "hr", note: "7-day average, on target", tone: "arc", trend: [6.4, 7.1, 6.8, 7.5, 7.0, 7.4, 7.2] },
+    { label: "Workouts", value: "3", unit: "of 5", note: "This week", tone: "sage", trend: [2, 4, 3, 5, 4, 4, 3] },
+    { label: "Study", value: "6.5", unit: "of 10 hr", note: "3.5 hr left this week", tone: "yellow", trend: [8, 9, 7, 10, 9, 8, 6.5] },
+    { label: "Weight", value: "72.4", unit: "kg", note: "Up 2.1 kg in 8 weeks", tone: "brand", trend: weights },
+    { label: "Spent today", value: "₹425", unit: "", note: "Food ₹305 · Travel ₹120", tone: "pine", trend: [900, 300, 650, 120, 480, 220, 425] },
   ],
   today: [
     { label: "Gym · push day", area: "Body", done: true },
@@ -85,6 +85,49 @@ export const demoData: DashboardData = {
     spent: 31800,
     split: { needs: 48, wants: 15, savings: 37 },
     fund: { name: "Travel fund", pct: 52, target: 40000 },
+    // Made-up accounts. Real ones come read-only from the finance sheet in Phase 6.
+    accounts: [
+      {
+        id: "savings",
+        name: "Savings account",
+        kind: "savings",
+        balance: 48200,
+        transactions: [
+          { label: "Moved from salary account", date: "18 Oct", amount: 10000 },
+          { label: "Interest", date: "1 Oct", amount: 312 },
+          { label: "Travel fund top-up", date: "1 Oct", amount: -5000 },
+          { label: "Moved from salary account", date: "18 Sep", amount: 10000 },
+          { label: "Interest", date: "1 Sep", amount: 298 },
+        ],
+      },
+      {
+        id: "salary",
+        name: "Salary account",
+        kind: "current",
+        balance: 31500,
+        transactions: [
+          { label: "Groceries", date: "19 Oct", amount: -1240 },
+          { label: "Moved to savings", date: "18 Oct", amount: -10000 },
+          { label: "Rent", date: "5 Oct", amount: -12000 },
+          { label: "Salary", date: "1 Oct", amount: 50000 },
+          { label: "Phone bill", date: "1 Oct", amount: -399 },
+        ],
+      },
+      {
+        id: "card",
+        name: "Credit card",
+        kind: "card",
+        balance: -12400,
+        due: "5 Nov",
+        transactions: [
+          { label: "Food delivery", date: "17 Oct", amount: -245 },
+          { label: "Air fryer, EMI 1 of 3", date: "14 Oct", amount: -2300 },
+          { label: "Fuel", date: "12 Oct", amount: -1500 },
+          { label: "Streaming plan", date: "11 Oct", amount: -199 },
+          { label: "Bill paid", date: "5 Oct", amount: 9800 },
+        ],
+      },
+    ],
   },
   weight: {
     unit: "kg",
@@ -95,18 +138,18 @@ export const demoData: DashboardData = {
     axis: [69, 77],
   },
   goals: [
-    { name: "Gain 5 kg", progress: "2.1 of 5 kg", pct: 42, by: "by 24 Dec", tone: "blue" },
-    { name: "Bench press 70 kg", progress: "55 of 70", pct: 79, by: "by 31 Dec", tone: "green" },
-    { name: "German A1", progress: "35%", pct: 35, by: "by 31 Mar 2027", tone: "red" },
-    { name: "Travel fund", progress: "52%", pct: 52, by: "by 30 Apr 2027", tone: "teal" },
+    { name: "Gain 5 kg", progress: "2.1 of 5 kg", pct: 42, by: "by 24 Dec", tone: "brand" },
+    { name: "Bench press 70 kg", progress: "55 of 70", pct: 79, by: "by 31 Dec", tone: "sage" },
+    { name: "German A1", progress: "35%", pct: 35, by: "by 31 Mar 2027", tone: "coral" },
+    { name: "Travel fund", progress: "52%", pct: 52, by: "by 30 Apr 2027", tone: "pine" },
   ],
   habits,
   mailboxes: [
-    { label: "Inbox", tone: "blue", count: "4" },
-    { label: "Follow up", tone: "peach", count: "1" },
+    { label: "Inbox", tone: "brand", count: "4" },
+    { label: "Follow up", tone: "yellow", count: "1" },
     { label: "Waiting", tone: "yellow", count: "2" },
-    { label: "Instinct", tone: "mauve", count: "1" },
-    { label: "Bank", tone: "green", count: "1" },
+    { label: "Instinct", tone: "arc", count: "1" },
+    { label: "Bank", tone: "sage", count: "1" },
   ],
   mailboxNote: "Claude files Instinct mail and logs bank alerts automatically.",
   mails: [
@@ -204,7 +247,7 @@ export const demoData: DashboardData = {
     },
     {
       name: "In progress",
-      tone: "blue",
+      tone: "brand",
       count: "4",
       cards: [
         { title: "Winter Arc Dashboard design", owner: "Both", area: "Build" },
@@ -215,7 +258,7 @@ export const demoData: DashboardData = {
     },
     {
       name: "Waiting on others",
-      tone: "peach",
+      tone: "yellow",
       count: "2",
       cards: [
         { title: "New job: document check", owner: "Claude", area: "Work" },
@@ -224,7 +267,7 @@ export const demoData: DashboardData = {
     },
     {
       name: "Done",
-      tone: "green",
+      tone: "sage",
       count: "5",
       cards: [
         { title: "Dashboard project brief", owner: "Claude", area: "Build", done: true },

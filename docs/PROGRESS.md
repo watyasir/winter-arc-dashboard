@@ -39,4 +39,12 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Checked on laptop (1440px) and phone (390px); `npx hig-doctor .` clean
 - [ ] Left for Phase 2: the phone home screen with tab bar and the check-in sheet (`Phone.dc.html`, `CheckIn.dc.html`), built with `/log`
 
-**Next up:** Phase 2, database + login + daily check-in.
+## Design v6 "Teal and grey" (20 Oct 2026)
+- [x] Design docs committed ("Design v6: Teal and grey + wallet stack")
+- [x] Tokens renamed to v6 meanings, grey frame, white cards, teal brand, dark teal hero, pill controls
+- [x] Wallet stack in the Money tile (fake accounts, tab opens account detail)
+- [x] Checked at 1440px and 375px; `npx hig-doctor .` clean
+- [ ] Pre-commit privacy check
+- [ ] Phase 2
+
+**Next up:** pre-commit privacy check, then Phase 2 (database + login + daily check-in).

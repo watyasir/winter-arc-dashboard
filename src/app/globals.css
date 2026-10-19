@@ -1,48 +1,62 @@
 @import "tailwindcss";
 
 /*
-  Design tokens. Light theme only. Catppuccin Latte palette (MIT), see docs/DESIGN.md §2.
+  Design tokens. Light theme only. v6 "Teal and grey", see docs/DESIGN.md §2b.
   Every colour and font lives here. Components use the Tailwind classes these create
-  (bg-base, text-subtext1, stroke-blue, ...) and never a raw hex value.
+  (bg-card, text-sub, stroke-brand, ...) and never a raw hex value.
 */
 @theme {
   --color-*: initial;
   --color-white: #ffffff;
   --color-transparent: transparent;
 
-  /* Surfaces and text */
-  --color-crust: #dce0e8;
-  --color-mantle: #e6e9ef;
-  --color-base: #eff1f5;
-  --color-surface0: #ccd0da;
-  --color-surface1: #bcc0cc;
-  --color-overlay0: #9ca0b0;
-  --color-overlay1: #8c8fa1;
-  --color-subtext1: #5c5f77;
-  --color-text: #4c4f69;
-  --color-fill: rgba(140, 143, 161, 0.16);
-  --color-fill-strong: rgba(140, 143, 161, 0.26);
+  /* Neutrals: pure greys, no colour cast */
+  --color-base: #ffffff;
+  --color-mantle: #f5f5f5;
+  --color-column: #f3f3f3;
+  --color-crust: #ededed;
+  --color-sep: #e5e5e5;
+  --color-rule: #c8c8c8;
+  --color-overlay: #848f99;
+  --color-sub: #666c70;
+  --color-ink: #16191b;
+  --color-fill: rgba(22, 25, 27, 0.05);
+  --color-fill-strong: rgba(22, 25, 27, 0.1);
 
-  /* Colours with one meaning each. "-text" = text-safe variant for small text on base. */
-  --color-blue: #2a6ef5;
-  --color-blue-text: #1f5bd8;
-  --color-blue-hover: #1747b0;
-  --color-green: #40a02b;
-  --color-green-text: #2e7a1e;
-  --color-green-light: #a6d79a;
-  --color-peach: #fe640b;
-  --color-peach-text: #b8460b;
-  --color-red: #d20f39;
-  --color-red-text: #b00d30;
-  --color-mauve: #8839ef;
-  --color-mauve-text: #7029d0;
-  --color-pink: #ec83d0;
-  --color-pink-text: #a3218e;
-  --color-teal: #179299;
-  --color-yellow: #e49320;
-  --color-sky: #04a5e5;
-  --color-sapphire: #209fb5;
-  --color-lavender: #7287fd;
+  /* Colours with one meaning each. "-text" = text-safe variant for small text on white. */
+  --color-brand: #0f4c4a; /* interactive */
+  --color-brand-text: #0f4c4a;
+  --color-brand-hover: #0a3533;
+  --color-sage: #6e9c93; /* done / on target / saved */
+  --color-sage-text: #3d6e64;
+  --color-sage-light: #b9d3cd;
+  --color-yellow: #f2c230; /* due soon / warning */
+  --color-yellow-text: #8a6200;
+  --color-coral: #e0684b; /* overdue / errors / money out */
+  --color-coral-text: #b4432a;
+  --color-arc: #155a63; /* Winter Arc identity */
+  --color-arc-text: #155a63;
+  --color-cyan: #4fb3bf; /* Claude */
+  --color-cyan-text: #1a6a70;
+
+  /* Teal ramp: nav icon tiles, section bars, extra series. Not for text. */
+  --color-ramp2: #2d6e6a;
+  --color-ramp3: #4f8780;
+  --color-pine: #3d8a80;
+  --color-mist: #6fa8b6;
+  --color-seafoam: #8fb3aa;
+  --color-lagoon: #4f8f9a;
+
+  /* Hero card (the one dark card per view) */
+  --color-hero-sub: rgba(255, 255, 255, 0.74);
+  --color-hero-sage: #a8d5cc;
+  --color-hero-yellow: #f5d96b;
+  --color-hero-label: #bfe3e0;
+  --color-hero-all: #7fb0a6;
+  --color-hero-most: #9cc3bb;
+  --color-hero-missed: #f2d54e;
+  --color-hero-upcoming: rgba(255, 255, 255, 0.13);
+  --color-on-dark: rgba(255, 255, 255, 0.16);
 
   /* Type */
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
@@ -60,14 +74,30 @@
   }
 }
 
+/* Gradients can't be colour tokens, so they live here as named utilities. */
+@utility bg-frame {
+  background: linear-gradient(160deg, #f2f2f2 0%, #e6e6e6 55%, #d4d4d4 100%) fixed;
+}
+@utility bg-card {
+  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+}
+@utility bg-hero {
+  background: linear-gradient(135deg, #0b2c33 0%, #11414a 45%, #2b6f84 100%);
+}
+/* The wallet front card's semicircle notch at top centre. */
+@utility notch-top {
+  -webkit-mask: radial-gradient(circle 26px at 50% 0, transparent 25px, #000 26px);
+  mask: radial-gradient(circle 26px at 50% 0, transparent 25px, #000 26px);
+}
+
 html {
   background: var(--color-crust);
 }
 
 body {
   margin: 0;
-  background: var(--color-crust);
-  color: var(--color-text);
+  background: linear-gradient(160deg, #f2f2f2 0%, #e6e6e6 55%, #d4d4d4 100%) fixed;
+  color: var(--color-ink);
   font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
@@ -75,13 +105,13 @@ body {
 
 /* Visible focus on every button, link and input (DESIGN.md §5). */
 :where(button, a, input, [role="switch"]):focus-visible {
-  outline: 2px solid var(--color-blue-text);
+  outline: 2px solid var(--color-brand);
   outline-offset: 2px;
 }
 
 a {
-  color: var(--color-blue-text);
+  color: var(--color-brand-text);
 }
 a:hover {
-  color: var(--color-blue-hover);
+  color: var(--color-brand-hover);
 }

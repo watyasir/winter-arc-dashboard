@@ -10,17 +10,17 @@ export function StatsTile() {
   return (
     <section aria-label="Key numbers" className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-3">
       {stats.map((s) => (
-        <div key={s.label} className="flex min-w-0 flex-col gap-1.5 rounded-2xl bg-base p-4">
+        <div key={s.label} className="flex min-w-0 flex-col gap-1.5 rounded-[20px] border border-sep bg-card p-4">
           <span className="flex items-center gap-1.5 text-xs font-semibold">
             <span aria-hidden="true" className={`size-2 rounded-full ${toneBg[s.tone]}`} />
             {s.label}
           </span>
           <span className="flex items-baseline gap-1">
             <span className="font-rounded text-[30px] font-bold">{s.value}</span>
-            {s.unit && <span className="text-[13px] font-semibold text-subtext1">{s.unit}</span>}
+            {s.unit && <span className="text-[13px] font-semibold text-sub">{s.unit}</span>}
           </span>
           <Sparkline values={s.trend} tone={s.tone} />
-          <span className="text-xs text-subtext1">{s.note}</span>
+          <span className="text-xs text-sub">{s.note}</span>
         </div>
       ))}
     </section>

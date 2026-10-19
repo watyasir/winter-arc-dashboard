@@ -51,3 +51,20 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **What Yasir had to do himself:** nothing.
 **Screenshot to take:** `/demo` Overview on a laptop, and the Instinct view with the status pill showing (click "Send to Instinct").
 **Next:** Phase 2: Supabase, login, and the daily check-in at `/log` (including the phone check-in sheet from the design).
+
+## Session 4 — 20 Oct 2026 — Design v6 "Teal and grey" + privacy check + Phase 2
+**Goal:** Move `/demo` to the new v6 look, add a pre-commit privacy check, then start Phase 2.
+**What I asked Claude Code to do:** "Commit the design docs, apply DESIGN.md v6 to /demo (grey frame, white cards, deep teal, dark teal hero, pill controls, wallet stack), add a pre-commit privacy check, then do Phase 2."
+**What got built:**
+- Every colour token renamed to what it means in v6 (`brand`, `sage`, `yellow`, `coral`, `arc`, `cyan`, `ink`, `sub`, `sep`…), so the code reads like the spec. Gradients (frame, card, hero) live as named utilities next to the tokens.
+- Grey gradient frame, white cards with a thin grey border, 20px corners.
+- Sidebar items, mailboxes, buttons and chips are now pills; the selected one is filled deep teal with white text.
+- The Winter Arc season card is the one dark teal gradient "hero" card, with its own light cell colours.
+- Money tile: a wallet stack. Each (fake) account is a coloured tab showing its balance; the white front card shows the total. Clicking a tab opens that account's last 5 transactions in the same tile; Escape goes back and puts focus back on the tab.
+- Rupee amounts below zero now show a real minus: −₹12,400.
+**What broke and how we fixed it:**
+- A git lock file left over from the last session blocked the first commit; nothing was running, so it was removed.
+- hig-doctor flagged one plain hex colour in the CSS; it now uses a token.
+**What Yasir had to do himself:** nothing for the look.
+**Screenshot to take:** `/demo` Overview on a laptop (hero card + wallet stack), and the Money tile with an account opened.
+**Next:** pre-commit privacy check, then Phase 2.

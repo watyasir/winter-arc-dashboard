@@ -12,7 +12,7 @@ export function InboxPreviewTile() {
     <Card aria-label="Inbox" className="flex-[1_1_340px] px-3 pt-[18px] pb-2.5">
       <div className="px-2 pb-1.5">
         <CardHeader aside={<TextButton onClick={() => setView("inbox")}>Open Inbox</TextButton>}>
-          <SectionHeading tone="peach">Inbox</SectionHeading>
+          <SectionHeading tone="yellow">Inbox</SectionHeading>
         </CardHeader>
       </div>
       {data.mails.slice(0, 4).map((m) => (

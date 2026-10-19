@@ -34,6 +34,18 @@ export interface BoardCard {
   done?: boolean;
 }
 
+/** One bank account or card in the Money wallet stack. Card balances are negative (amount owed). */
+export interface Account {
+  id: string;
+  name: string;
+  kind: "savings" | "current" | "card" | "other";
+  balance: number;
+  /** Cards only: next bill due date, e.g. "5 Nov". */
+  due?: string;
+  /** Latest first. Positive = money in. */
+  transactions: { label: string; date: string; amount: number }[];
+}
+
 export interface DashboardData {
   ownerLine: string;
   views: Record<ViewId, { title: string; subtitle: string }>;
@@ -60,6 +72,7 @@ export interface DashboardData {
     spent: number;
     split: { needs: number; wants: number; savings: number };
     fund: { name: string; pct: number; target: number };
+    accounts: Account[];
   };
   weight: {
     unit: string;

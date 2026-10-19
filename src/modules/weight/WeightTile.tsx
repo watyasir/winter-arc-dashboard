@@ -26,14 +26,14 @@ export function WeightTile() {
 
   return (
     <Card aria-label="Weight" className="flex flex-[2_1_480px] flex-col gap-1">
-      <CardHeader aside={<span className="text-xs text-subtext1">{weight.rangeLabel} · goal {weight.goal} {unit}</span>}>
-        <SectionHeading tone="sky">Weight</SectionHeading>
+      <CardHeader aside={<span className="text-xs text-sub">{weight.rangeLabel} · goal {weight.goal} {unit}</span>}>
+        <SectionHeading tone="mist">Weight</SectionHeading>
       </CardHeader>
       <div className="flex flex-wrap items-baseline gap-2">
         <span className="font-rounded text-[26px] font-bold">
           {last.toFixed(1)} {unit}
         </span>
-        <span className="text-[13px] font-semibold text-green-text">
+        <span className="text-[13px] font-semibold text-sage-text">
           {change >= 0 ? "▲" : "▼"} {Math.abs(change).toFixed(1)} {unit} since {weight.startLabel}
         </span>
       </div>
@@ -45,8 +45,8 @@ export function WeightTile() {
       >
         {[hi, mid, lo].map((v) => (
           <g key={v}>
-            <line x1={X0} x2={X1} y1={y(v)} y2={y(v)} className="stroke-surface0" />
-            <text x={518} y={y(v) + 4} className="fill-subtext1">
+            <line x1={X0} x2={X1} y1={y(v)} y2={y(v)} className="stroke-sep" />
+            <text x={518} y={y(v) + 4} className="fill-sub">
               {v}
             </text>
           </g>
@@ -58,20 +58,20 @@ export function WeightTile() {
           y2={y(weight.goal)}
           strokeWidth={1.5}
           strokeDasharray="4 4"
-          className="stroke-green"
+          className="stroke-sage"
         />
-        <text x={14} y={y(weight.goal) - 5} className="fill-green-text font-semibold">
+        <text x={14} y={y(weight.goal) - 5} className="fill-sage-text font-semibold">
           Goal {weight.goal} {unit}
         </text>
-        <polygon points={`${line} ${X1},${Y_BOTTOM} ${X0},${Y_BOTTOM}`} className="fill-blue/10" />
-        <polyline points={line} fill="none" strokeWidth={2.5} strokeLinejoin="round" strokeLinecap="round" className="stroke-blue" />
+        <polygon points={`${line} ${X1},${Y_BOTTOM} ${X0},${Y_BOTTOM}`} className="fill-brand/10" />
+        <polyline points={line} fill="none" strokeWidth={2.5} strokeLinejoin="round" strokeLinecap="round" className="stroke-brand" />
         {pts.map(([px, py], i) => (
-          <circle key={i} cx={px} cy={py} r={3.5} strokeWidth={2} className="fill-white stroke-blue" />
+          <circle key={i} cx={px} cy={py} r={3.5} strokeWidth={2} className="fill-white stroke-brand" />
         ))}
-        <text x={X0} y={172} className="fill-subtext1">
+        <text x={X0} y={172} className="fill-sub">
           {weight.startLabel}
         </text>
-        <text x={X1} y={172} textAnchor="end" className="fill-subtext1">
+        <text x={X1} y={172} textAnchor="end" className="fill-sub">
           This week
         </text>
       </svg>

@@ -1,47 +1,45 @@
 /*
   Data never carries a hex value. It names a tone, and these maps turn the tone into
   Tailwind classes (written out in full so Tailwind can find them).
+  v6 "Teal and grey" (docs/DESIGN.md §2b).
 */
 export type Tone =
-  | "red"
-  | "peach"
+  | "brand"
+  | "sage"
   | "yellow"
-  | "green"
-  | "teal"
-  | "sky"
-  | "sapphire"
-  | "blue"
-  | "lavender"
-  | "mauve"
-  | "pink"
+  | "coral"
+  | "arc"
+  | "cyan"
+  | "pine"
+  | "mist"
+  | "seafoam"
+  | "lagoon"
   | "neutral";
 
 export const toneBg: Record<Tone, string> = {
-  red: "bg-red",
-  peach: "bg-peach",
+  brand: "bg-brand",
+  sage: "bg-sage",
   yellow: "bg-yellow",
-  green: "bg-green",
-  teal: "bg-teal",
-  sky: "bg-sky",
-  sapphire: "bg-sapphire",
-  blue: "bg-blue",
-  lavender: "bg-lavender",
-  mauve: "bg-mauve",
-  pink: "bg-pink",
-  neutral: "bg-overlay1",
+  coral: "bg-coral",
+  arc: "bg-arc",
+  cyan: "bg-cyan",
+  pine: "bg-pine",
+  mist: "bg-mist",
+  seafoam: "bg-seafoam",
+  lagoon: "bg-lagoon",
+  neutral: "bg-overlay",
 };
 
 export const toneStroke: Record<Tone, string> = {
-  red: "stroke-red",
-  peach: "stroke-peach",
+  brand: "stroke-brand",
+  sage: "stroke-sage",
   yellow: "stroke-yellow",
-  green: "stroke-green",
-  teal: "stroke-teal",
-  sky: "stroke-sky",
-  sapphire: "stroke-sapphire",
-  blue: "stroke-blue",
-  lavender: "stroke-lavender",
-  mauve: "stroke-mauve",
-  pink: "stroke-pink",
-  neutral: "stroke-overlay1",
+  coral: "stroke-coral",
+  arc: "stroke-arc",
+  cyan: "stroke-cyan",
+  pine: "stroke-pine",
+  mist: "stroke-mist",
+  seafoam: "stroke-seafoam",
+  lagoon: "stroke-lagoon",
+  neutral: "stroke-overlay",
 };

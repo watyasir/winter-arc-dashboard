@@ -9,8 +9,8 @@ export function HabitsTile() {
   const { habits } = useDashboard().data;
   return (
     <Card aria-label="Habits" className="flex flex-[2_1_480px] flex-col gap-3">
-      <CardHeader aside={<span className="text-xs text-subtext1">Filled = done</span>}>
-        <SectionHeading tone="teal">Habits · last 4 weeks</SectionHeading>
+      <CardHeader aside={<span className="text-xs text-sub">Filled = done</span>}>
+        <SectionHeading tone="pine">Habits · last 4 weeks</SectionHeading>
       </CardHeader>
       <div className="overflow-x-auto">
         <div className="flex min-w-[540px] flex-col gap-2">
@@ -26,7 +26,7 @@ export function HabitsTile() {
                   className="grid flex-1 grid-cols-[repeat(28,minmax(0,1fr))] gap-[3px]"
                 >
                   {h.days.map((ok, i) => (
-                    <div key={i} className={`aspect-square rounded ${ok ? "bg-green" : "bg-crust"}`} />
+                    <div key={i} className={`aspect-square rounded ${ok ? "bg-sage" : "bg-crust"}`} />
                   ))}
                 </div>
                 <span className="w-10 text-right font-rounded text-[13px] font-bold">{pct}%</span>

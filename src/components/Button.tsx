@@ -1,8 +1,8 @@
 import type { ComponentPropsWithoutRef } from "react";
 
 const variants = {
-  primary: "bg-blue text-white hover:bg-blue-text",
-  plain: "bg-fill text-text hover:bg-fill-strong",
+  primary: "bg-brand text-white hover:bg-brand-hover",
+  plain: "border border-solid border-sep bg-base text-ink hover:bg-fill-strong",
 };
 
 /** Primary (one per view) or plain button. 44px tall on phone, 36px from 640px up. */
@@ -14,7 +14,7 @@ export function Button({
   return (
     <button
       type="button"
-      className={`min-h-11 cursor-pointer rounded-lg border-0 px-4 text-[13px] font-semibold sm:min-h-9 ${variants[variant]} ${className}`}
+      className={`min-h-11 cursor-pointer rounded-full border-0 px-4 text-[13px] font-semibold sm:min-h-9 ${variants[variant]} ${className}`}
       {...props}
     />
   );
