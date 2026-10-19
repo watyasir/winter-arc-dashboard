@@ -6,7 +6,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 |---|---|---|
 | 0 | Setup: scaffold, git, GitHub, Vercel | ✅ Done (19 Oct 2026) |
 | 1 | The look (demo data only) | ✅ Done (19 Oct 2026) |
-| 2 | Database + login + daily check-in | 🟡 Code done, waiting on Supabase keys |
+| 2 | Database + login + daily check-in | ✅ Done (20 Oct 2026) |
 | 3 | Real dashboard | 🟡 In progress |
 | 4 | Workouts + body | 🟡 Live, waiting on Yasir's first real workout |
 | 5 | Tasks + goals | ⬜ Not started |
@@ -54,8 +54,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Supabase project (Mumbai), migration run, auth URLs set, `.env.local` written (20 Oct)
 - [x] Tested on the Mac: signed in with the email link, saved a check-in (8 trackers, 8 entries in the database)
 - [x] Vercel: `NEXT_PUBLIC_SUPABASE_URL` + `ALLOWED_EMAIL` set; publishable key is a code default (`src/lib/supabase/config.ts`); pushed and live (20 Oct)
-- [ ] Sign in on the phone at the live link (waiting for Supabase's 2-emails-per-hour limit to reset)
-- [ ] Test: sign in on the phone and save today's check-in (Phase 2 "done when")
+- [x] Signed in on the iPhone at the live link and saved a check-in (20 Oct, 2:40 AM IST, confirmed in the database). Phase 2 done.
 - [ ] Moved to Phase 3: phone home screen with the tab bar (`Phone.dc.html`), since it shows real dashboard data
 
 ## Phase 3 checklist
@@ -83,4 +82,4 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Each device is signed out 7 days after its sign-in, with a clear message on `/login` (`src/lib/session.ts`, `src/proxy.ts`)
 - [ ] Phase 8b: connect Gmail at sign-in so both renew on the same day (note in `docs/BUILD_PLAN.md`)
 
-**Next up:** Yasir logs a real workout + body check. Still open from before: the phone test (closes Phase 2) and checking `/` signed in (closes Phase 3). Winter Arc shows "No season running yet" until a season row exists (start date is set in Phase 7). Note: Supabase's built-in email allows only 2 sign-in emails per hour; custom SMTP would lift that.
+**Next up:** Yasir logs a real workout + body check. Still open from before: checking `/` signed in (closes Phase 3). Phase 2's phone test is done. Winter Arc shows "No season running yet" until a season row exists (start date is set in Phase 7). Note: Supabase's built-in email allows only 2 sign-in emails per hour; custom SMTP would lift that.
