@@ -100,6 +100,8 @@ Build the full dashboard **visually**, on fake data. It's the most satisfying ph
 **Kickoff prompt:**
 > Phase 8b. Add the Inbox view from the design: Google OAuth with Gmail read/modify scopes, mailbox list (Inbox, Follow up, Waiting, Instinct, Bank), message list, reading pane, Reply and Archive. Show a "Reconnect Gmail" banner when the token expires. Never store email bodies in the database.
 
+**Keep sign-in and Gmail in sync (decided 20 Oct 2026):** the dashboard signs each device out 7 days after sign-in (`SESSION_DAYS` in `src/lib/session.ts`), the same as Google's 7-day limit for unverified apps. Connect Gmail as part of signing in (or straight after), so both start and end on the same day and one sign-in a week renews both. The "Reconnect Gmail" banner is then only a fallback if Google ends the Gmail connection early.
+
 ## Phase 8c: Instinct link
 
 **Kickoff prompt:**

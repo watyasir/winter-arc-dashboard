@@ -67,4 +67,9 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Checked at 375px and desktop on `/demo` and on the real builder with test rows; `npx hig-doctor .` clean
 - [ ] Yasir: sign in on the live site and check `/` shows his real numbers, and that ticking a row updates them (Phase 3 "done when")
 
+## Sign-in rules (20 Oct 2026)
+- [x] Same browser stays signed in (login cookie lasts 400 days and refreshes on each visit)
+- [x] Each device is signed out 7 days after its sign-in, with a clear message on `/login` (`src/lib/session.ts`, `src/proxy.ts`)
+- [ ] Phase 8b: connect Gmail at sign-in so both renew on the same day (note in `docs/BUILD_PLAN.md`)
+
 **Next up:** the phone test (closes Phase 2), then Yasir checks `/` signed in (closes Phase 3). Winter Arc shows "No season running yet" until a season row exists (start date is set in Phase 7). Note: Supabase's built-in email allows only 2 sign-in emails per hour; custom SMTP would lift that.

@@ -8,6 +8,7 @@ export const metadata: Metadata = { title: "Sign in · Winter Arc Dashboard" };
 const notices: Record<string, string> = {
   "not-allowed": "That account can't use this dashboard.",
   "link-expired": "That sign-in link has expired or was already used. Send a new one.",
+  "session-ended": "It's been 7 days, so you were signed out. Sign in again to carry on.",
 };
 
 export default function LoginPage({ searchParams }: PageProps<"/login">) {
