@@ -53,8 +53,9 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] `/log` check-in sheet (steppers, switches, segments, Done → Saved ✓), plus `/demo/log` on fake data
 - [x] Supabase project (Mumbai), migration run, auth URLs set, `.env.local` written (20 Oct)
 - [x] Tested on the Mac: signed in with the email link, saved a check-in (8 trackers, 8 entries in the database)
-- [ ] Keys in Vercel, push, then sign in on the phone at the live link
+- [x] Vercel: `NEXT_PUBLIC_SUPABASE_URL` + `ALLOWED_EMAIL` set; publishable key is a code default (`src/lib/supabase/config.ts`); pushed and live (20 Oct)
+- [ ] Sign in on the phone at the live link (waiting for Supabase's 2-emails-per-hour limit to reset)
 - [ ] Test: sign in on the phone and save today's check-in (Phase 2 "done when")
 - [ ] Moved to Phase 3: phone home screen with the tab bar (`Phone.dc.html`), since it shows real dashboard data
 
-**Next up:** Vercel env vars + push, then the phone test.
+**Next up:** the phone test, then Phase 3 (real dashboard). Note: Supabase's built-in email allows only 2 sign-in emails per hour; custom SMTP would lift that.

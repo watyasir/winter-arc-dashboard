@@ -66,6 +66,15 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 - A git lock file left over from the last session blocked the first commit; nothing was running, so it was removed.
 - hig-doctor flagged one plain hex colour in the CSS; it now uses a token.
 - Pre-commit privacy check (`scripts/privacy-check.mjs`): blocks any commit that adds an email address (example.com is fine), a phone number, a long account or card number, or a .env file. Tested in a scratch copy: real email, Indian and US phones, card and account numbers, and .env.local were all blocked; example.com, .env.example, dates, rupee amounts and SVG numbers went through. The whole existing repo passes. `npm install` switches it on automatically.
-**What Yasir had to do himself:** nothing for the look or the privacy check.
+- Phase 2: Supabase database (trackers, entries, seasons, each locked to its owner), email sign-in limited to one address, default trackers added on first visit, and the `/log` check-in sheet (plus `/demo/log` on fake data). Tested on the Mac: signed in, saved a check-in, and the database showed 8 trackers and 8 values for the day.
+- Supabase project in Mumbai; login URLs set; live on Vercel.
+**What broke and how we fixed it (Phase 2):**
+- The first Supabase project landed in Tokyo; Yasir made a new one in Mumbai.
+- Supabase's free email can't use a custom template, so the sign-in link now carries the login after "#" and `/auth/callback` finishes it. That makes it work from a phone's mail app too.
+- The `/log` guard also matched `/login`, making `/login` redirect to itself. Fixed.
+- The built-in browser couldn't render Vercel, so the Vercel settings were done in Yasir's Chrome.
+- The publishable Supabase key is public by design, so it's a default in code instead of a Vercel setting.
+- Supabase only sends 2 sign-in emails an hour on the built-in email service.
+**What Yasir had to do himself:** sign in to Supabase, create the Supabase project (Mumbai), click the sign-in link in his email.
 **Screenshot to take:** `/demo` Overview on a laptop (hero card + wallet stack), and the Money tile with an account opened.
-**Next:** pre-commit privacy check, then Phase 2.
+**Next:** sign in on the phone at the live link, then Phase 3 (real dashboard, including the phone home screen).
