@@ -51,8 +51,10 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Login: email sign-in link, only `ALLOWED_EMAIL` gets in (`/login`, `/auth/confirm`, `src/proxy.ts`)
 - [x] Default trackers added on first visit: sleep, water, workout, steps, skincare, hair, study, mood
 - [x] `/log` check-in sheet (steppers, switches, segments, Done → Saved ✓), plus `/demo/log` on fake data
-- [ ] Yasir: create Supabase project, run the migration, set email template + URLs, paste keys into `.env.local` and Vercel
+- [x] Supabase project (Mumbai), migration run, auth URLs set, `.env.local` written (20 Oct)
+- [x] Tested on the Mac: signed in with the email link, saved a check-in (8 trackers, 8 entries in the database)
+- [ ] Keys in Vercel, push, then sign in on the phone at the live link
 - [ ] Test: sign in on the phone and save today's check-in (Phase 2 "done when")
 - [ ] Moved to Phase 3: phone home screen with the tab bar (`Phone.dc.html`), since it shows real dashboard data
 
-**Next up:** Yasir's Supabase steps, then test sign-in + saving on the phone.
+**Next up:** Vercel env vars + push, then the phone test.
