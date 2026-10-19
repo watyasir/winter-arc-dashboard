@@ -8,7 +8,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 | 1 | The look (demo data only) | ✅ Done (19 Oct 2026) |
 | 2 | Database + login + daily check-in | 🟡 Code done, waiting on Supabase keys |
 | 3 | Real dashboard | 🟡 In progress |
-| 4 | Workouts + body | ⬜ Not started |
+| 4 | Workouts + body | 🟡 Built, waiting on Yasir's first real workout |
 | 5 | Tasks + goals | ⬜ Not started |
 | 6 | Money (read from the sheet) | ⬜ Not started |
 | 7 | Winter Arc season + custom trackers | ⬜ Not started |
@@ -67,9 +67,20 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Checked at 375px and desktop on `/demo` and on the real builder with test rows; `npx hig-doctor .` clean
 - [ ] Yasir: sign in on the live site and check `/` shows his real numbers, and that ticking a row updates them (Phase 3 "done when")
 
+## Phase 4 checklist
+- [x] Migration: workouts, workout_sets (saved together by `save_workout`), body_checks, user_settings (goal weight), each locked to its owner. Run on Supabase (20 Oct)
+- [x] `/log/workout`: name, exercises, sets of reps × kg; one-tap "Repeat last workout"; new sets copy the one before; recent list with delete. Saving ticks "Workout done" for that day
+- [x] `/log/body`: weekly weight, goal weight, waist, chest, arms, progress photo yes/no (only the yes/no is stored)
+- [x] Tiles: Workouts this week (vs weekly target), Lift progress (heaviest set per session), Weight vs goal with measurements and a "Due" chip after 7 days
+- [x] `/demo/log/workout` and `/demo/log/body` on fake data; demo tiles run fake workouts through the same builder
+- [x] Links from `/log` ("More to log"); phone: Workouts on Today tab, Weight + Lifts on Arc tab
+- [x] Checked at 1440px and 375px on `/demo`; `npx hig-doctor .` clean
+- [ ] Push to GitHub so Vercel deploys it
+- [ ] Yasir: log a real workout and a body check, check the tiles on `/` (Phase 4 "done when")
+
 ## Sign-in rules (20 Oct 2026)
 - [x] Same browser stays signed in (login cookie lasts 400 days and refreshes on each visit)
 - [x] Each device is signed out 7 days after its sign-in, with a clear message on `/login` (`src/lib/session.ts`, `src/proxy.ts`)
 - [ ] Phase 8b: connect Gmail at sign-in so both renew on the same day (note in `docs/BUILD_PLAN.md`)
 
-**Next up:** the phone test (closes Phase 2), then Yasir checks `/` signed in (closes Phase 3). Winter Arc shows "No season running yet" until a season row exists (start date is set in Phase 7). Note: Supabase's built-in email allows only 2 sign-in emails per hour; custom SMTP would lift that.
+**Next up:** push Phase 4, then Yasir logs a real workout + body check. Still open from before: the phone test (closes Phase 2) and checking `/` signed in (closes Phase 3). Winter Arc shows "No season running yet" until a season row exists (start date is set in Phase 7). Note: Supabase's built-in email allows only 2 sign-in emails per hour; custom SMTP would lift that.

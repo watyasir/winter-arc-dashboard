@@ -92,3 +92,20 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **What Yasir had to do himself:** Nothing yet. Still to do: the phone sign-in test (Phase 2), then check `/` signed in.
 **Screenshot to take:** `/demo` at phone width: Today tab, then the Arc tab with the season grid.
 **Next:** Phone test, then confirm `/` with real data. Then Phase 4 (workouts + body), which fills the Weight tile.
+
+## Session 6 — 20 Oct 2026 — Phase 4: Workouts + body
+**Goal:** Log workouts (sets × reps × weight) with a fast "repeat last workout", a weekly body check, and tiles for workouts this week, lift progress and weight vs target.
+**What I asked Claude Code to do:** "phase 4"
+**What got built:**
+- Four new tables: workouts, sets, weekly body checks, and a small settings row for the goal weight. Each is locked to its owner. A workout and its sets save together in one step, so a half-saved workout can't happen.
+- `/log/workout`: "Repeat last workout" copies the last session with one tap. Change a weight, hit Save. A new set starts as a copy of the one before. Exercise and workout names are suggested from past ones. Saving also ticks "Workout done" for that day, so the streak and habits stay in step.
+- `/log/body`: weight, goal weight, waist, chest, arms, and a yes/no for the progress photo (the photo itself never leaves the phone). The boxes start empty with last week's number shown faintly, so an old number is never saved by mistake.
+- Dashboard: a Workouts tile (this week against the target, with Repeat last workout), Lift progress (the heaviest set each session for your top 4 lifts), and the Weight chart, now with the goal line, latest measurements and a "Due" chip after a week.
+- The demo runs 8 weeks of made-up push/pull/legs workouts through the same code as the real dashboard.
+**What broke and how we fixed it:**
+- The demo workout page read the page address before it was ready, which broke the build. It now loads inside a placeholder.
+- September showed as "Sept" in Chrome. Dates now use fixed three-letter months everywhere (18 Oct 2026, 26 Sep).
+- Another session's dev server was using the folder, so testing ran on a production build on its own port.
+**What Yasir had to do himself:** Nothing. The migration ran in his Supabase SQL editor through Chrome.
+**Screenshot to take:** `/demo` laptop view of the Weight, Workouts and Lift progress tiles; `/demo/log/workout` on a phone after tapping "Repeat last workout".
+**Next:** Push to deploy, then log a real workout and body check. Then Phase 5 (tasks + goals).
