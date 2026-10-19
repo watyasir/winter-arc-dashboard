@@ -11,6 +11,9 @@ import { HabitsTile } from "@/modules/habits/HabitsTile";
 import { MoneyTile } from "@/modules/money/MoneyTile";
 import { SeasonTile } from "@/modules/season/SeasonTile";
 import { TodayRows } from "@/modules/today/TodayRows";
+import { WeightTile } from "@/modules/weight/WeightTile";
+import { LiftsTile } from "@/modules/workouts/LiftsTile";
+import { WorkoutsTile } from "@/modules/workouts/WorkoutsTile";
 import { useDashboard } from "./DashboardContext";
 
 /*
@@ -41,6 +44,8 @@ export function PhoneHome() {
             <LargeTitle>{data.season?.name ?? "Winter Arc"}</LargeTitle>
             <SeasonTile />
             <HabitsTile />
+            <WeightTile />
+            <LiftsTile />
           </>
         )}
         {tab === "board" && (
@@ -157,6 +162,8 @@ function TodayTab() {
           <TodayRows size="phone" />
         </PhoneCard>
       </PhoneSection>
+
+      <WorkoutsTile />
 
       {money ? (
         <PhoneSection title={`Money · ${money.month}`}>

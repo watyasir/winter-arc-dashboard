@@ -97,16 +97,46 @@ export interface DashboardData {
     fund: { name: string; pct: number; target: number };
     accounts: Account[];
   } | null;
+  /** Where the workout log and the weekly body check live (/log/... or /demo/log/...). */
+  workoutHref: string;
+  bodyHref: string;
+  workouts: {
+    /** Days with a workout this week (Monday to today). */
+    weekCount: number;
+    /** From the "Workout done" tracker's weekly target. null = no target. */
+    weekTarget: number | null;
+    /** This week's sessions, latest first. */
+    week: { day: string; name: string; summary: string }[];
+    /** The latest session, for "Repeat last workout". null = none logged yet. */
+    last: { name: string; when: string; summary: string } | null;
+  };
+  /** Top set per session for the most-done exercises. Empty = nothing weighted logged yet. */
+  lifts: {
+    exercise: string;
+    /** Kilograms, oldest session first. */
+    tops: number[];
+    sinceLabel: string;
+  }[];
   weight: {
     unit: string;
-    goal: number;
+    /** null = no goal weight set. */
+    goal: number | null;
     rangeLabel: string;
     startLabel: string;
-    /** One reading per week, oldest first. */
+    endLabel: string;
+    /** One reading per weekly check, oldest first. */
     values: number[];
     /** Y axis bottom and top. */
     axis: [number, number];
   } | null;
+  bodyCheck: {
+    /** "Today", "3 days ago", "11 Oct". null = never done. */
+    lastLabel: string | null;
+    /** A week or more since the last check. */
+    due: boolean;
+    /** Latest measurements, with the change since the check before. */
+    measures: { label: string; value: string; change: number | null }[];
+  };
   goals: { name: string; progress: string; pct: number; by: string; tone: Tone }[];
   habits: { name: string; days: boolean[] }[];
   mailboxes: { label: string; tone: Tone; count: string }[];

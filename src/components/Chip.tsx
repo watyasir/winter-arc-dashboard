@@ -5,6 +5,7 @@ const tones = {
   me: "bg-brand/12 text-brand-text",
   claude: "bg-cyan/12 text-cyan-text",
   sage: "bg-sage/14 text-sage-text",
+  yellow: "bg-yellow/16 text-yellow-text",
 };
 
 export type ChipTone = keyof typeof tones;

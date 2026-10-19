@@ -8,6 +8,8 @@ import { SeasonTile } from "./season/SeasonTile";
 import { StatsTile } from "./stats/StatsTile";
 import { TodayTile } from "./today/TodayTile";
 import { WeightTile } from "./weight/WeightTile";
+import { LiftsTile } from "./workouts/LiftsTile";
+import { WorkoutsTile } from "./workouts/WorkoutsTile";
 
 /*
   Every Overview tile is registered here. Adding a module = adding one entry.
@@ -26,7 +28,9 @@ export const overviewTiles: TileDef[] = [
   { id: "inbox-preview", row: 3, Component: InboxPreviewTile },
   { id: "money", row: 3, Component: MoneyTile },
   { id: "weight", row: 4, Component: WeightTile },
-  { id: "goals", row: 4, Component: GoalsTile },
-  { id: "habits", row: 5, Component: HabitsTile },
-  { id: "in-progress", row: 5, Component: InProgressTile },
+  { id: "workouts", row: 4, Component: WorkoutsTile },
+  { id: "lifts", row: 5, Component: LiftsTile },
+  { id: "goals", row: 5, Component: GoalsTile },
+  { id: "habits", row: 6, Component: HabitsTile },
+  { id: "in-progress", row: 6, Component: InProgressTile },
 ];

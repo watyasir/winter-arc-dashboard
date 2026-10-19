@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { CheckIn } from "@/components/checkin/CheckIn";
+import { MoreLogs } from "@/components/checkin/MoreLogs";
 import { requireUser } from "@/lib/auth";
 import { loadTrackers } from "@/lib/tracker-store";
 import { addDays, formatDayLabel, startingValue, todayISO, type CheckInValues } from "@/lib/trackers";
@@ -51,11 +52,14 @@ async function TodayCheckIn() {
       cancelHref="/"
       onSave={saveCheckIn}
       footer={
-        <form action="/auth/signout" method="post" className="flex justify-center pt-2">
-          <button type="submit" className="min-h-11 cursor-pointer rounded-full border-0 bg-transparent px-3 text-[15px] text-sub hover:text-ink">
-            Sign out
-          </button>
-        </form>
+        <>
+          <MoreLogs workoutHref="/log/workout" bodyHref="/log/body" />
+          <form action="/auth/signout" method="post" className="flex justify-center pt-2">
+            <button type="submit" className="min-h-11 cursor-pointer rounded-full border-0 bg-transparent px-3 text-[15px] text-sub hover:text-ink">
+              Sign out
+            </button>
+          </form>
+        </>
       }
     />
   );

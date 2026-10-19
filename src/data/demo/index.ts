@@ -1,4 +1,5 @@
 import type { DashboardData, SeasonDay } from "@/modules/types";
+import { demoBody } from "./body";
 
 /*
   Fake data for /demo. Every name, amount and number here is made up.
@@ -69,7 +70,7 @@ export const demoData: DashboardData = {
     { label: "Sleep", value: "7.2", unit: "hr", note: "7-day average, on target", tone: "arc", trend: [6.4, 7.1, 6.8, 7.5, 7.0, 7.4, 7.2] },
     { label: "Workouts", value: "3", unit: "of 5", note: "This week", tone: "sage", trend: [2, 4, 3, 5, 4, 4, 3] },
     { label: "Study", value: "6.5", unit: "of 10 hr", note: "3.5 hr left this week", tone: "yellow", trend: [8, 9, 7, 10, 9, 8, 6.5] },
-    { label: "Weight", value: "72.4", unit: "kg", note: "Up 2.1 kg in 8 weeks", tone: "brand", trend: weights },
+    { label: "Weight", value: "72.4", unit: "kg", note: "Up 2.1 kg in 7 weeks", tone: "brand", trend: weights },
     { label: "Spent today", value: "₹425", unit: "", note: "Food ₹305 · Travel ₹120", tone: "pine", trend: [900, 300, 650, 120, 480, 220, 425] },
   ],
   today: [
@@ -131,14 +132,9 @@ export const demoData: DashboardData = {
       },
     ],
   },
-  weight: {
-    unit: "kg",
-    goal: 76,
-    rangeLabel: "8 weeks",
-    startLabel: "23 Aug",
-    values: weights,
-    axis: [69, 77],
-  },
+  workoutHref: "/demo/log/workout",
+  bodyHref: "/demo/log/body",
+  ...demoBody,
   goals: [
     { name: "Gain 5 kg", progress: "2.1 of 5 kg", pct: 42, by: "by 24 Dec", tone: "brand" },
     { name: "Bench press 70 kg", progress: "55 of 70", pct: 79, by: "by 31 Dec", tone: "sage" },

@@ -1,11 +1,14 @@
 import type { Tone } from "@/lib/tones";
 import { addDays, formatAmount, formatValue, type Tracker } from "@/lib/trackers";
 import type { DashboardData, SeasonDay, TodayItem } from "@/modules/types";
+import type { BodyCheck, Workout } from "@/lib/body";
+import { buildBody } from "./body";
+import { daysBetween, headerDate, lastDays, shortDate, weekStart } from "./dates";
 
 /*
   Turns the real rows (trackers, entries, the active season) into the same DashboardData
   shape /demo uses, so both run on the same tiles. Pure: no database, easy to reason about.
-  Sources that aren't connected yet (money, mail, tasks, weight, goals) come back empty and
+  Sources that aren't connected yet (money, mail, tasks, goals) come back empty and
   the tiles show what to do instead.
 */
 
@@ -29,6 +32,11 @@ export interface BuildInput {
   season: SeasonRow | null;
   today: string;
   ownerInitial: string;
+  /** Latest first. */
+  workouts: Workout[];
+  /** Latest first. */
+  bodyChecks: BodyCheck[];
+  weightGoal: number | null;
 }
 
 /** How far back the dashboard reads: 7 weeks of weekly trends, plus the season if it started earlier. */
@@ -38,38 +46,6 @@ const STAT_TONES: Tone[] = ["arc", "sage", "yellow", "brand", "pine"];
 const FEATURED_STATS = ["sleep", "workout", "study", "water", "steps"];
 const HABIT_DAYS = 28;
 
-// ---------------------------------------------------------------- date helpers (YYYY-MM-DD, India time)
-
-function utc(iso: string): Date {
-  const [y, m, d] = iso.split("-").map(Number);
-  return new Date(Date.UTC(y, m - 1, d, 12));
-}
-
-function daysBetween(from: string, to: string): number {
-  return Math.round((utc(to).getTime() - utc(from).getTime()) / 86_400_000);
-}
-
-/** Monday of the week the date is in. */
-function weekStart(iso: string): string {
-  const weekday = (utc(iso).getUTCDay() + 6) % 7; // Monday = 0
-  return addDays(iso, -weekday);
-}
-
-/** "2026-09-26" -> "26 Sep" */
-export function shortDate(iso: string): string {
-  return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "UTC" }).format(utc(iso));
-}
-
-/** "2026-10-20" -> "Tuesday, 20 October" */
-function headerDate(iso: string): string {
-  const part = (o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat("en-GB", { ...o, timeZone: "UTC" }).format(utc(iso));
-  return `${part({ weekday: "long" })}, ${part({ day: "numeric", month: "long" })}`;
-}
-
-function lastDays(today: string, n: number): string[] {
-  return Array.from({ length: n }, (_, i) => addDays(today, i - n + 1));
-}
-
 /** One decimal at most, no trailing ".0": 7 -> "7", 6.25 -> "6.3". */
 function oneDecimal(n: number): string {
   return String(Math.round(n * 10) / 10);
@@ -77,7 +53,16 @@ function oneDecimal(n: number): string {
 
 // ---------------------------------------------------------------- the build
 
-export function buildDashboardData({ trackers, entries, season, today, ownerInitial }: BuildInput): DashboardData {
+export function buildDashboardData({
+  trackers,
+  entries,
+  season,
+  today,
+  ownerInitial,
+  workouts,
+  bodyChecks,
+  weightGoal,
+}: BuildInput): DashboardData {
   const values = new Map<string, number>();
   for (const e of entries) values.set(`${e.tracker_id}|${e.entry_date}`, Number(e.value));
   const valueOn = (t: Tracker, date: string) => values.get(`${t.id}|${date}`);
@@ -108,6 +93,16 @@ export function buildDashboardData({ trackers, entries, season, today, ownerInit
   let streak = 0;
   for (let d = counts(today) ? today : addDays(today, -1); counts(d) && streak < 3650; d = addDays(d, -1)) streak++;
 
+  const workoutTracker = trackers.find((t) => t.slug === "workout");
+  const body = buildBody({
+    workouts,
+    bodyChecks,
+    weightGoal,
+    today,
+    workoutDays: workoutTracker ? entries.filter((e) => e.tracker_id === workoutTracker.id && e.value >= 1).map((e) => e.entry_date) : [],
+    weekTarget: workoutTracker?.target_period === "weekly" && workoutTracker.target != null ? Number(workoutTracker.target) : null,
+  });
+
   const loggedToday = trackers.filter((t) => valueOn(t, today) !== undefined).length;
 
   return {
@@ -132,7 +127,9 @@ export function buildDashboardData({ trackers, entries, season, today, ownerInit
     stats: pickStatTrackers(trackers).map((t, i) => buildStat(t, STAT_TONES[i % STAT_TONES.length], today, valueOn)),
     today: trackers.map((t) => todayItem(t, valueOn(t, today), hitOn(t, today))),
     money: null,
-    weight: null,
+    workoutHref: "/log/workout",
+    bodyHref: "/log/body",
+    ...body,
     goals: [],
     habits: trackers
       .filter((t) => t.type === "checkbox" || dailyTarget(t) != null)
@@ -154,7 +151,7 @@ export function buildDashboardData({ trackers, entries, season, today, ownerInit
       ],
       digest: digest(season, today, streak, trackers, valueOn),
     },
-    footnote: "Your data, updated every time you log. Money, mail, tasks and weight show up here as they get connected.",
+    footnote: "Your data, updated every time you log. Money, mail and tasks show up here as they get connected.",
     isDemo: false,
   };
 }
