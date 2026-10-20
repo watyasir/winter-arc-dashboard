@@ -13,9 +13,10 @@ const linkable = demoTrackers.filter((t) => t.type !== "scale_1_5").map(({ id, n
 
 const toRow = (goal: Goal): GoalRow => {
   const tracker = linkable.find((t) => t.id === goal.trackerId);
+  const unit = tracker ? (tracker.type === "duration_minutes" ? "hr" : tracker.type === "checkbox" ? "days" : tracker.unit) : goal.unit;
   return {
     goal,
-    progress: `${formatAmount(goal.current)} of ${formatAmount(goal.target)}${goal.unit ? ` ${goal.unit}` : ""}`,
+    progress: `${formatAmount(goal.current)} of ${formatAmount(goal.target)}${unit ? ` ${unit}` : ""}`,
     trackerName: tracker?.name ?? null,
   };
 };

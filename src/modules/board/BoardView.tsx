@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 import { Chip } from "@/components/Chip";
 import { Icon } from "@/components/Icon";
@@ -95,6 +95,11 @@ function AddTask({ status, column }: { status: TaskStatus; column: string }) {
   const [area, setArea] = useState("");
   const [due, setDue] = useState("");
   const [problem, setProblem] = useState<string | null>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
+  // Opening the form (a tap on "Add task") puts the cursor in the title box.
+  useEffect(() => {
+    if (open) titleRef.current?.focus();
+  }, [open]);
 
   if (!open) {
     return (
@@ -118,11 +123,12 @@ function AddTask({ status, column }: { status: TaskStatus; column: string }) {
     setArea("");
     setDue("");
     setProblem(null);
+    titleRef.current?.focus();
   };
 
   return (
     <form onSubmit={submit} aria-label={`Add a task to ${column}`} className="flex flex-col gap-2 rounded-[10px] border border-sep bg-base p-2.5">
-      <input autoFocus aria-label="Task title" placeholder="What needs doing?" value={title} onChange={(e) => setTitle(e.target.value)} maxLength={120} className={inputClass} />
+      <input ref={titleRef} aria-label="Task title" placeholder="What needs doing?" value={title} onChange={(e) => setTitle(e.target.value)} maxLength={120} className={inputClass} />
       <div className="flex gap-2">
         <input aria-label="Area" placeholder="Area" value={area} onChange={(e) => setArea(e.target.value)} maxLength={40} className={`${inputClass} min-w-0 flex-1`} />
         <input aria-label="Due date" type="date" value={due} onChange={(e) => setDue(e.target.value)} className={`${inputClass} w-auto flex-1`} />

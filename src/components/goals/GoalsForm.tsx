@@ -89,7 +89,7 @@ export function GoalsForm({
 
       <Group title="New goal">
         <Field label="Name">
-          <input value={title} maxLength={60} placeholder="Bench press 70 kg" onChange={(e) => setTitle(e.target.value)} className={`${fieldClass} w-44`} />
+          <input value={title} maxLength={60} placeholder="e.g. Run 100 km" onChange={(e) => setTitle(e.target.value)} className={`${fieldClass} w-44`} />
         </Field>
         <Field label="Area">
           <select value={area} onChange={(e) => setArea(e.target.value)} className={`${fieldClass} w-44 cursor-pointer`}>
@@ -179,14 +179,15 @@ function GoalItem({ row, actions }: { row: GoalRow; actions: GoalActions }) {
             </Button>
           </>
         )}
-        <Button
+        <button
+          type="button"
           aria-label={`Delete ${goal.title}`}
           onClick={() => window.confirm(`Delete the goal "${goal.title}"?`) && run(() => actions.remove(goal.id), "Deleted")}
           disabled={busy}
-          className={`text-coral-text ${row.trackerName ? "ml-auto" : ""}`}
+          className="min-h-11 cursor-pointer rounded-full border-0 bg-transparent px-2 text-[13px] font-semibold text-coral-text hover:bg-coral/12"
         >
           Delete
-        </Button>
+        </button>
       </div>
       {msg && (
         <p role={msg.ok ? "status" : "alert"} className={`m-0 text-[13px] ${msg.ok ? "text-sage-text" : "text-coral-text"}`}>

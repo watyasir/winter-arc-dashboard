@@ -25,7 +25,11 @@ export function TaskRows({ tasks, size = "desktop" }: { tasks: Task[]; size?: "d
           >
             <CheckBox checked={done} />
             <span className={`min-w-0 flex-1 ${done ? "text-sub line-through" : ""}`}>{t.title}</span>
-            <DueLabel task={t} today={data.todayISO} className={phone ? "text-[13px]" : "text-xs"} />
+            {t.due === data.todayISO ? (
+              <span className={`text-sub ${phone ? "text-[13px]" : "text-xs"}`}>{t.area}</span>
+            ) : (
+              <DueLabel task={t} today={data.todayISO} className={phone ? "text-[13px]" : "text-xs"} />
+            )}
           </button>
         );
       })}

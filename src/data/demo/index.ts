@@ -140,7 +140,7 @@ export const demoData: DashboardData = {
   goals: [
     { name: "Gain 5 kg", progress: "2.1 of 5 kg", pct: 42, by: "by 24 Dec", tone: "brand" },
     { name: "Bench press 70 kg", progress: "55 of 70", pct: 79, by: "by 31 Dec", tone: "sage" },
-    { name: "German A1", progress: "35%", pct: 35, by: "by 31 Mar 2027", tone: "coral" },
+    { name: "German A1", progress: "35%", pct: 35, by: "by 31 Mar 2027", tone: "mist" },
     { name: "Travel fund", progress: "52%", pct: 52, by: "by 30 Apr 2027", tone: "pine" },
   ],
   habits,
