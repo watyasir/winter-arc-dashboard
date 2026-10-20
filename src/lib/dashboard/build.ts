@@ -118,7 +118,7 @@ export function buildDashboardData({
   const dueToday = open.filter((t) => t.due === today).length;
 
   return {
-    ownerLine: "Your life dashboard",
+    ownerLine: "Winter Arc · 90 days",
     ownerInitial,
     todayISO: today,
     logHref: "/log",

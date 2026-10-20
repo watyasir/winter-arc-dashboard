@@ -7,7 +7,7 @@ import { loadTrackers } from "@/lib/tracker-store";
 import { addDays, formatDayLabel, startingValue, todayISO, type CheckInValues } from "@/lib/trackers";
 import { saveCheckIn } from "./actions";
 
-export const metadata: Metadata = { title: "Check-in · Winter Arc Dashboard" };
+export const metadata: Metadata = { title: "Check-in · Yarizz's Dashboard" };
 
 export default function LogPage() {
   return (

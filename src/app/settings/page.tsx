@@ -7,7 +7,7 @@ import { loadTrackers } from "@/lib/tracker-store";
 import { addDays, todayISO } from "@/lib/trackers";
 import { addTracker, resetTestData, saveSeason } from "./actions";
 
-export const metadata: Metadata = { title: "Settings · Winter Arc Dashboard" };
+export const metadata: Metadata = { title: "Settings · Yarizz's Dashboard" };
 
 export default function SettingsPage() {
   return (

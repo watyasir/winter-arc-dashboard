@@ -6,7 +6,7 @@ import { loadBodyChecks, loadWeightGoal } from "@/lib/body-store";
 import { todayISO } from "@/lib/trackers";
 import { saveBodyCheck } from "./actions";
 
-export const metadata: Metadata = { title: "Body check · Winter Arc Dashboard" };
+export const metadata: Metadata = { title: "Body check · Yarizz's Dashboard" };
 
 export default function BodyPage() {
   return (

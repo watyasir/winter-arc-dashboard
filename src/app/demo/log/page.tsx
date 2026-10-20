@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { DemoCheckIn } from "@/components/checkin/DemoCheckIn";
 
 export const metadata: Metadata = {
-  title: "Demo check-in · Winter Arc Dashboard",
+  title: "Demo check-in · Yarizz's Dashboard",
   description: "The daily check-in on made-up sample data. Nothing is saved.",
 };
 

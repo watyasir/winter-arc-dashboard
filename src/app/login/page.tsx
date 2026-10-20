@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { LoginForm } from "./LoginForm";
 
-export const metadata: Metadata = { title: "Sign in · Winter Arc Dashboard" };
+export const metadata: Metadata = { title: "Sign in · Yarizz's Dashboard" };
 
 const notices: Record<string, string> = {
   "not-allowed": "That account can't use this dashboard.",
@@ -17,7 +17,7 @@ export default function LoginPage({ searchParams }: PageProps<"/login">) {
       <div className="flex w-full max-w-sm flex-col gap-5 rounded-[20px] border border-sep bg-card p-6">
         <div className="flex flex-col gap-1">
           <h1 className="m-0 text-[28px] leading-tight font-bold tracking-[-0.02em]">Sign in</h1>
-          <p className="m-0 text-[15px] text-sub">Winter Arc Dashboard is private. Just looking around?</p>
+          <p className="m-0 text-[15px] text-sub">Yarizz&apos;s Dashboard is private. Just looking around?</p>
           <Link href="/demo" className="self-start text-[15px] font-semibold text-brand-text hover:text-brand-hover">
             See the demo instead
           </Link>

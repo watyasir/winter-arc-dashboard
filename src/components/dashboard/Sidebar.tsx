@@ -32,7 +32,7 @@ export function Sidebar() {
           <Icon name="snowflake" size={18} strokeWidth={2.2} className="stroke-white" />
         </div>
         <div className="flex flex-col">
-          <span className="text-[15px] font-bold">Winter Arc</span>
+          <span className="text-[15px] font-bold">Yarizz&apos;s Dashboard</span>
           <span className="text-xs text-sub">{data.ownerLine}</span>
         </div>
       </div>

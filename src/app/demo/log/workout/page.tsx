@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { DemoWorkoutForm } from "@/components/body/DemoForms";
 
 export const metadata: Metadata = {
-  title: "Demo workout · Winter Arc Dashboard",
+  title: "Demo workout · Yarizz's Dashboard",
   description: "The workout log on made-up sample data. Nothing is saved.",
 };
 

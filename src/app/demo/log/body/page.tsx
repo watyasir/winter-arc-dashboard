@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { DemoBodyCheckForm } from "@/components/body/DemoForms";
 
 export const metadata: Metadata = {
-  title: "Demo body check · Winter Arc Dashboard",
+  title: "Demo body check · Yarizz's Dashboard",
   description: "The weekly body check on made-up sample data. Nothing is saved.",
 };
 

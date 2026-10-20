@@ -24,6 +24,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - **Design stays on v6** ("Teal and grey"), never older designs. Not a hard freeze: where a feature needs a design or layout change, make it with v6 tokens and components (Yasir chose this over a strict freeze, 21 Oct).
 - **Gmail: no full inbox.** Phase 8b is "Mail nudges": Claude posts the emails that need Yasir through the API; he reads and replies in Gmail.
 - **Tracker targets** get decided with Yasir when Phase 6 is finalized.
+- **Site name is "Yarizz's Dashboard"** (tab titles, welcome and sign-in pages, sidebar). Repo and Vercel link keep the winter-arc-dashboard name.
 
 **Schedule**
 - **Fri 23 Oct, night:** Phase 8, 8b, 8c, then 9. Phase 9 runs on `/demo` data; drop it if it's past 1:30 AM.

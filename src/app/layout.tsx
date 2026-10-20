@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Winter Arc Dashboard",
+  title: "Yarizz's Dashboard",
   description: "A personal life dashboard with a 90-day Winter Arc season.",
 };
 
