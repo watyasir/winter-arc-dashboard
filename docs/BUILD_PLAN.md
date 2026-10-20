@@ -66,6 +66,8 @@ Build the full dashboard **visually**, on fake data. It's the most satisfying ph
 
 ## Phase 6: Money (read from your sheet)
 
+**Leaning (21 Oct 2026, not final; brainstorm with Claude chat before Sat 24 Oct):** no Google service account. Claude's scheduled finance task pushes a money snapshot to `POST /api/money` twice a day, using the Phase 8 API pattern. The sheet has one combined bank balance plus per-card dues, not per-bank balances (per-bank would need new sheet rows: open decision). Tracker targets get finalized in this phase too. If this holds, the setup and kickoff prompt below get replaced.
+
 **You do:** a one-time Google Cloud setup so the app can *read* the Personal Finance sheet (Claude Code will guide you). Share the sheet with the service account as **Viewer only**.
 
 **Kickoff prompt:**
@@ -109,6 +111,8 @@ Yasir reads and replies in Gmail itself. The dashboard only shows a short list o
 
 ## Phase 9: Share + portfolio polish
 
+**Scheduled (21 Oct 2026):** Fri 23 Oct night, after 8, 8b and 8c. Build it on `/demo` data; drop it to a later night if it's past 1:30 AM.
+
 **Kickoff prompt:**
 > Phase 9. Add a "progress card" page that shows my Winter Arc stats in a shareable layout (for my accountability group). Then write a strong README: what it is, screenshots from /demo, stack, how it grows, and a short "how I built it with AI" section drawn from docs/BUILD_LOG.md.
 
@@ -120,3 +124,4 @@ Yasir reads and replies in Gmail itself. The dashboard only shows a short list o
 - German practice tracker, reading log, trips and "cool stuff" bucket list with saving goals
 - Weekly review page fed by the Sunday review task
 - Install as a phone app (PWA)
+- Parked 21 Oct: Zendesk-style extras (alert strip, countdown, smart tags, connected-apps strip, weekly result card, collapsible tiles, NEW tag)

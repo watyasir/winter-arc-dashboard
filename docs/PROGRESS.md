@@ -17,6 +17,32 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 | 8c | Instinct link | ⬜ Not started |
 | 9 | Share + portfolio polish | ⬜ Not started |
 
+## Decisions & schedule (21 Oct 2026)
+
+**Decisions**
+- **Winter Arc starts Mon 26 Oct 2026**, day 1 of 90. Anything logged before then is test data; Yasir wipes it with "Reset test data" in `/settings`.
+- **Design frozen at v6 until Winter Arc day 30.** Only small, useful function changes; ask Yasir before anything that changes the look.
+- **Gmail: no full inbox.** Phase 8b is "Mail nudges": Claude posts the emails that need Yasir through the API; he reads and replies in Gmail.
+- **Tracker targets** get decided with Yasir when Phase 6 is finalized.
+
+**Schedule**
+- **Fri 23 Oct, night:** Phase 8, 8b, 8c, then 9. Phase 9 runs on `/demo` data; drop it if it's past 1:30 AM.
+- **Sat 24 Oct, night:** Phase 6 Money, after Yasir brainstorms it with Claude chat.
+
+**Phase 6 leaning (not final)**
+- No Google service account. Claude's scheduled finance task pushes a money snapshot to `POST /api/money` twice a day.
+- The sheet has one combined bank balance plus per-card dues, not per-bank balances.
+
+**Open decisions**
+- Sign-in length: 7 days or 30 days, now that Gmail sign-in is gone.
+- Per-bank balances: would need new rows in the sheet.
+
+**Parked for later**
+- Zendesk-style extras: alert strip, countdown, smart tags, connected-apps strip, weekly result card, collapsible tiles, NEW tag
+- German tracker
+- Trips / "cool stuff" fund
+- Install as a phone app (PWA)
+
 ## Phase 0 checklist
 - [x] Node.js installed
 - [x] Next.js + TypeScript + Tailwind project created
