@@ -9,7 +9,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 | 2 | Database + login + daily check-in | ✅ Done (20 Oct 2026) |
 | 3 | Real dashboard | ✅ Done (20 Oct 2026) |
 | 4 | Workouts + body | ✅ Done (21 Oct 2026) |
-| 5 | Tasks + goals | 🟡 In progress |
+| 5 | Tasks + goals | ✅ Done (21 Oct 2026) |
 | 6 | Money (read from the sheet) | ⬜ Not started |
 | 7 | Winter Arc season + custom trackers | ⬜ Not started |
 | 8 | Automation (logging API) | ⬜ Not started |
@@ -82,11 +82,11 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Board on real tasks: To do / In progress / Waiting / Done, add per column, move with the column picker, delete
 - [x] Tiles: Due today, Overdue (tick = done), In progress on real tasks; phone Today tab lists overdue + due today
 - [x] Goals page (`/log/goals`): add a goal (typed-in or from a tracker), update typed progress, delete; `/demo/log/goals` on fake data; Goals tile on real data with an "Update goals" link
-- [ ] Run the migration on Supabase, check at 1440px and 375px, `npx hig-doctor .`, push
+- [x] Migration run on Supabase (21 Oct); checked at 1440px and 375px on `/demo`; `npx hig-doctor .` clean; build passes; pushed
 
 ## Sign-in rules (20 Oct 2026)
 - [x] Same browser stays signed in (login cookie lasts 400 days and refreshes on each visit)
 - [x] Each device is signed out 7 days after its sign-in, with a clear message on `/login` (`src/lib/session.ts`, `src/proxy.ts`)
 - [ ] Phase 8b: connect Gmail at sign-in so both renew on the same day (note in `docs/BUILD_PLAN.md`)
 
-**Next up:** Yasir logs a real workout + body check. Still open from before: checking `/` signed in (closes Phase 3). Phase 2's phone test is done. Winter Arc shows "No season running yet" until a season row exists (start date is set in Phase 7). Note: Supabase's built-in email allows only 2 sign-in emails per hour; custom SMTP would lift that.
+**Next up:** Phase 6 (money from the Personal Finance sheet). Before it, get the sheet's cell map from Claude chat. Winter Arc shows "No season running yet" until Phase 7. Supabase's built-in email allows only 2 sign-in emails per hour.

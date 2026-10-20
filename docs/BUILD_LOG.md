@@ -109,3 +109,19 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **What Yasir had to do himself:** Nothing. The migration ran in his Supabase SQL editor through Chrome.
 **Screenshot to take:** `/demo` laptop view of the Weight, Workouts and Lift progress tiles; `/demo/log/workout` on a phone after tapping "Repeat last workout".
 **Next:** Push to deploy, then log a real workout and body check. Then Phase 5 (tasks + goals).
+
+## Session 7 — 21 Oct 2026 — Phase 5: Tasks + goals
+**Goal:** Real tasks and goals, with tiles for today's tasks, overdue tasks and goal progress, and a Board that runs on real tasks.
+**What I asked Claude Code to do:** "Mark Phase 4 done. Do Phase 5: tasks (title, area, due date, done) and goals (target, deadline, progress linked to a tracker or manual). Tiles for today's tasks, overdue and goal bars; Board on real tasks. v6 design, /demo stays fake. Keep it lean."
+**What got built:**
+- Two new tables, each locked to its owner: tasks (title, area, due date, Board column, who's on it) and goals (target, unit, deadline, and either a linked tracker or a typed-in number). A small database view adds up a linked tracker since the goal started, e.g. study hours or workout days.
+- Board: To do / In progress / Waiting / Done on real tasks. "Add task" opens a small form in that column (title, area, due date) and stays open for the next one. Each card has a column picker to move it, and a delete button.
+- Overview: "Due today" and "Overdue" tiles, where a tick moves the task to Done; In progress lists real tasks. On the phone, the Today tab lists overdue and due-today tasks under Focus.
+- `/log/goals`: add a goal, update typed-in progress, delete. The Goals tile shows real progress bars with "by 24 Dec", "Reached" or "Deadline passed".
+- `/demo/log/goals` and the demo Board run on fake tasks and goals; changes stay on the page.
+**What broke and how we fixed it:**
+- hig-doctor flagged the cursor jumping into the Add task box on its own (autoFocus). It now moves there only after tapping "Add task".
+- A demo goal used coral, which means "overdue". Switched to a neutral tone.
+**What Yasir had to do himself:** Nothing. The migration ran in his Supabase SQL editor through Chrome.
+**Screenshot to take:** `/demo` laptop view of the Due today, Overdue and Goals tiles; the Board view; `/demo/log/goals` on a phone.
+**Next:** Add a few real tasks and a goal. Then Phase 6 (money from the sheet).
