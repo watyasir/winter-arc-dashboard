@@ -93,14 +93,14 @@ Build the full dashboard **visually**, on fake data. It's the most satisfying ph
 
 ---
 
-## Phase 8b: Gmail inbox
+## Phase 8b: Mail nudges (changed 21 Oct 2026, replaces the full Gmail inbox)
 
-**You do:** one-time Google Cloud setup (Claude Code walks you through it) and sign in with Google once a week when the app asks.
+Yasir reads and replies in Gmail itself. The dashboard only shows a short list of emails that need his attention. No Google OAuth, no weekly re-login, no Google Cloud setup: Claude (which already has Gmail access) scans the inbox on a schedule and posts nudges through the Phase 8 logging API.
 
 **Kickoff prompt:**
-> Phase 8b. Add the Inbox view from the design: Google OAuth with Gmail read/modify scopes, mailbox list (Inbox, Follow up, Waiting, Instinct, Bank), message list, reading pane, Reply and Archive. Show a "Reconnect Gmail" banner when the token expires. Never store email bodies in the database.
+> Phase 8b. Replace the Inbox view with "Mail nudges": a mail_nudges table (sender, subject, reason, priority, gmail_thread_id, received_at, status open/done/snoozed) and POST /api/nudges using the same secret token as /api/log. Overview tile + Inbox view list open nudges; each row has "Open in Gmail" (https://mail.google.com/mail/u/0/#inbox/<thread id>), "Done" and "Snooze 1 day". Never store email bodies. Remove the old Gmail OAuth plan and the 7-day sign-out tie to Gmail from the docs. Document the endpoint in docs/API.md.
 
-**Keep sign-in and Gmail in sync (decided 20 Oct 2026):** the dashboard signs each device out 7 days after sign-in (`SESSION_DAYS` in `src/lib/session.ts`), the same as Google's 7-day limit for unverified apps. Connect Gmail as part of signing in (or straight after), so both start and end on the same day and one sign-in a week renews both. The "Reconnect Gmail" banner is then only a fallback if Google ends the Gmail connection early.
+**After this:** Claude (chat) sets up a scheduled task that checks Gmail and posts nudges (needs reply, bills/dues, bank or college action items).
 
 ## Phase 8c: Instinct link
 

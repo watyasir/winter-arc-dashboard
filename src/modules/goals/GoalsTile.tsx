@@ -13,8 +13,8 @@ export function GoalsTile() {
     <Card aria-label="Goals" className="flex flex-[1_1_280px] flex-col gap-3">
       <SectionHeading tone="seafoam">Goals</SectionHeading>
       {goals.length === 0 && <EmptyNote>No goals yet. Add one with a target and a date, and its progress shows here.</EmptyNote>}
-      {goals.map((g) => (
-        <div key={g.name} className="flex flex-col gap-[5px]">
+      {goals.map((g, i) => (
+        <div key={`${i}-${g.name}`} className="flex flex-col gap-[5px]">
           <div className="flex justify-between gap-2 text-[13px]">
             <span className="font-semibold">{g.name}</span>
             <span className="text-right text-xs text-sub">{g.progress}</span>

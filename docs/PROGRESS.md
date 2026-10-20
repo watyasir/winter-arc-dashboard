@@ -13,7 +13,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 | 6 | Money (read from the sheet) | ⬜ Not started |
 | 7 | Winter Arc season + custom trackers | ✅ Done (21 Oct 2026) |
 | 8 | Automation (logging API) | ⬜ Not started |
-| 8b | Gmail inbox | ⬜ Not started |
+| 8b | Mail nudges (replaces the Gmail inbox, 21 Oct) | ⬜ Not started |
 | 8c | Instinct link | ⬜ Not started |
 | 9 | Share + portfolio polish | ⬜ Not started |
 
@@ -37,7 +37,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Inbox, Board and Instinct views, switched from the sidebar
 - [x] Instinct status pill (demo: waiting with timer, then "replied" for 3.5 s)
 - [x] Checked on laptop (1440px) and phone (390px); `npx hig-doctor .` clean
-- [ ] Left for Phase 2: the phone home screen with tab bar and the check-in sheet (`Phone.dc.html`, `CheckIn.dc.html`), built with `/log`
+- [x] Moved on: the phone home screen and check-in sheet were built in Phases 2 and 3
 
 ## Design v6 "Teal and grey" (20 Oct 2026)
 - [x] Design docs committed ("Design v6: Teal and grey + wallet stack")
@@ -55,7 +55,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Tested on the Mac: signed in with the email link, saved a check-in (8 trackers, 8 entries in the database)
 - [x] Vercel: `NEXT_PUBLIC_SUPABASE_URL` + `ALLOWED_EMAIL` set; publishable key is a code default (`src/lib/supabase/config.ts`); pushed and live (20 Oct)
 - [x] Signed in on the iPhone at the live link and saved a check-in (20 Oct, 2:40 AM IST, confirmed in the database). Phase 2 done.
-- [ ] Moved to Phase 3: phone home screen with the tab bar (`Phone.dc.html`), since it shows real dashboard data
+- [x] Moved to Phase 3: phone home screen with the tab bar (`Phone.dc.html`), done there
 
 ## Phase 3 checklist
 - [x] Real data on `/` with the same tiles as `/demo`: today's status, streak, 7-day averages, this week vs weekly targets, 4-week habit grid (`src/lib/dashboard/`)
@@ -91,9 +91,15 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Yasir's season set in Supabase (21 Oct): Winter Arc, day 1 = Mon 26 Oct 2026, 90 days, targets sleep 7, water 3, steps 8000, skincare, hair, study 90 min (weekly workout and mood not counted daily; switch on in /settings)
 - [x] Checked `/settings` at 375px (on a throwaway local page, since it needs sign-in) and the hero on `/demo` at desktop; countdown checked against the builder; `npx hig-doctor .` clean; build passes; pushed
 
+## Polish + speed (21 Oct 2026)
+- [x] Server code runs in Mumbai (`vercel.json` region `bom1`), next to the database; it ran in the US before, adding ~250 ms per database read
+- [x] Sign-in checked from the login token's signature on the server (no extra trip to Supabase); dashboard and check-in read everything in parallel
+- [x] Fixed: `/settings` crashed after adding a tracker; done tasks no longer show due dates; goals with the same name no longer clash
+- [ ] Targets for each tracker are decided with Yasir when Phase 6 is finalized (the season currently uses each tracker's default daily target)
+
 ## Sign-in rules (20 Oct 2026)
 - [x] Same browser stays signed in (login cookie lasts 400 days and refreshes on each visit)
 - [x] Each device is signed out 7 days after its sign-in, with a clear message on `/login` (`src/lib/session.ts`, `src/proxy.ts`)
-- [ ] Phase 8b: connect Gmail at sign-in so both renew on the same day (note in `docs/BUILD_PLAN.md`)
+- [x] Dropped 21 Oct: Phase 8b is now mail nudges (no Gmail sign-in), so there's nothing to keep in step
 
 **Next up:** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.

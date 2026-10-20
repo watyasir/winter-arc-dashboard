@@ -51,6 +51,10 @@ Everything is built from a few generic pieces, so new things are added as data, 
 
 Workouts, tasks, goals and money get their own tables because their shape is different, but they still plug into the same tile registry.
 
+## Design rule (21 Oct 2026)
+
+Stay on the current v6 look ("Teal and grey") and never go back to older designs. This is not a hard freeze: where a feature needs a design or layout change, make it, built from the v6 tokens and components.
+
 ## Design direction: AnuPpuccin (Catppuccin Latte) card layout + Apple HIG behaviour
 
 **Read `docs/DESIGN.md` before any UI work.** It is the full spec (tokens, layout, components, states, copy) and has a changelog: if the code doesn't match the latest changelog entry, update the code to match, without waiting to be asked. The exact mockup markup is in `docs/design-reference/` (Main = dashboard, Phone, CheckIn). Rebuild it as React + Tailwind; don't paste the mockup code.
@@ -62,7 +66,7 @@ Short version:
 - **Colour has one meaning each:** blue interactive, green done, peach due soon, red overdue, mauve Winter Arc, pink Claude. Small coloured text uses the text-safe variants in DESIGN.md. Never colour alone.
 - **Apple HIG still governs behaviour:** one primary button per view, 44px phone targets, visible focus, reduced motion respected, charts with a summary line and right-side axis labels. Run `npx hig-doctor .` before finishing each phase.
 - Views: Overview · Inbox · Board · Instinct (details in DESIGN.md §3–4).
-- **Gmail:** full inbox inside the app via Google OAuth (Gmail API, read + reply + archive). Personal unverified apps must re-login every 7 days; show a clear "Reconnect Gmail" banner when the token expires. Never store email bodies in the database.
+- **Mail nudges, not a full inbox (21 Oct 2026):** Yasir uses Gmail directly. The dashboard shows only emails needing his attention, posted by a Claude scheduled task through the API (Phase 8b). No Gmail OAuth. Never store email bodies.
 - **Instinct:** every Claude→Instinct request is a row in `instinct_requests` (question, sent_at, status waiting/answered/paused, answer, answered_at). While any row is waiting, the header shows the mauve status pill with elapsed time; when answered it turns green for ~3.5 s and disappears. Dashboard only, no push.
 - **Instinct access:** a read-only `/instinct` page (secret token in the URL, no login) giving Instinct the full current picture as plain, well-labelled text, limited to the categories switched on in "What Instinct can see" (health off by default). Plus a morning digest email to the Instinct address (env var `INSTINCT_EMAIL`, never in code) at 7:30 AM IST.
 

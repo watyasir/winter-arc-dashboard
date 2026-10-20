@@ -116,7 +116,8 @@ function SeasonSection({
 
       <Group title="Daily targets that count">
         {trackers.map((t) => {
-          const row = rows[t.slug];
+          // A tracker added further down this page starts switched off.
+          const row = rows[t.slug] ?? { on: false, text: "" };
           return (
             <div key={t.id} className="flex min-h-[52px] items-center gap-3 py-1.5">
               <span className="min-w-0 flex-1 text-[17px]">{t.name}</span>
