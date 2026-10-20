@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useTransition, type ReactNode } from "react";
 import { Button } from "@/components/Button";
 import { fieldClass, StatusMessages, type Status } from "@/components/body/Sheet";
+import { Field, Group } from "@/components/FormGroup";
 import { parseNumber, type SaveResult } from "@/lib/body";
 import { goalProblem, type Goal, type NewGoal } from "@/lib/tasks";
 import { AREA_ORDER, type Tracker } from "@/lib/trackers";
@@ -195,23 +196,5 @@ function GoalItem({ row, actions }: { row: GoalRow; actions: GoalActions }) {
         </p>
       )}
     </div>
-  );
-}
-
-function Group({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <section aria-label={title} className="flex flex-col gap-1.5">
-      <h2 className="m-0 ml-4 text-[13px] font-normal text-sub">{title}</h2>
-      <div className="rounded-[14px] border border-sep bg-card px-4 [&>*+*]:border-t [&>*+*]:border-solid [&>*+*]:border-sep">{children}</div>
-    </section>
-  );
-}
-
-function Field({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <label className="flex min-h-[52px] items-center justify-between gap-3 py-1.5">
-      <span className="text-[17px]">{label}</span>
-      {children}
-    </label>
   );
 }

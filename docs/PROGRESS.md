@@ -87,7 +87,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 ## Phase 7 checklist
 - [x] Hero card before the start date: "Starts in X days" (desktop + phone); started: day X of 90, days to go, % targets hit, streak, best streak
 - [x] Links to `/settings`: sidebar "+ New tracker", hero "Start Winter Arc", "Season and trackers" on `/log`
-- [ ] `/settings`: Winter Arc start date + target per tracker, add a tracker, Reset test data (with confirm)
+- [x] `/settings`: Winter Arc start date + target per tracker, add a tracker (shows in /log and on the dashboard), Reset test data (with confirm). Next: browser check
 - [ ] Yasir's season: start Mon 26 Oct 2026, 90 days
 - [ ] Check at 1440px and 375px, `npx hig-doctor .`, push
 
