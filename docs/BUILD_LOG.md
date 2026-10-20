@@ -142,3 +142,16 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **What Yasir had to do himself:** Nothing. Yasir also clarified the design rule: stay on the v6 look, but layout changes are fine where a feature needs them.
 **Screenshot to take:** `/` on the phone before 26 Oct ("Starts in 5 days"); `/settings` on the phone.
 **Next:** Phase 6 (money). Optionally reset test data before 26 Oct.
+
+## Session 9 — 21 Oct 2026 — Polish + speed
+**Goal:** Go back over Phases 5 and 7, polish rough edges, make the dashboard load fast, finish anything left open.
+**What I asked Claude Code to do:** "Go through all you've done and see where polish is required, make the site load quickly (the dashboard is slow after check-in), complete any unfinished work."
+**What got built:**
+- Speed: the server code now runs in Mumbai, next to the database. It had been running in the US, so every database read crossed the world (~250 ms each, several per page). Sign-in is now checked from the login token's signature on the server instead of asking Supabase each time, and the dashboard and check-in read everything at once instead of one after another.
+- Polish: `/settings` no longer crashes after adding a tracker; done tasks stop showing due dates; two goals with the same name no longer clash.
+- Docs: committed the mail-nudges plan for Phase 8b, reworded the design freeze to Yasir's rule (stay on v6, layout changes fine where needed), and closed stale checklist items.
+**What broke and how we fixed it:**
+- Found by reading Vercel's response header: `bom1::iad1` meant Mumbai edge, US server. A one-line `vercel.json` region fixed it; the header now reads `bom1::bom1`.
+**What Yasir had to do himself:** Nothing.
+**Screenshot to take:** none (speed); before/after timings are in this entry.
+**Next:** Phase 6 (money), where the targets per tracker get finalized.
