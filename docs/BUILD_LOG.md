@@ -125,3 +125,20 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **What Yasir had to do himself:** Nothing. The migration ran in his Supabase SQL editor through Chrome.
 **Screenshot to take:** `/demo` laptop view of the Due today, Overdue and Goals tiles; the Board view; `/demo/log/goals` on a phone.
 **Next:** Add a few real tasks and a goal. Then Phase 6 (money from the sheet).
+
+## Session 8 — 21 Oct 2026 — Phase 7: Winter Arc season + custom trackers
+**Goal:** Schedule Winter Arc ahead of time, show the season on the hero card, add trackers without code, and clear test data.
+**What I asked Claude Code to do:** "Start Winter Arc with a date picker, my season from Mon 26 Oct, 90 days, a target per tracker; 'Starts in X days' before then. Hero: day X/90, days left, % targets hit, current and best streak. /settings: add a tracker; Reset test data with a confirm step."
+**What got built:**
+- `/settings` (signed in only):
+  - **Winter Arc:** a date picker for day 1, plus a switch and daily target per tracker. A day counts as "all targets" when every switched-on tracker hits its target.
+  - **New tracker:** name, area, type (yes/no, number, minutes, 1 to 5), unit, and a daily or weekly target. It shows up in the check-in and on the dashboard straight away.
+  - **Reset test data:** deletes entries, workouts, body checks, tasks and goals after a confirm step. Trackers, the season and the goal weight stay.
+- Hero card: before day 1 it counts down ("5 days to go"), the same on the phone ring. Once started it shows day X of 90, days to go, % targets hit, streak, best streak and missed days.
+- Ways in: "+ New tracker" in the sidebar, "Start Winter Arc" on the empty hero card, and "Season and trackers" on `/log` for the phone. The demo hides them (nothing to change there).
+- Yasir's season was set up directly in the database: day 1 is Mon 26 Oct 2026.
+**What broke and how we fixed it:**
+- `/settings` needs sign-in, so the browser check ran the same screen on a throwaway local page with fake data, then the page was deleted. The countdown math was checked with a small script against the real dashboard code.
+**What Yasir had to do himself:** Nothing. Yasir also clarified the design rule: stay on the v6 look, but layout changes are fine where a feature needs them.
+**Screenshot to take:** `/` on the phone before 26 Oct ("Starts in 5 days"); `/settings` on the phone.
+**Next:** Phase 6 (money). Optionally reset test data before 26 Oct.

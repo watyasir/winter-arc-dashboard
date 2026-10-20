@@ -11,7 +11,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 | 4 | Workouts + body | ✅ Done (21 Oct 2026) |
 | 5 | Tasks + goals | ✅ Done (21 Oct 2026) |
 | 6 | Money (read from the sheet) | ⬜ Not started |
-| 7 | Winter Arc season + custom trackers | 🟡 In progress |
+| 7 | Winter Arc season + custom trackers | ✅ Done (21 Oct 2026) |
 | 8 | Automation (logging API) | ⬜ Not started |
 | 8b | Gmail inbox | ⬜ Not started |
 | 8c | Instinct link | ⬜ Not started |
@@ -87,13 +87,13 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 ## Phase 7 checklist
 - [x] Hero card before the start date: "Starts in X days" (desktop + phone); started: day X of 90, days to go, % targets hit, streak, best streak
 - [x] Links to `/settings`: sidebar "+ New tracker", hero "Start Winter Arc", "Season and trackers" on `/log`
-- [x] `/settings`: Winter Arc start date + target per tracker, add a tracker (shows in /log and on the dashboard), Reset test data (with confirm). Next: browser check
-- [ ] Yasir's season: start Mon 26 Oct 2026, 90 days
-- [ ] Check at 1440px and 375px, `npx hig-doctor .`, push
+- [x] `/settings`: Winter Arc start date + target per tracker, add a tracker (shows in /log and on the dashboard), Reset test data (with confirm).
+- [x] Yasir's season set in Supabase (21 Oct): Winter Arc, day 1 = Mon 26 Oct 2026, 90 days, targets sleep 7, water 3, steps 8000, skincare, hair, study 90 min (weekly workout and mood not counted daily; switch on in /settings)
+- [x] Checked `/settings` at 375px (on a throwaway local page, since it needs sign-in) and the hero on `/demo` at desktop; countdown checked against the builder; `npx hig-doctor .` clean; build passes; pushed
 
 ## Sign-in rules (20 Oct 2026)
 - [x] Same browser stays signed in (login cookie lasts 400 days and refreshes on each visit)
 - [x] Each device is signed out 7 days after its sign-in, with a clear message on `/login` (`src/lib/session.ts`, `src/proxy.ts`)
 - [ ] Phase 8b: connect Gmail at sign-in so both renew on the same day (note in `docs/BUILD_PLAN.md`)
 
-**Next up:** Phase 6 (money from the Personal Finance sheet). Before it, get the sheet's cell map from Claude chat. Winter Arc shows "No season running yet" until Phase 7. Supabase's built-in email allows only 2 sign-in emails per hour.
+**Next up:** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.
