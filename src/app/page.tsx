@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { Dashboard } from "@/components/dashboard/Dashboard";
-import { isAllowedEmail } from "@/lib/auth";
+import { currentOwner } from "@/lib/auth";
 import { loadDashboardData } from "@/lib/dashboard/load";
-import { createClient } from "@/lib/supabase/server";
 import { addTask, deleteTask, moveTask, toggleTodayTracker } from "./actions";
 
 /** Signed in as the owner: the real dashboard. Anyone else: a short welcome with the demo link. */
@@ -22,12 +21,10 @@ export default function Home() {
 }
 
 async function HomeContent() {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
-  const email = data.user?.email;
-  if (!email || !isAllowedEmail(email)) return <Welcome />;
+  const owner = await currentOwner();
+  if (!owner) return <Welcome />;
 
-  const dashboard = await loadDashboardData(supabase, email);
+  const dashboard = await loadDashboardData(owner.supabase, owner.email);
   if (!dashboard) {
     return <p className="m-0 p-6 text-center text-[15px] text-coral-text">Couldn&apos;t load your dashboard. Refresh to try again.</p>;
   }

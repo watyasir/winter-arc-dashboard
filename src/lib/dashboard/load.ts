@@ -13,10 +13,29 @@ type Supabase = Awaited<ReturnType<typeof createClient>>;
 // Supabase returns at most 1,000 rows per request, so longer histories are read in pages.
 const PAGE = 1000;
 
+/** Entries between two dates (inclusive), oldest first. Null = database error. */
+async function loadEntries(supabase: Supabase, from: string, to: string): Promise<EntryRow[] | null> {
+  const entries: EntryRow[] = [];
+  for (let page = 0; ; page++) {
+    const { data, error } = await supabase
+      .from("entries")
+      .select("tracker_id, entry_date, value")
+      .gte("entry_date", from)
+      .lte("entry_date", to)
+      .order("entry_date")
+      .order("tracker_id")
+      .range(page * PAGE, page * PAGE + PAGE - 1);
+    if (error) return null;
+    entries.push(...data.map((e) => ({ ...e, value: Number(e.value) })));
+    if (data.length < PAGE) return entries;
+  }
+}
+
 /** Everything the real dashboard shows, read fresh on every visit. Null = couldn't reach the database. */
 export async function loadDashboardData(supabase: Supabase, email: string): Promise<DashboardData | null> {
   const today = todayISO();
-  const [trackers, seasonResult, workouts, bodyChecks, weightGoal, tasks, goals] = await Promise.all([
+  const historyStart = addDays(today, -HISTORY_DAYS);
+  const [trackers, seasonResult, workouts, bodyChecks, weightGoal, tasks, goals, recent] = await Promise.all([
     loadTrackers(supabase),
     supabase.from("seasons").select("name, start_date, length_days, targets").eq("is_active", true).maybeSingle<SeasonRow>(),
     loadWorkouts(supabase, { since: addDays(today, -BODY_WEEKS * 7) }),
@@ -25,25 +44,17 @@ export async function loadDashboardData(supabase: Supabase, email: string): Prom
     loadWeightGoal(supabase),
     loadTasks(supabase),
     loadGoals(supabase),
+    loadEntries(supabase, historyStart, today),
   ]);
-  if (!trackers || seasonResult.error || !workouts || !bodyChecks || weightGoal === undefined || !tasks || !goals) return null;
+  if (!trackers || seasonResult.error || !workouts || !bodyChecks || weightGoal === undefined || !tasks || !goals || !recent) return null;
   const season = seasonResult.data;
 
-  const historyStart = addDays(today, -HISTORY_DAYS);
-  const from = season && season.start_date < historyStart ? season.start_date : historyStart;
-  const entries: EntryRow[] = [];
-  for (let page = 0; ; page++) {
-    const { data, error } = await supabase
-      .from("entries")
-      .select("tracker_id, entry_date, value")
-      .gte("entry_date", from)
-      .lte("entry_date", today)
-      .order("entry_date")
-      .order("tracker_id")
-      .range(page * PAGE, page * PAGE + PAGE - 1);
-    if (error) return null;
-    entries.push(...data.map((e) => ({ ...e, value: Number(e.value) })));
-    if (data.length < PAGE) break;
+  // Once the season is older than the history window, read its earlier days too.
+  let entries = recent;
+  if (season && season.start_date < historyStart) {
+    const earlier = await loadEntries(supabase, season.start_date, addDays(historyStart, -1));
+    if (!earlier) return null;
+    entries = [...earlier, ...recent];
   }
 
   return buildDashboardData({

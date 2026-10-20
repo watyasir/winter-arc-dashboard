@@ -20,19 +20,19 @@ export default function LogPage() {
 async function TodayCheckIn() {
   const { supabase } = await requireUser();
 
-  const trackers = await loadTrackers(supabase);
+  // Latest value per tracker over the last 2 weeks: today's if logged, otherwise the most recent day.
+  const today = todayISO();
+  const [trackers, { data: recent }] = await Promise.all([
+    loadTrackers(supabase),
+    supabase
+      .from("entries")
+      .select("tracker_id, entry_date, value")
+      .gte("entry_date", addDays(today, -14))
+      .order("entry_date", { ascending: false }),
+  ]);
   if (!trackers) {
     return <p className="p-6 text-center text-[15px] text-coral-text">Couldn&apos;t load your trackers. Refresh to try again.</p>;
   }
-
-  // Latest value per tracker over the last 2 weeks: today's if logged, otherwise the most recent day.
-  const today = todayISO();
-  const twoWeeksAgo = addDays(today, -14);
-  const { data: recent } = await supabase
-    .from("entries")
-    .select("tracker_id, entry_date, value")
-    .gte("entry_date", twoWeeksAgo)
-    .order("entry_date", { ascending: false });
 
   const latest = new Map<string, { date: string; value: number }>();
   for (const e of recent ?? []) {
