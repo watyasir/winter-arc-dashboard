@@ -146,6 +146,7 @@ export function buildDashboardData({
     workoutHref: "/log/workout",
     bodyHref: "/log/body",
     goalsHref: "/log/goals",
+    settingsHref: "/settings",
     ...body,
     goals: buildGoals(goals, goalTracked, trackers, today),
     habits: trackers
@@ -183,6 +184,7 @@ function overviewSubtitle(season: SeasonRow | null, today: string, logged: numbe
   if (season) {
     const day = daysBetween(season.start_date, today) + 1;
     if (day >= 1 && day <= season.length_days) parts.push(`${season.name} day ${day}`);
+    if (day < 1) parts.push(`${season.name} starts in ${1 - day} ${1 - day === 1 ? "day" : "days"}`);
   }
   parts.push(logged === 0 ? "Nothing logged today yet" : `${logged} of ${total} trackers logged today`);
   if (dueToday) parts.push(`${dueToday} ${dueToday === 1 ? "task" : "tasks"} due today`);
@@ -218,6 +220,7 @@ function buildSeason(
   return {
     name: season.name,
     length,
+    startsIn: Math.max(0, daysBetween(today, season.start_date)),
     day: dayNum,
     streak,
     targetsHitPct: past.length && goalCount ? Math.round((hitDays / past.length) * 100) : 0,

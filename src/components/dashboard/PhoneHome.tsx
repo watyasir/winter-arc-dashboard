@@ -129,10 +129,12 @@ function TodayTab() {
             <div className="flex flex-col gap-[3px]">
               <span className="text-[13px] font-semibold text-arc-text">{season.name}</span>
               <span className="font-rounded text-[22px] font-bold">
-                Day {season.day} of {season.length}
+                {season.startsIn > 0 ? `Starts in ${season.startsIn} ${season.startsIn === 1 ? "day" : "days"}` : `Day ${season.day} of ${season.length}`}
               </span>
               <span className="text-[13px] text-sub">
-                {season.streak}-day streak · {season.targetsHitPct}% targets hit
+                {season.startsIn > 0
+                  ? `Day 1 is ${season.startLabel}`
+                  : `${season.streak}-day streak · best ${season.bestStreak} · ${season.targetsHitPct}% targets hit`}
               </span>
             </div>
           </>

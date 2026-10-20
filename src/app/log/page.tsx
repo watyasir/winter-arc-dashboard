@@ -53,7 +53,7 @@ async function TodayCheckIn() {
       onSave={saveCheckIn}
       footer={
         <>
-          <MoreLogs workoutHref="/log/workout" bodyHref="/log/body" />
+          <MoreLogs workoutHref="/log/workout" bodyHref="/log/body" settingsHref="/settings" />
           <form action="/auth/signout" method="post" className="flex justify-center pt-2">
             <button type="submit" className="min-h-11 cursor-pointer rounded-full border-0 bg-transparent px-3 text-[15px] text-sub hover:text-ink">
               Sign out

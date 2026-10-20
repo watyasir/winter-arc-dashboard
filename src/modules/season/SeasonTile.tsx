@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 import type { SeasonDay } from "@/modules/types";
 
@@ -23,7 +24,7 @@ const legend: SeasonDay[] = ["all", "most", "missed", "today"];
 
 /** The one dark hero card per view: big "23 of 90" plus the 90-cell season strip. */
 export function SeasonTile() {
-  const { season } = useDashboard().data;
+  const { season, settingsHref } = useDashboard().data;
   if (!season) {
     return (
       <section aria-label="Season" className="flex flex-col gap-1.5 rounded-[20px] bg-hero px-6 py-[22px] text-white">
@@ -32,9 +33,15 @@ export function SeasonTile() {
         <span className="text-[15px] text-hero-sub">
           Keep logging every day. Once Winter Arc has a start date, each day fills in here.
         </span>
+        {settingsHref && (
+          <Link href={`${settingsHref}#season`} className="mt-1 self-start text-[15px] font-semibold text-white underline hover:text-hero-sage">
+            Start Winter Arc
+          </Link>
+        )}
       </section>
     );
   }
+  const waiting = season.startsIn > 0;
   return (
     <section
       aria-label={`${season.name} season`}
@@ -45,14 +52,19 @@ export function SeasonTile() {
           {season.name} · {season.length} days
         </span>
         <div className="flex items-baseline gap-2">
-          <span className="font-rounded text-[64px] leading-none font-bold tracking-[-0.03em]">{season.day}</span>
-          <span className="text-[17px] font-semibold text-hero-sub">of {season.length}</span>
+          <span className="font-rounded text-[64px] leading-none font-bold tracking-[-0.03em]">{waiting ? season.startsIn : season.day}</span>
+          <span className="text-[17px] font-semibold text-hero-sub">
+            {waiting ? (season.startsIn === 1 ? "day to go" : "days to go") : `of ${season.length}`}
+          </span>
         </div>
         <span className="text-[15px]">
-          You&apos;re on a {season.streak}-day streak. {season.length - season.day} days to go.
+          {waiting
+            ? `Starts in ${season.startsIn} ${season.startsIn === 1 ? "day" : "days"}, on ${season.startLabel}. Keep logging; day 1 counts every target.`
+            : `You're on a ${season.streak}-day streak. ${season.length - season.day} days to go.`}
         </span>
-        <div className="flex gap-[18px] pt-2.5">
+        <div className={`flex gap-[18px] pt-2.5 ${waiting ? "hidden" : ""}`}>
           <Figure value={`${season.targetsHitPct}%`} label="targets hit" className="text-hero-sage" />
+          <Figure value={String(season.streak)} label="streak" />
           <Figure value={String(season.bestStreak)} label="best streak" />
           <Figure value={String(season.missed)} label="missed" className="text-hero-yellow" />
         </div>

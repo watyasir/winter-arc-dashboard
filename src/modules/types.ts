@@ -77,6 +77,8 @@ export interface DashboardData {
   season: {
     name: string;
     length: number;
+    /** 0 = started. Before the start date: days until day 1. */
+    startsIn: number;
     day: number;
     streak: number;
     targetsHitPct: number;
@@ -139,6 +141,8 @@ export interface DashboardData {
   };
   /** Where goals are added and updated (/log/goals or /demo/log/goals). */
   goalsHref: string;
+  /** Season, trackers and reset. null on the demo (no settings to change). */
+  settingsHref: string | null;
   goals: { name: string; progress: string; pct: number; by: string; tone: Tone }[];
   habits: { name: string; days: boolean[] }[];
   mailboxes: { label: string; tone: Tone; count: string }[];

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { CheckBox } from "@/components/Checkbox";
 import { Icon, type IconName } from "@/components/Icon";
@@ -86,9 +87,11 @@ export function Sidebar() {
           ))}
         </ul>
       )}
-      <button type="button" className={`${rowBase} mt-1 bg-transparent font-medium text-brand-text`}>
-        + New tracker
-      </button>
+      {data.settingsHref && (
+        <Link href={`${data.settingsHref}#new-tracker`} className={`${rowBase} mt-1 bg-transparent font-medium text-brand-text no-underline hover:text-brand-text`}>
+          + New tracker
+        </Link>
+      )}
     </nav>
   );
 }

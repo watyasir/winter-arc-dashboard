@@ -56,6 +56,7 @@ export const demoData: DashboardData = {
     { label: "German", done: false, value: "0 of 20 min" },
   ],
   season: {
+    startsIn: 0,
     name: "Winter Arc",
     length: 90,
     day: 23,
@@ -136,6 +137,7 @@ export const demoData: DashboardData = {
   workoutHref: "/demo/log/workout",
   bodyHref: "/demo/log/body",
   goalsHref: "/demo/log/goals",
+  settingsHref: null,
   ...demoBody,
   goals: [
     { name: "Gain 5 kg", progress: "2.1 of 5 kg", pct: 42, by: "by 24 Dec", tone: "brand" },

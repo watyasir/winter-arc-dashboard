@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 /** Under the check-in: the two longer logs that don't belong in the 60-second daily sheet. */
-export function MoreLogs({ workoutHref, bodyHref }: { workoutHref: string; bodyHref: string }) {
+export function MoreLogs({ workoutHref, bodyHref, settingsHref }: { workoutHref: string; bodyHref: string; settingsHref?: string }) {
   const row = "flex min-h-[52px] items-center justify-between border-t border-solid border-sep text-[17px] text-ink no-underline first:border-t-0 hover:text-ink";
   return (
     <nav aria-label="More to log" className="flex flex-col gap-1.5">
@@ -13,6 +13,11 @@ export function MoreLogs({ workoutHref, bodyHref }: { workoutHref: string; bodyH
         <Link href={bodyHref} className={row}>
           Weekly body check <span aria-hidden="true" className="text-sub">›</span>
         </Link>
+        {settingsHref && (
+          <Link href={settingsHref} className={row}>
+            Season and trackers <span aria-hidden="true" className="text-sub">›</span>
+          </Link>
+        )}
       </div>
     </nav>
   );

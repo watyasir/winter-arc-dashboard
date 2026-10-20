@@ -11,7 +11,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 | 4 | Workouts + body | ✅ Done (21 Oct 2026) |
 | 5 | Tasks + goals | ✅ Done (21 Oct 2026) |
 | 6 | Money (read from the sheet) | ⬜ Not started |
-| 7 | Winter Arc season + custom trackers | ⬜ Not started |
+| 7 | Winter Arc season + custom trackers | 🟡 In progress |
 | 8 | Automation (logging API) | ⬜ Not started |
 | 8b | Gmail inbox | ⬜ Not started |
 | 8c | Instinct link | ⬜ Not started |
@@ -83,6 +83,13 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Tiles: Due today, Overdue (tick = done), In progress on real tasks; phone Today tab lists overdue + due today
 - [x] Goals page (`/log/goals`): add a goal (typed-in or from a tracker), update typed progress, delete; `/demo/log/goals` on fake data; Goals tile on real data with an "Update goals" link
 - [x] Migration run on Supabase (21 Oct); checked at 1440px and 375px on `/demo`; `npx hig-doctor .` clean; build passes; pushed
+
+## Phase 7 checklist
+- [x] Hero card before the start date: "Starts in X days" (desktop + phone); started: day X of 90, days to go, % targets hit, streak, best streak
+- [x] Links to `/settings`: sidebar "+ New tracker", hero "Start Winter Arc", "Season and trackers" on `/log`
+- [ ] `/settings`: Winter Arc start date + target per tracker, add a tracker, Reset test data (with confirm)
+- [ ] Yasir's season: start Mon 26 Oct 2026, 90 days
+- [ ] Check at 1440px and 375px, `npx hig-doctor .`, push
 
 ## Sign-in rules (20 Oct 2026)
 - [x] Same browser stays signed in (login cookie lasts 400 days and refreshes on each visit)
