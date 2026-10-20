@@ -29,6 +29,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 **Schedule**
 - **Fri 23 Oct, night:** Phase 8, 8b, 8c, then 9. Phase 9 runs on `/demo` data; drop it if it's past 1:30 AM.
 - **Sat 24 Oct, night:** Phase 6 Money, after Yasir brainstorms it with Claude chat.
+- **Sun 25 Oct:** rename the web address and GitHub repo to match "Yarizz's Dashboard" (new Vercel domain, Supabase sign-in URLs updated, old link stops working).
 
 **Phase 6 leaning (not final)**
 - No Google service account. Claude's scheduled finance task pushes a money snapshot to `POST /api/money` twice a day.
