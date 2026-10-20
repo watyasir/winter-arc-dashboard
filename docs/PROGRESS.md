@@ -20,7 +20,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 ## Decisions & schedule (21 Oct 2026)
 
 **Decisions**
-- **Winter Arc starts Mon 26 Oct 2026**, day 1 of 90. Anything logged before then is test data; Yasir wipes it with "Reset test data" in `/settings`.
+- **Winter Arc starts Mon 26 Oct 2026**, day 1 of 90. Test data wiped 21 Oct with "Reset test data" (checked: 0 entries, workouts, body checks, tasks, goals; 8 trackers and the season kept). Real logging starts Mon 26 Oct.
 - **Design stays on v6** ("Teal and grey"), never older designs. Not a hard freeze: where a feature needs a design or layout change, make it with v6 tokens and components (Yasir chose this over a strict freeze, 21 Oct).
 - **Gmail: no full inbox.** Phase 8b is "Mail nudges": Claude posts the emails that need Yasir through the API; he reads and replies in Gmail.
 - **Tracker targets** get decided with Yasir when Phase 6 is finalized.
