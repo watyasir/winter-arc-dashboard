@@ -8,8 +8,8 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 | 1 | The look (demo data only) | ✅ Done (19 Oct 2026) |
 | 2 | Database + login + daily check-in | ✅ Done (20 Oct 2026) |
 | 3 | Real dashboard | ✅ Done (20 Oct 2026) |
-| 4 | Workouts + body | 🟡 Live, waiting on Yasir's first real workout |
-| 5 | Tasks + goals | ⬜ Not started |
+| 4 | Workouts + body | ✅ Done (21 Oct 2026) |
+| 5 | Tasks + goals | 🟡 In progress |
 | 6 | Money (read from the sheet) | ⬜ Not started |
 | 7 | Winter Arc season + custom trackers | ⬜ Not started |
 | 8 | Automation (logging API) | ⬜ Not started |
@@ -75,7 +75,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Links from `/log` ("More to log"); phone: Workouts on Today tab, Weight + Lifts on Arc tab
 - [x] Checked at 1440px and 375px on `/demo`; `npx hig-doctor .` clean
 - [x] Pushed and live on Vercel (20 Oct)
-- [ ] Yasir: log a real workout and a body check, check the tiles on `/` (Phase 4 "done when")
+- [x] Marked done 21 Oct: Yasir's entries so far are test numbers; tiles work on them. Real logging starts with the season.
 
 ## Sign-in rules (20 Oct 2026)
 - [x] Same browser stays signed in (login cookie lasts 400 days and refreshes on each visit)
