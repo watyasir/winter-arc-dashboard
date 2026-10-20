@@ -1,4 +1,7 @@
 import type { Tone } from "@/lib/tones";
+import type { NewTask, Owner, Task, TaskStatus } from "@/lib/tasks";
+
+export type { Owner, Task };
 
 /*
   The shape of everything the dashboard shows. /demo fills it with fake data
@@ -8,8 +11,6 @@ import type { Tone } from "@/lib/tones";
 export type ViewId = "overview" | "inbox" | "board" | "instinct";
 
 export type SeasonDay = "all" | "most" | "missed" | "today" | "upcoming";
-
-export type Owner = "Me" | "Claude" | "Both";
 
 export interface Mail {
   id: string;
@@ -22,16 +23,6 @@ export interface Mail {
   loggedByClaude?: boolean;
   body: string;
   claudeNote: string;
-}
-
-export interface BoardCard {
-  title: string;
-  owner: Owner;
-  area: string;
-  due?: string;
-  /** "soon" = within 3 days (peach), "overdue" = past due (red). */
-  dueState?: "soon" | "overdue";
-  done?: boolean;
 }
 
 /** One bank account or card in the Money wallet stack. Card balances are negative (amount owed). */
@@ -61,12 +52,21 @@ export interface TodayItem {
 /** Saves a tap on a Today row. Only the real dashboard passes one; the demo just flips the box. */
 export type ToggleTodayAction = (trackerId: string, done: boolean) => Promise<{ ok: boolean }>;
 
+/** Saves task changes. Only the real dashboard passes these; the demo changes stay on the page. */
+export interface TaskActions {
+  add: (task: NewTask) => Promise<{ ok: boolean }>;
+  move: (id: string, status: TaskStatus) => Promise<{ ok: boolean }>;
+  remove: (id: string) => Promise<{ ok: boolean }>;
+}
+
 /*
   Real data can be missing while a source isn't connected or nothing is logged yet.
   null / empty lists mean "show the empty state", which tells you what to log.
 */
 export interface DashboardData {
   ownerLine: string;
+  /** YYYY-MM-DD the dashboard counts as today (fixed on the demo). */
+  todayISO: string;
   /** Letter in the phone avatar. */
   ownerInitial: string;
   /** Where "Log Today" goes: /demo/log on the demo, /log for real. */
@@ -137,12 +137,15 @@ export interface DashboardData {
     /** Latest measurements, with the change since the check before. */
     measures: { label: string; value: string; change: number | null }[];
   };
+  /** Where goals are added and updated (/log/goals or /demo/log/goals). */
+  goalsHref: string;
   goals: { name: string; progress: string; pct: number; by: string; tone: Tone }[];
   habits: { name: string; days: boolean[] }[];
   mailboxes: { label: string; tone: Tone; count: string }[];
   mailboxNote: string;
   mails: Mail[];
-  board: { name: string; tone: Tone; count: string; cards: BoardCard[] }[];
+  /** Open tasks plus the ones done in the last two weeks. */
+  tasks: Task[];
   instinct: {
     draftQuestion: string;
     exchanges: { question: string; answer: string; meta: string; status: "answered" | "paused" }[];

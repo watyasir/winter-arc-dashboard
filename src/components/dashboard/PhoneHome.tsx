@@ -10,6 +10,7 @@ import { BoardView } from "@/modules/board/BoardView";
 import { HabitsTile } from "@/modules/habits/HabitsTile";
 import { MoneyTile } from "@/modules/money/MoneyTile";
 import { SeasonTile } from "@/modules/season/SeasonTile";
+import { TaskRows, useTaskLists } from "@/modules/tasks/TaskRows";
 import { TodayRows } from "@/modules/today/TodayRows";
 import { WeightTile } from "@/modules/weight/WeightTile";
 import { LiftsTile } from "@/modules/workouts/LiftsTile";
@@ -106,6 +107,8 @@ function TodayTab() {
   const { data, todayDone } = useDashboard();
   const { season, money } = data;
   const doneCount = todayDone.filter(Boolean).length;
+  const { dueToday, overdue } = useTaskLists();
+  const taskRows = [...overdue, ...dueToday];
 
   return (
     <>
@@ -162,6 +165,14 @@ function TodayTab() {
           <TodayRows size="phone" />
         </PhoneCard>
       </PhoneSection>
+
+      {taskRows.length > 0 && (
+        <PhoneSection title={`Tasks · ${overdue.length ? `${overdue.length} overdue, ` : ""}${dueToday.length} due today`}>
+          <PhoneCard className="px-4">
+            <TaskRows tasks={taskRows} size="phone" />
+          </PhoneCard>
+        </PhoneSection>
+      )}
 
       <WorkoutsTile />
 

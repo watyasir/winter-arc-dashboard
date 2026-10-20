@@ -1,5 +1,5 @@
 import type { DashboardData, SeasonDay } from "@/modules/types";
-import { demoBody } from "./body";
+import { DEMO_TODAY, demoBody } from "./body";
 
 /*
   Fake data for /demo. Every name, amount and number here is made up.
@@ -36,17 +36,18 @@ const weights = [70.3, 70.6, 70.9, 71.2, 71.4, 71.9, 72.1, 72.4];
 export const demoData: DashboardData = {
   ownerLine: "Yasir's life dashboard",
   ownerInitial: "Y",
+  todayISO: DEMO_TODAY,
   logHref: "/demo/log",
   views: {
     overview: {
       title: "Sunday, 18 October",
-      subtitle: "Winter Arc day 23 · 4 tasks open today · Instinct synced 9 min ago",
+      subtitle: "Winter Arc day 23 · 3 tasks due today · Instinct synced 9 min ago",
     },
     inbox: { title: "Inbox", subtitle: "4 unread · Claude logged 2 bank alerts today" },
-    board: { title: "Board", subtitle: "17 open · 8 with Claude · 2 waiting on others" },
+    board: { title: "Board", subtitle: "11 open · 2 overdue · 2 waiting on others" },
     instinct: { title: "Instinct", subtitle: "Your on-the-go assistant, kept in sync with this dashboard" },
   },
-  navBadges: { inbox: "4", board: "17" },
+  navBadges: { inbox: "4", board: "11" },
   trackers: [
     { label: "Workout", done: true, value: "Push" },
     { label: "Study", done: true, value: "90 min" },
@@ -134,6 +135,7 @@ export const demoData: DashboardData = {
   },
   workoutHref: "/demo/log/workout",
   bodyHref: "/demo/log/body",
+  goalsHref: "/demo/log/goals",
   ...demoBody,
   goals: [
     { name: "Gain 5 kg", progress: "2.1 of 5 kg", pct: 42, by: "by 24 Dec", tone: "brand" },
@@ -231,48 +233,21 @@ export const demoData: DashboardData = {
       claudeNote: "EMI 2 and 3 are already planned in Money.",
     },
   ],
-  board: [
-    {
-      name: "To do",
-      tone: "neutral",
-      count: "11",
-      cards: [
-        { title: "Winter Arc kickoff", owner: "Both", area: "Winter Arc" },
-        { title: "Renew library card", owner: "Me", area: "Errands" },
-        { title: "November finance review", owner: "Both", area: "Money", due: "28 Oct", dueState: "soon" },
-        { title: "Cancel unused music app", owner: "Claude", area: "Subscriptions" },
-      ],
-    },
-    {
-      name: "In progress",
-      tone: "brand",
-      count: "4",
-      cards: [
-        { title: "Winter Arc Dashboard design", owner: "Both", area: "Build" },
-        { title: "Course completion certificate", owner: "Both", area: "Learning", due: "26 Oct", dueState: "soon" },
-        { title: "Two delivery refund disputes", owner: "Claude", area: "Disputes" },
-        { title: "Habit app review", owner: "Claude", area: "Build" },
-      ],
-    },
-    {
-      name: "Waiting on others",
-      tone: "yellow",
-      count: "2",
-      cards: [
-        { title: "New job: document check", owner: "Claude", area: "Work" },
-        { title: "Course mentor: batch reply", owner: "Claude", area: "Learning", due: "21 Oct" },
-      ],
-    },
-    {
-      name: "Done",
-      tone: "sage",
-      count: "5",
-      cards: [
-        { title: "Dashboard project brief", owner: "Claude", area: "Build", done: true },
-        { title: "Weekly review agent", owner: "Claude", area: "Build", done: true },
-        { title: "Finance logging + email bridge", owner: "Claude", area: "Build", done: true },
-      ],
-    },
+  tasks: [
+    { id: "t1", title: "Winter Arc kickoff", owner: "Both", area: "Winter Arc", due: "2026-10-18", status: "todo" },
+    { id: "t2", title: "Renew library card", owner: "Me", area: "Errands", due: "2026-10-18", status: "todo" },
+    { id: "t3", title: "Book dentist check-up", owner: "Me", area: "Health", due: "2026-10-16", status: "todo" },
+    { id: "t4", title: "November finance review", owner: "Both", area: "Money", due: "2026-10-20", status: "todo" },
+    { id: "t5", title: "Cancel unused music app", owner: "Claude", area: "Subscriptions", due: null, status: "todo" },
+    { id: "t6", title: "Winter Arc Dashboard design", owner: "Both", area: "Build", due: null, status: "doing" },
+    { id: "t7", title: "Course completion certificate", owner: "Both", area: "Learning", due: "2026-10-18", status: "doing" },
+    { id: "t8", title: "Two delivery refund disputes", owner: "Claude", area: "Disputes", due: "2026-10-15", status: "doing" },
+    { id: "t9", title: "Habit app review", owner: "Claude", area: "Build", due: null, status: "doing" },
+    { id: "t10", title: "New job: document check", owner: "Claude", area: "Work", due: null, status: "waiting" },
+    { id: "t11", title: "Course mentor: batch reply", owner: "Claude", area: "Learning", due: "2026-10-21", status: "waiting" },
+    { id: "t12", title: "Dashboard project brief", owner: "Claude", area: "Build", due: null, status: "done" },
+    { id: "t13", title: "Weekly review agent", owner: "Claude", area: "Build", due: null, status: "done" },
+    { id: "t14", title: "Finance logging + email bridge", owner: "Claude", area: "Build", due: null, status: "done" },
   ],
   instinct: {
     draftQuestion: "Has my course mentor replied about my batch?",

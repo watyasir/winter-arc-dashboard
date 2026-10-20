@@ -1,6 +1,7 @@
 import "server-only";
 import type { createClient } from "@/lib/supabase/server";
 import { loadBodyChecks, loadWeightGoal, loadWorkouts } from "@/lib/body-store";
+import { loadGoals, loadTasks } from "@/lib/task-store";
 import { loadTrackers } from "@/lib/tracker-store";
 import { addDays, todayISO } from "@/lib/trackers";
 import type { DashboardData } from "@/modules/types";
@@ -15,15 +16,17 @@ const PAGE = 1000;
 /** Everything the real dashboard shows, read fresh on every visit. Null = couldn't reach the database. */
 export async function loadDashboardData(supabase: Supabase, email: string): Promise<DashboardData | null> {
   const today = todayISO();
-  const [trackers, seasonResult, workouts, bodyChecks, weightGoal] = await Promise.all([
+  const [trackers, seasonResult, workouts, bodyChecks, weightGoal, tasks, goals] = await Promise.all([
     loadTrackers(supabase),
     supabase.from("seasons").select("name, start_date, length_days, targets").eq("is_active", true).maybeSingle<SeasonRow>(),
     loadWorkouts(supabase, { since: addDays(today, -BODY_WEEKS * 7) }),
     // Weekly, so this covers the chart window plus the check before it.
     loadBodyChecks(supabase, BODY_WEEKS + 2),
     loadWeightGoal(supabase),
+    loadTasks(supabase),
+    loadGoals(supabase),
   ]);
-  if (!trackers || seasonResult.error || !workouts || !bodyChecks || weightGoal === undefined) return null;
+  if (!trackers || seasonResult.error || !workouts || !bodyChecks || weightGoal === undefined || !tasks || !goals) return null;
   const season = seasonResult.data;
 
   const historyStart = addDays(today, -HISTORY_DAYS);
@@ -51,6 +54,9 @@ export async function loadDashboardData(supabase: Supabase, email: string): Prom
     workouts,
     bodyChecks,
     weightGoal,
+    tasks,
+    goals: goals.goals,
+    goalTracked: goals.tracked,
     ownerInitial: email.trim().charAt(0).toUpperCase() || "Me",
   });
 }

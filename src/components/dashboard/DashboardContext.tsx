@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import type { DashboardData, ToggleTodayAction, ViewId } from "@/modules/types";
+import type { NewTask, Task, TaskStatus } from "@/lib/tasks";
+import type { DashboardData, TaskActions, ToggleTodayAction, ViewId } from "@/modules/types";
 
 type InstinctState = { status: "idle" } | { status: "waiting"; secs: number } | { status: "done"; secs: number };
 
@@ -14,6 +15,12 @@ interface DashboardState {
   toggleToday: (index: number) => void;
   /** Set when saving a Today tap failed; cleared by the next tap. */
   todayError: string | null;
+  /** Tasks as shown right now: changes appear at once and roll back if saving fails. */
+  tasks: Task[];
+  addTask: (task: NewTask) => void;
+  moveTask: (id: string, status: TaskStatus) => void;
+  deleteTask: (id: string) => void;
+  taskError: string | null;
   mailbox: string;
   setMailbox: (box: string) => void;
   selectedMailId: string;
@@ -39,11 +46,14 @@ const REPLIED_PILL_MS = 3500;
 export function DashboardProvider({
   data,
   onToggleToday,
+  taskActions,
   children,
 }: {
   data: DashboardData;
   /** Real dashboard only: saves a tapped Today row. The server then sends fresh data. */
   onToggleToday?: ToggleTodayAction;
+  /** Real dashboard only: saves task changes. */
+  taskActions?: TaskActions;
   children: ReactNode;
 }) {
   const [view, setViewState] = useState<ViewId>("overview");
@@ -75,6 +85,39 @@ export function DashboardProvider({
         setTodayError(`Couldn't save ${data.today[i].label}. Check your connection and try again.`);
       });
   };
+
+  const [tasks, setTasks] = useState(data.tasks);
+  const [taskError, setTaskError] = useState<string | null>(null);
+  const [shownTasks, setShownTasks] = useState(data.tasks);
+  if (shownTasks !== data.tasks) {
+    setShownTasks(data.tasks);
+    setTasks(data.tasks);
+  }
+  /** Shows the change now; on the real dashboard, saves it and puts things back if that fails. */
+  const changeTasks = (change: (t: Task[]) => Task[], save: ((a: TaskActions) => Promise<{ ok: boolean }>) | null, failMsg: string) => {
+    const before = tasks;
+    setTasks(change);
+    setTaskError(null);
+    if (!taskActions || !save) return;
+    save(taskActions)
+      .catch(() => ({ ok: false }))
+      .then((res) => {
+        if (res.ok) return;
+        setTasks(before);
+        setTaskError(`${failMsg} Check your connection and try again.`);
+      });
+  };
+  const addTask = (task: NewTask) =>
+    changeTasks(
+      (t) => [...t, { id: `new-${Date.now()}`, title: task.title.trim(), area: task.area.trim(), due: task.due, status: task.status, owner: "Me" }],
+      (a) => a.add(task),
+      "Couldn't add the task.",
+    );
+  const moveTask = (id: string, status: TaskStatus) =>
+    changeTasks((t) => t.map((k) => (k.id === id ? { ...k, status } : k)), id.startsWith("new-") ? null : (a) => a.move(id, status), "Couldn't move the task.");
+  const deleteTask = (id: string) =>
+    changeTasks((t) => t.filter((k) => k.id !== id), id.startsWith("new-") ? null : (a) => a.remove(id), "Couldn't delete the task.");
+
   const [mailbox, setMailbox] = useState("Inbox");
   const [selectedMailId, setSelectedMailId] = useState(data.mails[0]?.id ?? "");
   const [shares, setShares] = useState(() => Object.fromEntries(data.instinct.shares.map((s) => [s.key, s.on])));
@@ -110,6 +153,11 @@ export function DashboardProvider({
     todayDone,
     toggleToday,
     todayError,
+    tasks,
+    addTask,
+    moveTask,
+    deleteTask,
+    taskError,
     mailbox,
     setMailbox,
     selectedMailId,

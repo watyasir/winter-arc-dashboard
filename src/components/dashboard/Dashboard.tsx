@@ -3,7 +3,7 @@
 import { BoardView } from "@/modules/board/BoardView";
 import { InboxView } from "@/modules/inbox/InboxView";
 import { InstinctView } from "@/modules/instinct/InstinctView";
-import type { DashboardData, ToggleTodayAction } from "@/modules/types";
+import type { DashboardData, TaskActions, ToggleTodayAction } from "@/modules/types";
 import { DashboardProvider, useDashboard } from "./DashboardContext";
 import { Header } from "./Header";
 import { OverviewView } from "./OverviewView";
@@ -11,9 +11,17 @@ import { PhoneHome } from "./PhoneHome";
 import { Sidebar } from "./Sidebar";
 
 /** The whole app frame: the phone home screen under 640px, sidebar + header + the selected view from 640px up. */
-export function Dashboard({ data, onToggleToday }: { data: DashboardData; onToggleToday?: ToggleTodayAction }) {
+export function Dashboard({
+  data,
+  onToggleToday,
+  taskActions,
+}: {
+  data: DashboardData;
+  onToggleToday?: ToggleTodayAction;
+  taskActions?: TaskActions;
+}) {
   return (
-    <DashboardProvider data={data} onToggleToday={onToggleToday}>
+    <DashboardProvider data={data} onToggleToday={onToggleToday} taskActions={taskActions}>
       <div className="sm:hidden">
         <PhoneHome />
       </div>

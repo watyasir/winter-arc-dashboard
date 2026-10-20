@@ -2,6 +2,7 @@
 
 import { refresh } from "next/cache";
 import { requireUser } from "@/lib/auth";
+import { TASK_STATUSES, taskProblem, type NewTask, type TaskStatus } from "@/lib/tasks";
 import { todayISO } from "@/lib/trackers";
 
 /** A tap on a yes/no Today row: saves today's entry, then sends the dashboard fresh numbers. */
@@ -17,6 +18,41 @@ export async function toggleTodayTracker(trackerId: string, done: boolean): Prom
       { user_id: user.id, tracker_id: trackerId, entry_date: todayISO(), value: done ? 1 : 0 },
       { onConflict: "tracker_id,entry_date" },
     );
+  if (error) return { ok: false };
+  refresh();
+  return { ok: true };
+}
+
+/** Adds a task from the Board. */
+export async function addTask(task: NewTask): Promise<{ ok: boolean }> {
+  if (taskProblem(task)) return { ok: false };
+  const { supabase, user } = await requireUser();
+  const { error } = await supabase.from("tasks").insert({
+    user_id: user.id,
+    title: task.title.trim(),
+    area: task.area.trim(),
+    due_date: task.due || null,
+    status: task.status,
+  });
+  if (error) return { ok: false };
+  refresh();
+  return { ok: true };
+}
+
+/** Moves a task to another Board column (Done ticks it off). */
+export async function moveTask(id: string, status: TaskStatus): Promise<{ ok: boolean }> {
+  if (!TASK_STATUSES.includes(status)) return { ok: false };
+  const { supabase } = await requireUser();
+  // Row-level security limits this to the user's own tasks.
+  const { error } = await supabase.from("tasks").update({ status }).eq("id", id);
+  if (error) return { ok: false };
+  refresh();
+  return { ok: true };
+}
+
+export async function deleteTask(id: string): Promise<{ ok: boolean }> {
+  const { supabase } = await requireUser();
+  const { error } = await supabase.from("tasks").delete().eq("id", id);
   if (error) return { ok: false };
   refresh();
   return { ok: true };

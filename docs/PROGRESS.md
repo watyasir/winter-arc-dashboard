@@ -77,6 +77,13 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Pushed and live on Vercel (20 Oct)
 - [x] Marked done 21 Oct: Yasir's entries so far are test numbers; tiles work on them. Real logging starts with the season.
 
+## Phase 5 checklist
+- [x] Migration: tasks (title, area, due date, Board column, owner) and goals (target, unit, deadline, linked tracker or hand-typed progress) + `goal_progress` view, each locked to its owner
+- [x] Board on real tasks: To do / In progress / Waiting / Done, add per column, move with the column picker, delete
+- [x] Tiles: Due today, Overdue (tick = done), In progress on real tasks; phone Today tab lists overdue + due today
+- [ ] Goals page (`/log/goals`) to add goals and update hand-typed progress, plus `/demo/log/goals`
+- [ ] Run the migration on Supabase, check at 1440px and 375px, `npx hig-doctor .`, push
+
 ## Sign-in rules (20 Oct 2026)
 - [x] Same browser stays signed in (login cookie lasts 400 days and refreshes on each visit)
 - [x] Each device is signed out 7 days after its sign-in, with a clear message on `/login` (`src/lib/session.ts`, `src/proxy.ts`)

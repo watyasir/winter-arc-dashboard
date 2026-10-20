@@ -8,8 +8,8 @@ import { useDashboard } from "@/components/dashboard/DashboardContext";
 import { OwnerChip } from "./OwnerChip";
 
 export function InProgressTile() {
-  const { data, setView } = useDashboard();
-  const doing = data.board.find((c) => c.name === "In progress")?.cards ?? [];
+  const { tasks, setView } = useDashboard();
+  const doing = tasks.filter((t) => t.status === "doing");
   return (
     <Card aria-label="Board summary" className="flex flex-[1_1_280px] flex-col gap-2.5">
       <CardHeader aside={<TextButton onClick={() => setView("board")}>Open Board</TextButton>}>
@@ -17,7 +17,7 @@ export function InProgressTile() {
       </CardHeader>
       {doing.length === 0 && <EmptyNote>Nothing in progress. Tasks you start on the Board show here.</EmptyNote>}
       {doing.map((k) => (
-        <div key={k.title} className="flex items-center gap-2.5 border-t border-sep py-2">
+        <div key={k.id} className="flex items-center gap-2.5 border-t border-sep py-2">
           <span className="flex-1 text-[13px]">{k.title}</span>
           <OwnerChip owner={k.owner} />
         </div>

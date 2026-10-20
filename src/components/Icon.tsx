@@ -12,6 +12,7 @@ const paths = {
   sun: "M12 4v2M12 18v2M4 12h2M18 12h2M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z",
   rupee: "M7 5h10M7 9h10M7 5c6 0 6 8 0 8l7 6",
   plus: "M12 5v14M5 12h14",
+  x: "M6 6l12 12M18 6 6 18",
 };
 
 export type IconName = keyof typeof paths;

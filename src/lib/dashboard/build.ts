@@ -2,13 +2,15 @@ import type { Tone } from "@/lib/tones";
 import { addDays, formatAmount, formatValue, type Tracker } from "@/lib/trackers";
 import type { DashboardData, SeasonDay, TodayItem } from "@/modules/types";
 import type { BodyCheck, Workout } from "@/lib/body";
+import { dueState, type Goal, type Task } from "@/lib/tasks";
 import { buildBody } from "./body";
+import { buildGoals } from "./goals";
 import { daysBetween, headerDate, lastDays, shortDate, weekStart } from "./dates";
 
 /*
   Turns the real rows (trackers, entries, the active season) into the same DashboardData
   shape /demo uses, so both run on the same tiles. Pure: no database, easy to reason about.
-  Sources that aren't connected yet (money, mail, tasks, goals) come back empty and
+  Sources that aren't connected yet (money, mail) come back empty and
   the tiles show what to do instead.
 */
 
@@ -37,6 +39,10 @@ export interface BuildInput {
   /** Latest first. */
   bodyChecks: BodyCheck[];
   weightGoal: number | null;
+  tasks: Task[];
+  goals: Goal[];
+  /** Linked-tracker totals by goal id. */
+  goalTracked: Map<string, number>;
 }
 
 /** How far back the dashboard reads: 7 weeks of weekly trends, plus the season if it started earlier. */
@@ -62,6 +68,9 @@ export function buildDashboardData({
   workouts,
   bodyChecks,
   weightGoal,
+  tasks,
+  goals,
+  goalTracked,
 }: BuildInput): DashboardData {
   const values = new Map<string, number>();
   for (const e of entries) values.set(`${e.tracker_id}|${e.entry_date}`, Number(e.value));
@@ -104,21 +113,28 @@ export function buildDashboardData({
   });
 
   const loggedToday = trackers.filter((t) => valueOn(t, today) !== undefined).length;
+  const open = tasks.filter((t) => t.status !== "done");
+  const overdue = open.filter((t) => dueState(t, today) === "overdue").length;
+  const dueToday = open.filter((t) => t.due === today).length;
 
   return {
     ownerLine: "Your life dashboard",
     ownerInitial,
+    todayISO: today,
     logHref: "/log",
     views: {
       overview: {
         title: headerDate(today),
-        subtitle: overviewSubtitle(season, today, loggedToday, trackers.length),
+        subtitle: overviewSubtitle(season, today, loggedToday, trackers.length, dueToday),
       },
       inbox: { title: "Inbox", subtitle: "Gmail isn't connected yet" },
-      board: { title: "Board", subtitle: "Your tasks will live here" },
+      board: {
+        title: "Board",
+        subtitle: open.length === 0 ? "No open tasks" : `${open.length} open${overdue ? ` · ${overdue} overdue` : ""}${dueToday ? ` · ${dueToday} due today` : ""}`,
+      },
       instinct: { title: "Instinct", subtitle: "Your on-the-go assistant, kept in sync with this dashboard" },
     },
-    navBadges: {},
+    navBadges: open.length ? { board: String(open.length) } : {},
     trackers: trackers.map((t) => {
       const v = valueOn(t, today);
       return { label: t.name, done: v !== undefined && hitOn(t, today), value: v === undefined ? "–" : formatValue(t, v) };
@@ -129,15 +145,16 @@ export function buildDashboardData({
     money: null,
     workoutHref: "/log/workout",
     bodyHref: "/log/body",
+    goalsHref: "/log/goals",
     ...body,
-    goals: [],
+    goals: buildGoals(goals, goalTracked, trackers, today),
     habits: trackers
       .filter((t) => t.type === "checkbox" || dailyTarget(t) != null)
       .map((t) => ({ name: t.name, days: lastDays(today, HABIT_DAYS).map((d) => hitOn(t, d)) })),
     mailboxes: [],
     mailboxNote: "",
     mails: [],
-    board: [],
+    tasks,
     instinct: {
       draftQuestion: "",
       exchanges: [],
@@ -151,7 +168,7 @@ export function buildDashboardData({
       ],
       digest: digest(season, today, streak, trackers, valueOn),
     },
-    footnote: "Your data, updated every time you log. Money, mail and tasks show up here as they get connected.",
+    footnote: "Your data, updated every time you log. Money and mail show up here once they're connected.",
     isDemo: false,
   };
 }
@@ -161,13 +178,14 @@ function dailyTarget(t: Tracker): number | null {
   return Number(t.target);
 }
 
-function overviewSubtitle(season: SeasonRow | null, today: string, logged: number, total: number): string {
+function overviewSubtitle(season: SeasonRow | null, today: string, logged: number, total: number, dueToday: number): string {
   const parts: string[] = [];
   if (season) {
     const day = daysBetween(season.start_date, today) + 1;
     if (day >= 1 && day <= season.length_days) parts.push(`${season.name} day ${day}`);
   }
   parts.push(logged === 0 ? "Nothing logged today yet" : `${logged} of ${total} trackers logged today`);
+  if (dueToday) parts.push(`${dueToday} ${dueToday === 1 ? "task" : "tasks"} due today`);
   return parts.join(" · ");
 }
 
