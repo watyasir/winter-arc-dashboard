@@ -81,7 +81,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Migration: tasks (title, area, due date, Board column, owner) and goals (target, unit, deadline, linked tracker or hand-typed progress) + `goal_progress` view, each locked to its owner
 - [x] Board on real tasks: To do / In progress / Waiting / Done, add per column, move with the column picker, delete
 - [x] Tiles: Due today, Overdue (tick = done), In progress on real tasks; phone Today tab lists overdue + due today
-- [ ] Goals page (`/log/goals`) to add goals and update hand-typed progress, plus `/demo/log/goals`
+- [x] Goals page (`/log/goals`): add a goal (typed-in or from a tracker), update typed progress, delete; `/demo/log/goals` on fake data; Goals tile on real data with an "Update goals" link
 - [ ] Run the migration on Supabase, check at 1440px and 375px, `npx hig-doctor .`, push
 
 ## Sign-in rules (20 Oct 2026)
