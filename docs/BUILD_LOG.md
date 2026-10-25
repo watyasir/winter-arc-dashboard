@@ -171,3 +171,19 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **What Yasir had to do himself:** add `SHARE_TOKEN` and `SUPABASE_SERVICE_ROLE_KEY` in Vercel.
 **Screenshot to take:** `/demo/progress` on a phone (the whole card fits one screen).
 **Next:** Phase 6 (money).
+
+## Session 11 — 26 Oct 2026 — Design v6.1: life Overview + Winter Arc page
+**Goal:** Split the dashboard: the Overview covers the whole life, Winter Arc gets its own page, on laptop and phone.
+**What I asked Claude Code to do:** "Apply the v6.1 changelog and match LifeOverview and WinterArcPage: sidebar Overview, Winter Arc, Board, Trackers; Overview = whole life with a Day X/90 chip; a Winter Arc page with the strip, targets this week, streaks and a 13-week chart; phone Today and Arc tabs to match."
+**What got built:**
+- Sidebar: Overview, Winter Arc, Board, and Trackers (the trackers-today list folds out under it).
+- Overview: Today, Tasks, Money / Body, Workouts, Goals / Habits, In progress. New Tasks tile (overdue, today, next due) and a compact Body tile. Winter Arc is now just a dark "Day X/90 · Winter Arc →" chip in the header.
+- Winter Arc page: the dark teal hero with the 90-day strip, targets this week per tracker, streaks per tracker (now and best), and a 13-week bar chart of % targets hit, with a summary line and labels on the right. "Share card" in the header opens the Phase 9 card.
+- Phone: Today tab is the life Overview in one column (with a 2×2 of Body, Workouts, Goals and Money, and a 2-week habits grid); Arc tab is the Winter Arc page stacked. The phone tabs now follow the same view as the laptop, so tapping the chip or "Open Board" switches tabs.
+- The per-tracker numbers are worked out in the same builder as everything else, so `/` and `/demo` share one shape.
+**What broke and how we fixed it:**
+- On a phone, the Arc tab scrolled sideways (443px on a 375px screen). Hidden screen-reader labels inside the scrolling chart escaped its scroll box. Making the box the labels' anchor fixed it.
+- hig-doctor flagged 12 issues, all inside the new mockup HTML files, not the app. The mockups are now excluded from the audit.
+**What Yasir had to do himself:** nothing.
+**Screenshot to take:** `/demo` Overview and Winter Arc page on a laptop; the phone Today and Arc tabs.
+**Next:** Phase 6 (money).

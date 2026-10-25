@@ -1,0 +1,2 @@
+# Design mockups are reference files, not shipped code (rebuilt as React in src/).
+docs/design-reference/**
