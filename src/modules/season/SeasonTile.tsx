@@ -24,7 +24,7 @@ const legend: SeasonDay[] = ["all", "most", "missed", "today"];
 
 /** The one dark hero card per view: big "23 of 90" plus the 90-cell season strip. */
 export function SeasonTile() {
-  const { season, settingsHref } = useDashboard().data;
+  const { season, settingsHref, shareHref } = useDashboard().data;
   if (!season) {
     return (
       <section aria-label="Season" className="flex flex-col gap-1.5 rounded-[20px] bg-hero px-6 py-[22px] text-white">
@@ -48,9 +48,17 @@ export function SeasonTile() {
       className="flex min-w-0 flex-wrap items-center gap-7 rounded-[20px] bg-hero px-6 py-[22px] text-white"
     >
       <div className="flex flex-[0_1_260px] flex-col gap-1.5">
-        <span className="text-[13px] font-semibold text-hero-label">
-          {season.name} · {season.length} days
-        </span>
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-[13px] font-semibold text-hero-label">
+            {season.name} · {season.length} days
+          </span>
+          <Link
+            href={shareHref}
+            className="-my-3 flex min-h-11 items-center text-[13px] font-semibold text-white underline hover:text-hero-sage sm:min-h-0 sm:my-0"
+          >
+            Share progress
+          </Link>
+        </div>
         <div className="flex items-baseline gap-2">
           <span className="font-rounded text-[64px] leading-none font-bold tracking-[-0.03em]">{waiting ? season.startsIn : season.day}</span>
           <span className="text-[17px] font-semibold text-hero-sub">

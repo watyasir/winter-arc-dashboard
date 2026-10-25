@@ -53,6 +53,6 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // "/" is here so the login cookie stays fresh on the dashboard too.
-  matcher: ["/", "/log/:path*", "/login", "/settings/:path*"],
+  // "/" and "/progress" are here so the login cookie stays fresh there too (both stay open to visitors).
+  matcher: ["/", "/log/:path*", "/login", "/settings/:path*", "/progress"],
 };

@@ -141,6 +141,8 @@ export interface DashboardData {
   };
   /** Where goals are added and updated (/log/goals or /demo/log/goals). */
   goalsHref: string;
+  /** The shareable Winter Arc card (/progress or /demo/progress). */
+  shareHref: string;
   /** Season, trackers and reset. null on the demo (no settings to change). */
   settingsHref: string | null;
   goals: { name: string; progress: string; pct: number; by: string; tone: Tone }[];

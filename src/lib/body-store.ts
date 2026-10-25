@@ -23,14 +23,21 @@ interface BodyCheckRow {
 // Postgres numbers can arrive as strings; null stays null.
 const num = (v: number | string | null) => (v == null ? null : Number(v));
 
-/** Workouts with their sets, latest first. `since` = YYYY-MM-DD; `limit` caps the count. Null = database error. */
-export async function loadWorkouts(supabase: Supabase, { since, limit }: { since?: string; limit?: number }): Promise<Workout[] | null> {
+/**
+ * Workouts with their sets, latest first. `since` = YYYY-MM-DD; `limit` caps the count. Null = database error.
+ * `userId` is only for the share card's server-side read, which isn't limited by row-level security.
+ */
+export async function loadWorkouts(
+  supabase: Supabase,
+  { since, limit, userId }: { since?: string; limit?: number; userId?: string },
+): Promise<Workout[] | null> {
   let query = supabase
     .from("workouts")
     .select("id, workout_date, name, workout_sets(position, exercise, reps, weight_kg)")
     .order("workout_date", { ascending: false })
     .order("created_at", { ascending: false })
     .order("position", { referencedTable: "workout_sets" });
+  if (userId) query = query.eq("user_id", userId);
   if (since) query = query.gte("workout_date", since);
   if (limit) query = query.limit(limit);
   const { data, error } = await query.returns<WorkoutRow[]>();
@@ -43,11 +50,11 @@ export async function loadWorkouts(supabase: Supabase, { since, limit }: { since
   }));
 }
 
-/** Body checks, latest first. Null = database error. */
-export async function loadBodyChecks(supabase: Supabase, limit: number): Promise<BodyCheck[] | null> {
-  const { data, error } = await supabase
-    .from("body_checks")
-    .select("check_date, weight_kg, waist_cm, chest_cm, arms_cm, progress_photo")
+/** Body checks, latest first. Null = database error. `userId`: as for loadWorkouts. */
+export async function loadBodyChecks(supabase: Supabase, limit: number, userId?: string): Promise<BodyCheck[] | null> {
+  let query = supabase.from("body_checks").select("check_date, weight_kg, waist_cm, chest_cm, arms_cm, progress_photo");
+  if (userId) query = query.eq("user_id", userId);
+  const { data, error } = await query
     .order("check_date", { ascending: false })
     .limit(limit)
     .returns<BodyCheckRow[]>();

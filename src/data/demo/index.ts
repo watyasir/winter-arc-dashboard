@@ -38,6 +38,7 @@ export const demoData: DashboardData = {
   ownerInitial: "Y",
   todayISO: DEMO_TODAY,
   logHref: "/demo/log",
+  shareHref: "/demo/progress",
   views: {
     overview: {
       title: "Sunday, 18 October",

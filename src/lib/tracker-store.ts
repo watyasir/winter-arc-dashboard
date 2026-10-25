@@ -5,7 +5,7 @@ import type { Tracker } from "./trackers";
 
 type Supabase = Awaited<ReturnType<typeof createClient>>;
 
-const TRACKER_COLUMNS = "id, slug, name, area, type, unit, step, scale_labels, target, target_period, sort_order";
+export const TRACKER_COLUMNS = "id, slug, name, area, type, unit, step, scale_labels, target, target_period, sort_order";
 
 /** The signed-in user's trackers in order. The first visit (to / or /log) adds the defaults. Null = database error. */
 export async function loadTrackers(supabase: Supabase): Promise<Tracker[] | null> {

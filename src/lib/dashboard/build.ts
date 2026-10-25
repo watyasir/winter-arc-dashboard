@@ -122,6 +122,7 @@ export function buildDashboardData({
     ownerInitial,
     todayISO: today,
     logHref: "/log",
+    shareHref: "/progress",
     views: {
       overview: {
         title: headerDate(today),

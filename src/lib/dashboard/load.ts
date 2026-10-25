@@ -13,13 +13,16 @@ type Supabase = Awaited<ReturnType<typeof createClient>>;
 // Supabase returns at most 1,000 rows per request, so longer histories are read in pages.
 const PAGE = 1000;
 
-/** Entries between two dates (inclusive), oldest first. Null = database error. */
-async function loadEntries(supabase: Supabase, from: string, to: string): Promise<EntryRow[] | null> {
+/**
+ * Entries between two dates (inclusive), oldest first. Null = database error.
+ * `userId` is only for the share card's server-side read, which isn't limited by row-level security.
+ */
+export async function loadEntries(supabase: Supabase, from: string, to: string, userId?: string): Promise<EntryRow[] | null> {
   const entries: EntryRow[] = [];
   for (let page = 0; ; page++) {
-    const { data, error } = await supabase
-      .from("entries")
-      .select("tracker_id, entry_date, value")
+    let query = supabase.from("entries").select("tracker_id, entry_date, value");
+    if (userId) query = query.eq("user_id", userId);
+    const { data, error } = await query
       .gte("entry_date", from)
       .lte("entry_date", to)
       .order("entry_date")
