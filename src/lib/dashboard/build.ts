@@ -126,7 +126,7 @@ export function buildDashboardData({
     views: {
       overview: {
         title: headerDate(today),
-        subtitle: overviewSubtitle(season, today, loggedToday, trackers.length, dueToday),
+        subtitle: overviewSubtitle(loggedToday, trackers.length, dueToday, overdue),
       },
       arc: {
         title: season?.name ?? "Winter Arc",
@@ -187,15 +187,12 @@ function dailyTarget(t: Tracker): number | null {
   return Number(t.target);
 }
 
-function overviewSubtitle(season: SeasonRow | null, today: string, logged: number, total: number, dueToday: number): string {
+// The season day lives in the header's Winter Arc chip (v6.1), so it isn't repeated here.
+function overviewSubtitle(logged: number, total: number, dueToday: number, overdue: number): string {
   const parts: string[] = [];
-  if (season) {
-    const day = daysBetween(season.start_date, today) + 1;
-    if (day >= 1 && day <= season.length_days) parts.push(`${season.name} day ${day}`);
-    if (day < 1) parts.push(`${season.name} starts in ${1 - day} ${1 - day === 1 ? "day" : "days"}`);
-  }
-  parts.push(logged === 0 ? "Nothing logged today yet" : `${logged} of ${total} trackers logged today`);
   if (dueToday) parts.push(`${dueToday} ${dueToday === 1 ? "task" : "tasks"} due today`);
+  if (overdue) parts.push(`${overdue} overdue`);
+  parts.push(logged === 0 ? "Nothing logged today yet" : `${logged} of ${total} trackers logged today`);
   return parts.join(" · ");
 }
 

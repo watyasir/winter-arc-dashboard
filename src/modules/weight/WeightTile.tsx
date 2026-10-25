@@ -125,7 +125,7 @@ function Measures() {
 }
 
 /** When the last weekly check was, a "Due" chip once a week has passed, and the link to do it. */
-function CheckFooter() {
+export function CheckFooter() {
   const { bodyCheck, bodyHref } = useDashboard().data;
   return (
     <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-1">

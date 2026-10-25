@@ -42,7 +42,7 @@ export const demoData: DashboardData = {
   views: {
     overview: {
       title: "Sunday, 18 October",
-      subtitle: "Winter Arc day 23 · 3 tasks due today · 12-day streak",
+      subtitle: "3 tasks due today · 2 overdue · 4 of 6 done today",
     },
     arc: { title: "Winter Arc", subtitle: "26 Sep 2026 → 24 Dec 2026 · 90 days" },
     inbox: { title: "Inbox", subtitle: "4 unread · Claude logged 2 bank alerts today" },

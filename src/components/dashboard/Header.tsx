@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Icon } from "@/components/Icon";
+import { PillLink } from "@/components/PillLink";
+import { ArcChip } from "./ArcChip";
 import { useDashboard } from "./DashboardContext";
 
-/** Page header card with the dashed bottom rule. */
+/** Page header card with the dashed bottom rule. The Winter Arc chip on every page but Winter Arc itself. */
 export function Header() {
-  const { data, view } = useDashboard();
+  const { data, view, setView } = useDashboard();
   const { title, subtitle } = data.views[view];
 
   return (
@@ -16,15 +17,7 @@ export function Header() {
         <span className="text-[13px] text-sub">{subtitle}</span>
       </div>
       <div className="flex flex-wrap items-center gap-2.5">
-        <label className="flex min-h-11 items-center gap-1.5 rounded-full border border-sep bg-base px-3.5 text-sub sm:min-h-9">
-          <Icon name="search" size={14} />
-          <input
-            type="search"
-            placeholder="Search tasks and notes"
-            aria-label="Search"
-            className="w-[170px] border-0 bg-transparent text-[13px] text-ink outline-none placeholder:text-sub"
-          />
-        </label>
+        {view === "arc" ? data.season && <PillLink href={data.shareHref}>Share card</PillLink> : <ArcChip onOpen={() => setView("arc")} />}
         <Link
           href={data.logHref}
           className="flex min-h-11 items-center rounded-full bg-brand px-4 text-[13px] font-semibold text-white no-underline hover:bg-brand-hover hover:text-white sm:min-h-9"

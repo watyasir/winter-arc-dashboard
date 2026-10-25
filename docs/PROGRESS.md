@@ -144,7 +144,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 ## Design v6.1 layout split (26 Oct 2026)
 - [x] Winter Arc data per tracker (targets this week, streaks, 13-week %) in the shared builder + demo data
 - [x] Sidebar: Overview, Winter Arc, Board, Trackers (tree folds under Trackers); "Life, tracked"
-- [ ] Overview = whole life + "Day X/90 →" chip in the header
+- [x] Overview = whole life (Today · Tasks · Money / Body · Workouts · Goals / Habits · In progress) + "Day X/90 →" chip in the header
 - [ ] Winter Arc page
 - [ ] Phone Today and Arc tabs
 - [ ] Checked at 1440px and 375px, hig-doctor, pushed
