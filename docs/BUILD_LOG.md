@@ -155,3 +155,19 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **What Yasir had to do himself:** Nothing.
 **Screenshot to take:** none (speed); before/after timings are in this entry.
 **Next:** Phase 6 (money), where the targets per tracker get finalized.
+
+## Session 10 — 26 Oct 2026 — Cleanup + Phase 9: Share + portfolio polish
+**Goal:** Hide the parked Inbox and Instinct, build a shareable Winter Arc card, write the README.
+**What I asked Claude Code to do:** "Hide Inbox and Instinct (keep the code). Phase 9: a /progress page with a shareable Winter Arc card, a Copy link button, public through a secret SHARE_TOKEN, working on /demo. Then a README."
+**What got built:**
+- Inbox and Instinct are gone from the sidebar, the header pill and the Overview on `/` and `/demo`; their code stays in `src/modules`. Today and Money now share their row.
+- `/progress`: one dark teal card sized for a phone screenshot with day X of 90, current and best streak, % targets hit this week (last week on Mondays), workouts this week and weight change. "Copy link" underneath; if the clipboard is blocked it shows the link to copy by hand. A "Share progress" link sits on the Winter Arc hero.
+- The public link works with `?t=<SHARE_TOKEN>`. The numbers are worked out on the server and only the card is sent; a wrong or missing token shows "not found". The page asks search engines not to index it and doesn't pass the link on to other sites.
+- `/demo/progress` shows the same card on fake data with a "Sample data" chip.
+- `README.md`: what it is, screenshot list, stack, how it grows, how it was built with AI.
+**What broke and how we fixed it:**
+- With no one signed in, the database's row locks hide everything, so the public card reads with the Supabase secret key, and every query in that path filters to the owner's account itself.
+- The app streams pages, so a wrong token can't change the HTTP status after the page starts; it still shows only the "not found" screen.
+**What Yasir had to do himself:** add `SHARE_TOKEN` and `SUPABASE_SERVICE_ROLE_KEY` in Vercel.
+**Screenshot to take:** `/demo/progress` on a phone (the whole card fits one screen).
+**Next:** Phase 6 (money).
