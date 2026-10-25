@@ -7,11 +7,11 @@ import { EmptyNote } from "@/components/EmptyNote";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 import { OwnerChip } from "./OwnerChip";
 
-export function InProgressTile() {
+export function InProgressTile({ className = "flex-[1_1_280px]" }: { className?: string }) {
   const { tasks, setView } = useDashboard();
   const doing = tasks.filter((t) => t.status === "doing");
   return (
-    <Card aria-label="Board summary" className="flex flex-[1_1_280px] flex-col gap-2.5">
+    <Card aria-label="Board summary" className={`flex flex-col gap-2.5 ${className}`}>
       <CardHeader aside={<TextButton onClick={() => setView("board")}>Open Board</TextButton>}>
         <SectionHeading tone="yellow">In progress</SectionHeading>
       </CardHeader>

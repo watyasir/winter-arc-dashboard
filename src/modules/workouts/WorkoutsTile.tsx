@@ -9,13 +9,13 @@ import { CardHeader, SectionHeading } from "@/components/SectionHeading";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 
 /** Workouts this week against the weekly target, with "Repeat last workout" one tap away. */
-export function WorkoutsTile() {
+export function WorkoutsTile({ className = "flex-[1_1_280px]" }: { className?: string }) {
   const { workouts, workoutHref } = useDashboard().data;
   const { weekCount, weekTarget, week, last } = workouts;
   const pct = weekTarget ? Math.min(100, Math.round((weekCount / weekTarget) * 100)) : 0;
 
   return (
-    <Card aria-label="Workouts" className="flex flex-[1_1_280px] flex-col gap-3">
+    <Card aria-label="Workouts" className={`flex flex-col gap-3 ${className}`}>
       <CardHeader aside={<span className="text-xs text-sub">This week</span>}>
         <SectionHeading tone="pine">Workouts</SectionHeading>
       </CardHeader>

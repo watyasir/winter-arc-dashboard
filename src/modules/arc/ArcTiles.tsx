@@ -85,7 +85,8 @@ export function ArcWeeksTile() {
         <SectionHeading tone="arc">Week by week</SectionHeading>
       </CardHeader>
       <p className="m-0 text-[13px] font-semibold">{summary}</p>
-      <div className="overflow-x-auto">
+      {/* relative: keeps the hidden screen-reader labels inside the scroll box, so the page never scrolls sideways */}
+      <div className="relative overflow-x-auto">
         <div className="flex min-w-[460px] gap-2">
           <ol aria-label="Targets hit per week" className="m-0 grid flex-1 list-none grid-cols-[repeat(13,minmax(0,1fr))] gap-2 p-0">
             {arc.weeks.map((w, i) => (

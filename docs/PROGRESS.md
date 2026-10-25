@@ -146,7 +146,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Sidebar: Overview, Winter Arc, Board, Trackers (tree folds under Trackers); "Life, tracked"
 - [x] Overview = whole life (Today · Tasks · Money / Body · Workouts · Goals / Habits · In progress) + "Day X/90 →" chip in the header
 - [x] Winter Arc page: hero + 90-day strip, targets this week, streaks per tracker, week-by-week % (13 bars); header "Share card" opens the Phase 9 card
-- [ ] Phone Today and Arc tabs
+- [x] Phone: Today tab = life Overview in one column (chip, Today, Tasks, 2×2 Body/Workouts/Goals/Money, Habits 2 weeks, In progress); Arc tab = Winter Arc page stacked + Share card; tabs follow the shared view
 - [ ] Checked at 1440px and 375px, hig-doctor, pushed
 
 **Next up:** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.
