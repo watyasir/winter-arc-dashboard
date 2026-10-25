@@ -2,7 +2,7 @@
 
 A personal life dashboard with a 90-day **Winter Arc** season on top. One place to see and log health, workouts, body, tasks, goals and money, built to keep growing: new areas of life are added as data, not new code.
 
-**Live demo (fake data, no login):** https://winter-arc-dashboard-drab.vercel.app/demo
+**Live demo (fake data, no login):** https://yasiros.vercel.app/demo
 
 It's also a portfolio project. I'm a vibe coder: I planned, designed, directed and reviewed; [Claude Code](https://claude.com/claude-code) wrote the code. The whole process is logged in [`docs/BUILD_LOG.md`](docs/BUILD_LOG.md).
 
@@ -22,12 +22,12 @@ All taken from `/demo` (sample data):
 
 | Screen | Where |
 |---|---|
-| Overview on a laptop: Winter Arc hero, stats, Today, Money wallet, weight chart, habits | [`/demo`](https://winter-arc-dashboard-drab.vercel.app/demo) at 1440px |
+| Overview on a laptop: Winter Arc hero, stats, Today, Money wallet, weight chart, habits | [`/demo`](https://yasiros.vercel.app/demo) at 1440px |
 | Phone home with the floating tab bar and Winter Arc ring | `/demo` at 390px |
 | Board view | `/demo` → Board in the sidebar |
-| Daily check-in sheet | [`/demo/log`](https://winter-arc-dashboard-drab.vercel.app/demo/log) on a phone |
-| Workout logger with "Repeat last workout" | [`/demo/log/workout`](https://winter-arc-dashboard-drab.vercel.app/demo/log/workout) |
-| Shareable Winter Arc card | [`/demo/progress`](https://winter-arc-dashboard-drab.vercel.app/demo/progress) on a phone |
+| Daily check-in sheet | [`/demo/log`](https://yasiros.vercel.app/demo/log) on a phone |
+| Workout logger with "Repeat last workout" | [`/demo/log/workout`](https://yasiros.vercel.app/demo/log/workout) |
+| Shareable Winter Arc card | [`/demo/progress`](https://yasiros.vercel.app/demo/progress) on a phone |
 
 ## Stack
 

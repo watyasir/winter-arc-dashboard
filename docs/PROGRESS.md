@@ -151,9 +151,10 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 
 ## Rename to Yasir OS (26 Oct 2026)
 - [x] Product name "Yasir OS" in tab titles, sidebar logo text, welcome/sign-in pages, share card, metadata, README, CLAUDE.md; `package.json` name `yasiros`
-- [ ] GitHub repo renamed to `yasiros`, git remote updated
-- [ ] Vercel domain `yasiros.vercel.app` added (old address keeps working)
-- [ ] Supabase Auth: `https://yasiros.vercel.app` in Site URL + Redirect URLs (old one kept)
-- [ ] Sign-in tested on the new address
+- [x] GitHub repo renamed to `yasiros` (github.com/watyasir/yasiros; old URL redirects), git remote updated
+- [x] Vercel domain `yasiros.vercel.app` added to Production; `winter-arc-dashboard-drab.vercel.app` still works. README links use the new address
+- [x] Supabase Auth: Site URL `https://yasiros.vercel.app`; Redirect URLs `https://yasiros.vercel.app/**` added, old one and localhost kept
+- [x] Sign-in on the new address: email sent from yasiros.vercel.app/login, its link returns to `https://yasiros.vercel.app/auth/callback` (checked in the email)
+- [ ] Yasir: open that sign-in email once to finish the first sign-in on the new address (each address keeps its own login)
 
 **Next up:** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.
