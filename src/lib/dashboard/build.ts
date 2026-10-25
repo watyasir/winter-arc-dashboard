@@ -277,8 +277,12 @@ function buildArc(
     ...dailyGoals.map((g) => ({ tracker: g.tracker, target: g.target, perWeek: weekLength(weekIndex) })),
     ...weekly.filter((t) => !dailyGoals.some((g) => g.tracker.id === t.id)).map((t) => ({ tracker: t, target: undefined, perWeek: Number(t.target) })),
   ];
-  const label = (t: Tracker, target: number | undefined) =>
-    target == null || t.type === "checkbox" || t.type === "scale_1_5" ? t.name : `${t.name} ${formatValue(t, target)}`;
+  // "Sleep 7 hr", "Study 1.5 hr"; "Steps 8,000" rather than "Steps 8,000 steps".
+  const label = (t: Tracker, target: number | undefined) => {
+    if (target == null || t.type === "checkbox" || t.type === "scale_1_5") return t.name;
+    if (t.unit && t.unit.toLowerCase() === t.name.toLowerCase()) return `${t.name} ${formatAmount(target)}`;
+    return `${t.name} ${formatValue(t, target)}`;
+  };
   const thisWeek = started ? daysOfWeek(weekIndex) : [];
 
   return {
