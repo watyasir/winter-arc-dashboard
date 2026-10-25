@@ -7,14 +7,14 @@ export function MoreLogs({ workoutHref, bodyHref, settingsHref }: { workoutHref:
     <nav aria-label="More to log" className="flex flex-col gap-1.5">
       <h2 className="m-0 ml-4 text-[13px] font-normal text-sub">More to log</h2>
       <div className="rounded-[14px] border border-sep bg-card px-4">
-        <Link href={workoutHref} className={row}>
+        <Link prefetch href={workoutHref} className={row}>
           Log a workout <span aria-hidden="true" className="text-sub">›</span>
         </Link>
-        <Link href={bodyHref} className={row}>
+        <Link prefetch href={bodyHref} className={row}>
           Weekly body check <span aria-hidden="true" className="text-sub">›</span>
         </Link>
         {settingsHref && (
-          <Link href={settingsHref} className={row}>
+          <Link prefetch href={settingsHref} className={row}>
             Season and trackers <span aria-hidden="true" className="text-sub">›</span>
           </Link>
         )}

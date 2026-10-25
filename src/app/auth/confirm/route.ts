@@ -28,5 +28,5 @@ export async function GET(request: NextRequest) {
     await supabase.auth.signOut();
     return to("/login?error=not-allowed");
   }
-  return to("/log");
+  return to("/");
 }

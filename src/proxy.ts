@@ -43,9 +43,10 @@ export async function proxy(request: NextRequest) {
     to.search = "";
     return NextResponse.redirect(to);
   }
+  // Signed in already: the dashboard, never the check-in (that only opens from "Log Today").
   if (signedIn && path === "/login") {
     const to = request.nextUrl.clone();
-    to.pathname = "/log";
+    to.pathname = "/";
     to.search = "";
     return NextResponse.redirect(to);
   }

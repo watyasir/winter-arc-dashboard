@@ -54,7 +54,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] `docs/PROGRESS.md` created
 - [x] Placeholder home page says "Winter Arc Dashboard"
 - [x] Pushed to GitHub (watyasir/winter-arc-dashboard)
-- [x] Deployed on Vercel, live link works: https://winter-arc-dashboard-drab.vercel.app
+- [x] Deployed on Vercel, live link works: https://yasiros.vercel.app
 
 ## Phase 1 checklist
 - [x] Design tokens: Catppuccin Latte colours, text-safe variants, fonts (`src/app/globals.css`)
@@ -152,9 +152,16 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 ## Rename to Yasir OS (26 Oct 2026)
 - [x] Product name "Yasir OS" in tab titles, sidebar logo text, welcome/sign-in pages, share card, metadata, README, CLAUDE.md; `package.json` name `yasiros`
 - [x] GitHub repo renamed to `yasiros` (github.com/watyasir/yasiros; old URL redirects), git remote updated
-- [x] Vercel domain `yasiros.vercel.app` added to Production; `winter-arc-dashboard-drab.vercel.app` still works. README links use the new address
-- [x] Supabase Auth: Site URL `https://yasiros.vercel.app`; Redirect URLs `https://yasiros.vercel.app/**` added, old one and localhost kept
+- [x] Vercel: project renamed `yasiros`, domain `yasiros.vercel.app`; the old address was removed on Yasir's request (it now returns 404)
+- [x] Supabase Auth: Site URL `https://yasiros.vercel.app`; Redirect URLs: `https://yasiros.vercel.app/**` and localhost only (old one removed)
 - [x] Sign-in on the new address: email sent from yasiros.vercel.app/login, its link returns to `https://yasiros.vercel.app/auth/callback` (checked in the email)
-- [ ] Yasir: open that sign-in email once to finish the first sign-in on the new address (each address keeps its own login)
+- [x] Yasir signed in on the laptop at the new address
+
+## Speed + sign-in landing (26 Oct 2026)
+- [x] Signing in (email link or /login while signed in) lands on the dashboard, never the check-in; the check-in only opens from Log Today
+- [x] Visited pages are reused for 2 minutes when going back and forth (`staleTimes`); saving still refreshes the dashboard at once
+- [x] Log Today, Cancel/back links and the "More to log" links fully preload their page
+- [x] Only the visible layout (phone or laptop) is rendered after load: about 1/3 less work on every tap and view switch
+- Measured before (live, signed in): page loads 190–760 ms (slow ones = Vercel starting a fresh server), view switch ~60 ms on the laptop. Fluid compute was already on; server already in Mumbai
 
 **Next up:** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.

@@ -90,6 +90,7 @@ export function PhoneHome() {
         </div>
         <Link
           href={data.logHref}
+          prefetch
           aria-label="Log today"
           className="flex size-[62px] shrink-0 items-center justify-center rounded-full bg-brand text-white shadow-fab hover:bg-brand-hover hover:text-white"
         >

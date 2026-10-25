@@ -24,7 +24,7 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 ## Session 2 — 19 Oct 2026 — Phase 0: Setup
 **Goal:** An empty but real app, on GitHub and live on Vercel.
 **What I asked Claude Code to do:** Create the Next.js + TypeScript + Tailwind project, install the Apple HIG skills, set up git, .env.example and PROGRESS.md, make a placeholder page, then get it onto GitHub and Vercel.
-**What got built:** Next.js 16 app (App Router, TypeScript, Tailwind 4) with a placeholder "Winter Arc Dashboard" card on Catppuccin Latte colours. 14 Apple HIG skills in `.claude/skills` (`npx hig-doctor .` reports clean). `.env.example` with empty placeholders for every later phase. Public repo `watyasir/winter-arc-dashboard`, auto-deploying to https://winter-arc-dashboard-drab.vercel.app.
+**What got built:** Next.js 16 app (App Router, TypeScript, Tailwind 4) with a placeholder "Winter Arc Dashboard" card on Catppuccin Latte colours. 14 Apple HIG skills in `.claude/skills` (`npx hig-doctor .` reports clean). `.env.example` with empty placeholders for every later phase. Public repo `watyasir/winter-arc-dashboard`, auto-deploying to https://yasiros.vercel.app (originally a winter-arc-dashboard address, renamed 26 Oct).
 **What broke and how we fixed it:**
 - Node.js wasn't installed, so Yasir installed the LTS from nodejs.org.
 - The default `.gitignore` hid `.env.example` too, so we added an exception for it.
@@ -186,4 +186,17 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 - hig-doctor flagged 12 issues, all inside the new mockup HTML files, not the app. The mockups are now excluded from the audit.
 **What Yasir had to do himself:** nothing.
 **Screenshot to take:** `/demo` Overview and Winter Arc page on a laptop; the phone Today and Arc tabs.
+**Next:** Phase 6 (money).
+
+## Session 12 — 26 Oct 2026 — Rename to Yasir OS, old link removed, speed
+**Goal:** Rename the product, move to one web address, stop sign-in from opening the check-in, and make moving around faster.
+**What I asked Claude Code to do:** "Rename to Yasir OS (repo yasiros), new address yasiros.vercel.app, disable the old link everywhere. Don't open the check-in when I sign in. Switching and page changes are slow, make it faster."
+**What got built:**
+- Product name Yasir OS everywhere; GitHub repo and Vercel project renamed `yasiros`; https://yasiros.vercel.app is the only address (the old one returns 404 and is gone from Supabase's sign-in list).
+- Sign-in lands on the dashboard. The check-in opens only from Log Today.
+- Speed: pages you just visited are reused for 2 minutes; Log Today and the back links load their page in advance; and only the layout on screen (phone or laptop) is drawn, instead of both.
+**What broke and how we fixed it:**
+- Measured first: in-page switches were fine on a laptop (~60 ms) but did double work; page changes waited on the server every time (190 ms warm, up to 760 ms when Vercel starts a fresh server). Caching and preloading hide the server wait.
+**What Yasir had to do himself:** sign in once on the new address.
+**Screenshot to take:** none.
 **Next:** Phase 6 (money).

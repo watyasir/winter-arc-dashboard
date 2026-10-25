@@ -58,7 +58,7 @@ export function CheckIn({
     <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col gap-[18px] px-4 pt-2 pb-8">
       <div aria-hidden="true" className="h-[5px] w-9 self-center rounded-full bg-rule" />
       <header className="grid grid-cols-[1fr_auto_1fr] items-center">
-        <Link href={cancelHref} className="flex min-h-11 items-center text-[17px] text-brand-text no-underline hover:text-brand-hover">
+        <Link href={cancelHref} prefetch className="flex min-h-11 items-center text-[17px] text-brand-text no-underline hover:text-brand-hover">
           Cancel
         </Link>
         <div className="flex flex-col items-center">

@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/browser";
 
 /*
   The sign-in email link lands here with the login tokens after "#". Only the browser can
-  read that part of the link, so this page saves the login and moves on to /log, where the
+  read that part of the link, so this page saves the login and moves on to the dashboard (/), where the
   server checks the email is allowed. Works from any browser, including a phone mail app's.
 */
 export default function AuthCallbackPage() {
@@ -24,7 +24,7 @@ export default function AuthCallbackPage() {
     }
     createClient()
       .auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
-      .then(({ error }) => router.replace(error ? "/login?error=link-expired" : "/log"));
+      .then(({ error }) => router.replace(error ? "/login?error=link-expired" : "/"));
   }, [router]);
 
   return (

@@ -20,6 +20,7 @@ export function Header() {
         {view === "arc" ? data.season && <PillLink href={data.shareHref}>Share card</PillLink> : <ArcChip onOpen={() => setView("arc")} />}
         <Link
           href={data.logHref}
+          prefetch
           className="flex min-h-11 items-center rounded-full bg-brand px-4 text-[13px] font-semibold text-white no-underline hover:bg-brand-hover hover:text-white sm:min-h-9"
         >
           Log Today

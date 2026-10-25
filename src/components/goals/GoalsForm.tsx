@@ -76,7 +76,7 @@ export function GoalsForm({
     <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col gap-[18px] px-4 pt-6 pb-8">
       <header className="flex items-center justify-between">
         <h1 className="m-0 text-[34px] leading-[1.1] font-bold tracking-[-0.02em]">Goals</h1>
-        <Link href={backHref} className="flex min-h-11 items-center text-[17px] text-brand-text no-underline hover:text-brand-hover">
+        <Link href={backHref} prefetch className="flex min-h-11 items-center text-[17px] text-brand-text no-underline hover:text-brand-hover">
           Done
         </Link>
       </header>
