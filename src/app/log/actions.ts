@@ -24,8 +24,9 @@ export async function saveCheckIn(values: CheckInValues): Promise<SaveResult> {
     });
     const { error } = await supabase.from("entries").upsert(rows, { onConflict: "tracker_id,entry_date" });
     if (error) return { ok: false, message: "Couldn't save. Check your connection and try again." };
-    // The dashboard shows the new numbers the moment you go back to it.
+    // The dashboard (and a reopened check-in) show the new numbers straight away.
     revalidatePath("/");
+    revalidatePath("/log");
   } catch (e) {
     return { ok: false, message: e instanceof Error ? e.message : "Couldn't save." };
   }

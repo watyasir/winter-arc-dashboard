@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { cacheLife } from "next/cache";
 import { Suspense } from "react";
 import { CheckIn } from "@/components/checkin/CheckIn";
 import { MoreLogs } from "@/components/checkin/MoreLogs";
-import { requireUser } from "@/lib/auth";
+import { currentOwner, requireUser } from "@/lib/auth";
 import { loadTrackers } from "@/lib/tracker-store";
 import { addDays, formatDayLabel, startingValue, todayISO, type CheckInValues } from "@/lib/trackers";
 import { saveCheckIn } from "./actions";
@@ -18,37 +19,22 @@ export default function LogPage() {
 }
 
 async function TodayCheckIn() {
-  const { supabase } = await requireUser();
-
-  // Latest value per tracker over the last 2 weeks: today's if logged, otherwise the most recent day.
-  const today = todayISO();
-  const [trackers, { data: recent }] = await Promise.all([
-    loadTrackers(supabase),
-    supabase
-      .from("entries")
-      .select("tracker_id, entry_date, value")
-      .gte("entry_date", addDays(today, -14))
-      .order("entry_date", { ascending: false }),
-  ]);
-  if (!trackers) {
+  const data = await loadCheckIn();
+  // Not signed in as the owner: requireUser sends them to /login (and signs out other emails).
+  if (!data) {
+    await requireUser();
+    return null;
+  }
+  if ("error" in data) {
     return <p className="p-6 text-center text-[15px] text-coral-text">Couldn&apos;t load your trackers. Refresh to try again.</p>;
   }
-
-  const latest = new Map<string, { date: string; value: number }>();
-  for (const e of recent ?? []) {
-    if (!latest.has(e.tracker_id)) latest.set(e.tracker_id, { date: e.entry_date, value: Number(e.value) });
-  }
-  const initial: CheckInValues = {};
-  for (const t of trackers) {
-    const last = latest.get(t.id);
-    initial[t.id] = last?.date === today ? last.value : startingValue(t, last?.value);
-  }
+  const { trackers, initial, dayLabel } = data;
 
   return (
     <CheckIn
       trackers={trackers}
       initialValues={initial}
-      dayLabel={formatDayLabel(today)}
+      dayLabel={dayLabel}
       cancelHref="/"
       onSave={saveCheckIn}
       footer={
@@ -63,4 +49,40 @@ async function TodayCheckIn() {
       }
     />
   );
+}
+
+/*
+  Everything the check-in needs. A private cache (per signed-in browser, never shared on the server),
+  so "Log Today" can load it ahead of the tap and the check-in opens instantly. Fresh for 60 seconds;
+  the form keeps your edits in the page anyway, and saving updates the database directly.
+*/
+async function loadCheckIn() {
+  "use cache: private";
+  cacheLife({ stale: 60 });
+  const owner = await currentOwner();
+  if (!owner) return null;
+  const { supabase } = owner;
+
+  // Latest value per tracker over the last 2 weeks: today's if logged, otherwise the most recent day.
+  const today = todayISO();
+  const [trackers, { data: recent }] = await Promise.all([
+    loadTrackers(supabase),
+    supabase
+      .from("entries")
+      .select("tracker_id, entry_date, value")
+      .gte("entry_date", addDays(today, -14))
+      .order("entry_date", { ascending: false }),
+  ]);
+  if (!trackers) return { error: true as const };
+
+  const latest = new Map<string, { date: string; value: number }>();
+  for (const e of recent ?? []) {
+    if (!latest.has(e.tracker_id)) latest.set(e.tracker_id, { date: e.entry_date, value: Number(e.value) });
+  }
+  const initial: CheckInValues = {};
+  for (const t of trackers) {
+    const last = latest.get(t.id);
+    initial[t.id] = last?.date === today ? last.value : startingValue(t, last?.value);
+  }
+  return { trackers, initial, dayLabel: formatDayLabel(today) };
 }
