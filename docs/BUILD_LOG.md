@@ -197,6 +197,7 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 - Speed: pages you just visited are reused for 2 minutes; Log Today and the back links load their page in advance; and only the layout on screen (phone or laptop) is drawn, instead of both.
 **What broke and how we fixed it:**
 - Measured first: in-page switches were fine on a laptop (~60 ms) but did double work; page changes waited on the server every time (190 ms warm, up to 760 ms when Vercel starts a fresh server). Caching and preloading hide the server wait.
+- The first preload didn't help: with this Next.js setup, a preload skips anything that depends on the login cookie. Marking the check-in's data as a private cache let the preload include it: Log Today went from 300–760 ms to 14 ms.
 **What Yasir had to do himself:** sign in once on the new address.
 **Screenshot to take:** none.
 **Next:** Phase 6 (money).

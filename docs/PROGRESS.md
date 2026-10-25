@@ -160,8 +160,9 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 ## Speed + sign-in landing (26 Oct 2026)
 - [x] Signing in (email link or /login while signed in) lands on the dashboard, never the check-in; the check-in only opens from Log Today
 - [x] Visited pages are reused for 2 minutes when going back and forth (`staleTimes`); saving still refreshes the dashboard at once
-- [x] Log Today, Cancel/back links and the "More to log" links fully preload their page
+- [x] Log Today, Cancel/back links and the "More to log" links fully preload their page; the check-in's data is a private cache (`'use cache: private'`) so the preload includes it
 - [x] Only the visible layout (phone or laptop) is rendered after load: about 1/3 less work on every tap and view switch
 - Measured before (live, signed in): page loads 190–760 ms (slow ones = Vercel starting a fresh server), view switch ~60 ms on the laptop. Fluid compute was already on; server already in Mumbai
+- Measured after (live): Log Today → check-in 14 ms (was 300–760 ms), Cancel → dashboard 10 ms, view switches 44–67 ms including two screen frames
 
 **Next up:** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.
