@@ -34,7 +34,7 @@ const habits = habitSeeds.map(([name, rate], hi) => ({
 const weights = [70.3, 70.6, 70.9, 71.2, 71.4, 71.9, 72.1, 72.4];
 
 export const demoData: DashboardData = {
-  ownerLine: "Winter Arc · 90 days",
+  ownerLine: "Life, tracked",
   ownerInitial: "Y",
   todayISO: DEMO_TODAY,
   logHref: "/demo/log",
@@ -44,6 +44,7 @@ export const demoData: DashboardData = {
       title: "Sunday, 18 October",
       subtitle: "Winter Arc day 23 · 3 tasks due today · 12-day streak",
     },
+    arc: { title: "Winter Arc", subtitle: "26 Sep 2026 → 24 Dec 2026 · 90 days" },
     inbox: { title: "Inbox", subtitle: "4 unread · Claude logged 2 bank alerts today" },
     board: { title: "Board", subtitle: "11 open · 2 overdue · 2 waiting on others" },
     instinct: { title: "Instinct", subtitle: "Your on-the-go assistant, kept in sync with this dashboard" },
@@ -68,6 +69,29 @@ export const demoData: DashboardData = {
     startLabel: "26 Sep",
     endLabel: "24 Dec",
     days: seasonDays,
+  },
+  // Day 23 is the 2nd day of season week 4.
+  arc: {
+    rangeLabel: "26 Sep 2026 → 24 Dec 2026",
+    week: 4,
+    weekCount: 13,
+    targets: [
+      { name: "Sleep 7 hr", done: 2, target: 7 },
+      { name: "Study 1.5 hr", done: 2, target: 7 },
+      { name: "Water 3 L", done: 1, target: 7 },
+      { name: "Skincare", done: 2, target: 7 },
+      { name: "German 20 min", done: 0, target: 7 },
+      { name: "Workout", done: 1, target: 5 },
+    ],
+    streaks: [
+      { name: "Sleep 7 hr", current: 3, best: 12 },
+      { name: "Study 1.5 hr", current: 12, best: 19 },
+      { name: "Water 3 L", current: 1, best: 6 },
+      { name: "Skincare", current: 9, best: 15 },
+      { name: "German 20 min", current: 0, best: 8 },
+      { name: "Workout", current: 2, best: 5 },
+    ],
+    weeks: [78, 86, 71, 64, null, null, null, null, null, null, null, null, null],
   },
   stats: [
     { label: "Sleep", value: "7.2", unit: "hr", note: "7-day average, on target", tone: "arc", trend: [6.4, 7.1, 6.8, 7.5, 7.0, 7.4, 7.2] },

@@ -118,7 +118,7 @@ export function buildDashboardData({
   const dueToday = open.filter((t) => t.due === today).length;
 
   return {
-    ownerLine: "Winter Arc · 90 days",
+    ownerLine: "Life, tracked",
     ownerInitial,
     todayISO: today,
     logHref: "/log",
@@ -127,6 +127,12 @@ export function buildDashboardData({
       overview: {
         title: headerDate(today),
         subtitle: overviewSubtitle(season, today, loggedToday, trackers.length, dueToday),
+      },
+      arc: {
+        title: season?.name ?? "Winter Arc",
+        subtitle: season
+          ? `${fullDate(season.start_date)} → ${fullDate(addDays(season.start_date, season.length_days - 1))} · ${season.length_days} days`
+          : "No season set up yet",
       },
       inbox: { title: "Inbox", subtitle: "Gmail isn't connected yet" },
       board: {
@@ -141,6 +147,7 @@ export function buildDashboardData({
       return { label: t.name, done: v !== undefined && hitOn(t, today), value: v === undefined ? "–" : formatValue(t, v) };
     }),
     season: season ? buildSeason(season, today, dayStatus, counts, dailyGoals.length) : null,
+    arc: season ? buildArc(season, today, trackers, dailyGoals, hitOn) : null,
     stats: pickStatTrackers(trackers).map((t, i) => buildStat(t, STAT_TONES[i % STAT_TONES.length], today, valueOn)),
     today: trackers.map((t) => todayItem(t, valueOn(t, today), hitOn(t, today))),
     money: null,
@@ -230,6 +237,80 @@ function buildSeason(
     startLabel: shortDate(season.start_date),
     endLabel: shortDate(addDays(season.start_date, length - 1)),
     days,
+  };
+}
+
+// ---------------------------------------------------------------- Winter Arc page
+
+type HitOn = (t: Tracker, date: string, target?: number) => boolean;
+
+/** "2026-10-26" -> "26 Oct 2026" */
+function fullDate(iso: string): string {
+  return `${shortDate(iso)} ${iso.slice(0, 4)}`;
+}
+
+function buildArc(
+  season: SeasonRow,
+  today: string,
+  trackers: Tracker[],
+  dailyGoals: { tracker: Tracker; target: number | undefined }[],
+  hitOn: HitOn,
+): NonNullable<DashboardData["arc"]> {
+  const length = season.length_days;
+  const end = addDays(season.start_date, length - 1);
+  const weekCount = Math.ceil(length / 7);
+  const dayNum = daysBetween(season.start_date, today) + 1;
+  const started = dayNum >= 1;
+  const weekIndex = started ? Math.min(Math.floor((dayNum - 1) / 7), weekCount - 1) : 0;
+
+  /** Season days of week `w` (0-based) up to today. */
+  const daysOfWeek = (w: number) => {
+    const days: string[] = [];
+    for (let i = w * 7; i < Math.min(w * 7 + 7, length); i++) {
+      const d = addDays(season.start_date, i);
+      if (d <= today) days.push(d);
+    }
+    return days;
+  };
+  const weekLength = (w: number) => Math.min(7, length - w * 7);
+
+  // Daily targets, plus weekly yes/no ones like workouts ("5 days a week").
+  const weekly = trackers.filter((t) => t.type === "checkbox" && t.target_period === "weekly" && t.target != null);
+  const goals = [
+    ...dailyGoals.map((g) => ({ tracker: g.tracker, target: g.target, perWeek: weekLength(weekIndex) })),
+    ...weekly.filter((t) => !dailyGoals.some((g) => g.tracker.id === t.id)).map((t) => ({ tracker: t, target: undefined, perWeek: Number(t.target) })),
+  ];
+  const label = (t: Tracker, target: number | undefined) =>
+    target == null || t.type === "checkbox" || t.type === "scale_1_5" ? t.name : `${t.name} ${formatValue(t, target)}`;
+  const thisWeek = started ? daysOfWeek(weekIndex) : [];
+
+  return {
+    rangeLabel: `${fullDate(season.start_date)} → ${fullDate(end)}`,
+    week: weekIndex + 1,
+    weekCount,
+    targets: goals.map((g) => ({
+      name: label(g.tracker, g.target),
+      done: thisWeek.filter((d) => hitOn(g.tracker, d, g.target)).length,
+      target: g.perWeek,
+    })),
+    streaks: goals.map((g) => {
+      const hit = (d: string) => hitOn(g.tracker, d, g.target);
+      let current = 0;
+      for (let d = hit(today) ? today : addDays(today, -1); d >= season.start_date && hit(d); d = addDays(d, -1)) current++;
+      let best = 0;
+      let run = 0;
+      for (let d = season.start_date; d <= today && d <= end; d = addDays(d, 1)) {
+        run = hit(d) ? run + 1 : 0;
+        best = Math.max(best, run);
+      }
+      return { name: label(g.tracker, g.target), current, best };
+    }),
+    weeks: Array.from({ length: weekCount }, (_, w) => {
+      const days = daysOfWeek(w);
+      if (days.length === 0 || dailyGoals.length === 0) return null;
+      const hits = days.reduce((n, d) => n + dailyGoals.filter((g) => hitOn(g.tracker, d, g.target)).length, 0);
+      return Math.round((hits / (days.length * dailyGoals.length)) * 100);
+    }),
   };
 }
 

@@ -141,4 +141,12 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] `SHARE_TOKEN` and `SUPABASE_SERVICE_ROLE_KEY` set in Vercel (Production) by Yasir; checked live 26 Oct: signed-in card shows day 1 with Copy link, the share link shows the card with no sign-in, a wrong token shows no card
 - [x] README: what it is, screenshot list, stack, how it grows, how it was built with AI
 
+## Design v6.1 layout split (26 Oct 2026)
+- [x] Winter Arc data per tracker (targets this week, streaks, 13-week %) in the shared builder + demo data
+- [x] Sidebar: Overview, Winter Arc, Board, Trackers (tree folds under Trackers); "Life, tracked"
+- [ ] Overview = whole life + "Day X/90 →" chip in the header
+- [ ] Winter Arc page
+- [ ] Phone Today and Arc tabs
+- [ ] Checked at 1440px and 375px, hig-doctor, pushed
+
 **Next up:** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.

@@ -8,7 +8,7 @@ export type { Owner, Task };
   (src/data/demo); from Phase 3 the real dashboard fills it from Supabase.
 */
 
-export type ViewId = "overview" | "inbox" | "board" | "instinct";
+export type ViewId = "overview" | "arc" | "inbox" | "board" | "instinct";
 
 export type SeasonDay = "all" | "most" | "missed" | "today" | "upcoming";
 
@@ -87,6 +87,20 @@ export interface DashboardData {
     startLabel: string;
     endLabel: string;
     days: SeasonDay[];
+  } | null;
+  /** The Winter Arc page (DESIGN.md v6.1). null = no season set up. */
+  arc: {
+    /** "26 Oct 2026 → 23 Jan 2027" */
+    rangeLabel: string;
+    /** Season week today is in (1-based; 1 before the start), out of weekCount. */
+    week: number;
+    weekCount: number;
+    /** This season week, per tracker: days on target so far against the days it asks for. */
+    targets: { name: string; done: number; target: number }[];
+    /** Days in a row on target, per tracker. */
+    streaks: { name: string; current: number; best: number }[];
+    /** % of tracker targets hit in each season week. null = week not started yet. */
+    weeks: (number | null)[];
   } | null;
   stats: { label: string; value: string; unit: string; note: string; tone: Tone; trend: number[] }[];
   today: TodayItem[];
