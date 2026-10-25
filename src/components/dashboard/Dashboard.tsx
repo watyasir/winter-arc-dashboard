@@ -1,5 +1,6 @@
 "use client";
 
+import { WinterArcView } from "@/modules/arc/WinterArcView";
 import { BoardView } from "@/modules/board/BoardView";
 import type { DashboardData, TaskActions, ToggleTodayAction } from "@/modules/types";
 import { DashboardProvider, useDashboard } from "./DashboardContext";
@@ -35,8 +36,9 @@ export function Dashboard({
   );
 }
 
-// Inbox and Instinct views are parked (Phases 8b, 8c), so only Overview and Board are reachable.
+// Inbox and Instinct views are parked (Phases 8b, 8c), so only Overview, Winter Arc and Board are reachable.
 function CurrentView() {
   const { view } = useDashboard();
+  if (view === "arc") return <WinterArcView />;
   return view === "board" ? <BoardView /> : <OverviewView />;
 }
