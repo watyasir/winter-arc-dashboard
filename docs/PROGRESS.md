@@ -15,7 +15,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 | 8 | Automation (logging API) | ⬜ Not started |
 | 8b | Mail nudges | ⏸ Parked (26 Oct), Yasir will re-plan |
 | 8c | Instinct link | ⏸ Parked (26 Oct), Yasir will re-plan |
-| 9 | Share + portfolio polish | ✅ Built (26 Oct 2026); live link waits on Vercel settings |
+| 9 | Share + portfolio polish | ✅ Done (26 Oct 2026) |
 
 ## Decisions & schedule (21 Oct 2026)
 
@@ -138,7 +138,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] "Copy link" (shows the link to copy by hand if the clipboard is blocked); "Share progress" link on the Winter Arc hero
 - [x] Public with `?t=<SHARE_TOKEN>`: numbers worked out on the server, only the card is sent; wrong or missing token = not found; not indexed, no referrer
 - [x] `/demo/progress` on fake data with a "Sample data" chip
-- [ ] Yasir: add `SHARE_TOKEN` and `SUPABASE_SERVICE_ROLE_KEY` in Vercel, then check the live link
+- [x] `SHARE_TOKEN` and `SUPABASE_SERVICE_ROLE_KEY` set in Vercel (Production) by Yasir; checked live 26 Oct: signed-in card shows day 1 with Copy link, the share link shows the card with no sign-in, a wrong token shows no card
 - [x] README: what it is, screenshot list, stack, how it grows, how it was built with AI
 
 **Next up:** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.
