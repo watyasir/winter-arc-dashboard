@@ -13,8 +13,8 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 | 6 | Money (read from the sheet) | ⬜ Not started |
 | 7 | Winter Arc season + custom trackers | ✅ Done (21 Oct 2026) |
 | 8 | Automation (logging API) | ⬜ Not started |
-| 8b | Mail nudges (replaces the Gmail inbox, 21 Oct) | ⬜ Not started |
-| 8c | Instinct link | ⬜ Not started |
+| 8b | Mail nudges | ⏸ Parked (26 Oct), Yasir will re-plan |
+| 8c | Instinct link | ⏸ Parked (26 Oct), Yasir will re-plan |
 | 9 | Share + portfolio polish | ⬜ Not started |
 
 ## Decisions & schedule (21 Oct 2026)

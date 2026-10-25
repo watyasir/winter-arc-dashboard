@@ -95,7 +95,11 @@ Build the full dashboard **visually**, on fake data. It's the most satisfying ph
 
 ---
 
-## Phase 8b: Mail nudges (changed 21 Oct 2026, replaces the full Gmail inbox)
+## Phase 8b — PARKED (26 Oct 2026)
+
+Scrapped for now by Yasir; he will plan a better approach later. Do not build. Original notes kept below for reference.
+
+Original title: Mail nudges (changed 21 Oct 2026, replaces the full Gmail inbox)
 
 Yasir reads and replies in Gmail itself. The dashboard only shows a short list of emails that need his attention. No Google OAuth, no weekly re-login, no Google Cloud setup: Claude (which already has Gmail access) scans the inbox on a schedule and posts nudges through the Phase 8 logging API.
 
@@ -104,7 +108,11 @@ Yasir reads and replies in Gmail itself. The dashboard only shows a short list o
 
 **After this:** Claude (chat) sets up a scheduled task that checks Gmail and posts nudges (needs reply, bills/dues, bank or college action items).
 
-## Phase 8c: Instinct link
+## Phase 8c — PARKED (26 Oct 2026)
+
+Scrapped for now by Yasir; he will plan a better approach later. Do not build. Original notes kept below for reference.
+
+Original title: Instinct link
 
 **Kickoff prompt:**
 > Phase 8c. Add the Instinct view from the design: instinct_requests table and API, the header status pill (waiting → answered → disappears), the "What Instinct can see" switches, a read-only /instinct page protected by a secret token that shows the current picture as plain text for only the switched-on categories, and a 7:30 AM IST digest email to Instinct.
