@@ -101,7 +101,7 @@ function Card({ card, demo }: { card: ShareCard; demo: boolean }) {
       </dl>
 
       <footer className="flex items-center justify-between border-t border-on-dark pt-4 text-[13px] text-hero-sub">
-        <span className="font-semibold text-white">Yarizz&apos;s Dashboard</span>
+        <span className="font-semibold text-white">Yasir OS</span>
         <span>As of {card.asOf}</span>
       </footer>
     </section>

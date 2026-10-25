@@ -1,4 +1,4 @@
-# Build Plan: Winter Arc Dashboard
+# Build Plan: Yasir OS
 
 One phase = one Claude Code session. Each phase ends with something that works and that you can see. Paste the **kickoff prompt** to start that session. Don't start a new phase in the same session; start a fresh session for it (this keeps usage low).
 

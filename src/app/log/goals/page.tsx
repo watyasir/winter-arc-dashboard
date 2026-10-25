@@ -8,7 +8,7 @@ import { loadTrackers } from "@/lib/tracker-store";
 import { todayISO } from "@/lib/trackers";
 import { addGoal, deleteGoal, updateGoalProgress } from "./actions";
 
-export const metadata: Metadata = { title: "Goals · Yarizz's Dashboard" };
+export const metadata: Metadata = { title: "Goals · Yasir OS" };
 
 export default function GoalsPage() {
   return (

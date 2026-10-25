@@ -1,4 +1,4 @@
-# Design spec: Winter Arc Dashboard
+# Design spec: Yasir OS
 
 **Status:** v6 "Teal and grey", 20 Oct 2026. §2b overrides all colours in §2; §2 is kept only for history. The look is Yasir's Obsidian theme **AnuPpuccin** in its **light card layout**, on the **Catppuccin Latte** palette, with Apple HIG rules for controls, accessibility and charts.
 **Source of truth:** the Claude Design canvas "Winter Arc Dashboard". Its exact markup is copied into `docs/design-reference/` (`Main.dc.html` is the dashboard, `Phone.dc.html` the phone home screen, `CheckIn.dc.html` the daily check-in). Open those files to match spacing, copy and sample data exactly. They are design mockups, not production code: rebuild them as React components with Tailwind.

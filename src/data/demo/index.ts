@@ -266,7 +266,7 @@ export const demoData: DashboardData = {
     { id: "t3", title: "Book dentist check-up", owner: "Me", area: "Health", due: "2026-10-16", status: "todo" },
     { id: "t4", title: "November finance review", owner: "Both", area: "Money", due: "2026-10-20", status: "todo" },
     { id: "t5", title: "Cancel unused music app", owner: "Claude", area: "Subscriptions", due: null, status: "todo" },
-    { id: "t6", title: "Winter Arc Dashboard design", owner: "Both", area: "Build", due: null, status: "doing" },
+    { id: "t6", title: "Yasir OS design", owner: "Both", area: "Build", due: null, status: "doing" },
     { id: "t7", title: "Course completion certificate", owner: "Both", area: "Learning", due: "2026-10-18", status: "doing" },
     { id: "t8", title: "Two delivery refund disputes", owner: "Claude", area: "Disputes", due: "2026-10-15", status: "doing" },
     { id: "t9", title: "Habit app review", owner: "Claude", area: "Build", due: null, status: "doing" },

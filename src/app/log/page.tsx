@@ -7,7 +7,7 @@ import { loadTrackers } from "@/lib/tracker-store";
 import { addDays, formatDayLabel, startingValue, todayISO, type CheckInValues } from "@/lib/trackers";
 import { saveCheckIn } from "./actions";
 
-export const metadata: Metadata = { title: "Check-in · Yarizz's Dashboard" };
+export const metadata: Metadata = { title: "Check-in · Yasir OS" };
 
 export default function LogPage() {
   return (

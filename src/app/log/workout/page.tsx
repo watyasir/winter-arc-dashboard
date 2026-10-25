@@ -6,7 +6,7 @@ import { loadWorkouts } from "@/lib/body-store";
 import { todayISO } from "@/lib/trackers";
 import { deleteWorkout, saveWorkout } from "./actions";
 
-export const metadata: Metadata = { title: "Workout · Yarizz's Dashboard" };
+export const metadata: Metadata = { title: "Workout · Yasir OS" };
 
 export default function WorkoutPage({ searchParams }: { searchParams: Promise<{ repeat?: string }> }) {
   return (

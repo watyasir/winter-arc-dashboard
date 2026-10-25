@@ -1,6 +1,6 @@
-# Winter Arc Dashboard
+# Yasir OS
 
-A personal life dashboard for Yasir. One place to see and log health, workouts, body, tasks, goals and money, with a 90-day "Winter Arc" season on top. It is built to keep growing: new areas of life get added as new trackers, without rebuilding the app.
+**Yasir OS** (code and repo name `yasiros`): a personal life dashboard for Yasir. Winter Arc is only the 90-day season feature (chip, page, hero), never the product name. One place to see and log health, workouts, body, tasks, goals and money, with a 90-day "Winter Arc" season on top. It is built to keep growing: new areas of life get added as new trackers, without rebuilding the app.
 
 It is also a **public portfolio project**. Yasir is a vibe coder: he directs, prompts and reviews; you write the code. Explain what you did in plain words, not jargon.
 

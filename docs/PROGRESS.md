@@ -24,7 +24,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - **Design stays on v6** ("Teal and grey"), never older designs. Not a hard freeze: where a feature needs a design or layout change, make it with v6 tokens and components (Yasir chose this over a strict freeze, 21 Oct).
 - **Gmail: no full inbox.** Phase 8b is "Mail nudges": Claude posts the emails that need Yasir through the API; he reads and replies in Gmail.
 - **Tracker targets** get decided with Yasir when Phase 6 is finalized.
-- **Site name is "Yarizz's Dashboard"** (tab titles, welcome and sign-in pages, sidebar). Repo and Vercel link keep the winter-arc-dashboard name.
+- **Product name is "Yasir OS"** (renamed 26 Oct 2026 from "Yarizz's Dashboard"): tab titles, header/logo, metadata, README. Code/repo name `yasiros`. Winter Arc is only the season feature (chip, page, hero), never the product name.
 
 **Schedule**
 - **Fri 23 Oct, night:** Phase 8, 8b, 8c, then 9. Phase 9 runs on `/demo` data; drop it if it's past 1:30 AM.
@@ -148,5 +148,12 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Winter Arc page: hero + 90-day strip, targets this week, streaks per tracker, week-by-week % (13 bars); header "Share card" opens the Phase 9 card
 - [x] Phone: Today tab = life Overview in one column (chip, Today, Tasks, 2×2 Body/Workouts/Goals/Money, Habits 2 weeks, In progress); Arc tab = Winter Arc page stacked + Share card; tabs follow the shared view
 - [x] Checked at 1440px and 375px on /demo (no sideways scroll, all phone targets 44px+); `npx hig-doctor .` clean (mockups excluded via `.higauditignore`); build passes; pushed
+
+## Rename to Yasir OS (26 Oct 2026)
+- [x] Product name "Yasir OS" in tab titles, sidebar logo text, welcome/sign-in pages, share card, metadata, README, CLAUDE.md; `package.json` name `yasiros`
+- [ ] GitHub repo renamed to `yasiros`, git remote updated
+- [ ] Vercel domain `yasiros.vercel.app` added (old address keeps working)
+- [ ] Supabase Auth: `https://yasiros.vercel.app` in Site URL + Redirect URLs (old one kept)
+- [ ] Sign-in tested on the new address
 
 **Next up:** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.

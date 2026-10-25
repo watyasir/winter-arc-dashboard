@@ -35,7 +35,7 @@ function Welcome() {
   return (
     <main className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-md rounded-[20px] border border-sep bg-card p-8 text-center">
-        <h1 className="m-0 text-3xl font-bold tracking-tight">Yarizz&apos;s Dashboard</h1>
+        <h1 className="m-0 text-3xl font-bold tracking-tight">Yasir OS</h1>
         <p className="mt-2 text-sub">A personal life dashboard with a 90-day Winter Arc season.</p>
         <Link
           href="/demo"
