@@ -8,11 +8,10 @@ import type { ViewId } from "@/modules/types";
 import { useDashboard } from "./DashboardContext";
 
 // Icon tiles use the teal ramp, darkest first (DESIGN.md §2b).
+// Inbox and Instinct are hidden while Phases 8b and 8c are parked (26 Oct); their views stay in src/modules.
 const nav: { id: ViewId; label: string; icon: IconName; tile: string }[] = [
   { id: "overview", label: "Overview", icon: "grid", tile: "bg-brand" },
-  { id: "inbox", label: "Inbox", icon: "mail", tile: "bg-ramp2" },
-  { id: "board", label: "Board", icon: "board", tile: "bg-ramp3" },
-  { id: "instinct", label: "Instinct", icon: "spark", tile: "bg-sage" },
+  { id: "board", label: "Board", icon: "board", tile: "bg-ramp2" },
 ];
 
 const rowBase =

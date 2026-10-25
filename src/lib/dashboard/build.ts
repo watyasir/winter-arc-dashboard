@@ -169,7 +169,7 @@ export function buildDashboardData({
       ],
       digest: digest(season, today, streak, trackers, valueOn),
     },
-    footnote: "Your data, updated every time you log. Money and mail show up here once they're connected.",
+    footnote: "Your data, updated every time you log. Money shows up here once the finance sheet is connected.",
     isDemo: false,
   };
 }

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { useDashboard } from "./DashboardContext";
-import { InstinctPill } from "./InstinctPill";
 
 /** Page header card with the dashed bottom rule. */
 export function Header() {
@@ -17,12 +16,11 @@ export function Header() {
         <span className="text-[13px] text-sub">{subtitle}</span>
       </div>
       <div className="flex flex-wrap items-center gap-2.5">
-        <InstinctPill />
         <label className="flex min-h-11 items-center gap-1.5 rounded-full border border-sep bg-base px-3.5 text-sub sm:min-h-9">
           <Icon name="search" size={14} />
           <input
             type="search"
-            placeholder="Search tasks, mail, notes"
+            placeholder="Search tasks and notes"
             aria-label="Search"
             className="w-[170px] border-0 bg-transparent text-[13px] text-ink outline-none placeholder:text-sub"
           />

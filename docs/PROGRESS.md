@@ -130,4 +130,7 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Each device is signed out 7 days after its sign-in, with a clear message on `/login` (`src/lib/session.ts`, `src/proxy.ts`)
 - [x] Dropped 21 Oct: Phase 8b is now mail nudges (no Gmail sign-in), so there's nothing to keep in step
 
+## Cleanup (26 Oct 2026)
+- [x] Inbox and Instinct hidden from the sidebar, header (Instinct pill) and Overview (Inbox preview) on `/` and `/demo`; code kept in `src/modules/inbox` and `src/modules/instinct`. Today and Money now share their row.
+
 **Next up:** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.

@@ -1,8 +1,6 @@
 "use client";
 
 import { BoardView } from "@/modules/board/BoardView";
-import { InboxView } from "@/modules/inbox/InboxView";
-import { InstinctView } from "@/modules/instinct/InstinctView";
 import type { DashboardData, TaskActions, ToggleTodayAction } from "@/modules/types";
 import { DashboardProvider, useDashboard } from "./DashboardContext";
 import { Header } from "./Header";
@@ -37,16 +35,8 @@ export function Dashboard({
   );
 }
 
+// Inbox and Instinct views are parked (Phases 8b, 8c), so only Overview and Board are reachable.
 function CurrentView() {
   const { view } = useDashboard();
-  switch (view) {
-    case "inbox":
-      return <InboxView />;
-    case "board":
-      return <BoardView />;
-    case "instinct":
-      return <InstinctView />;
-    default:
-      return <OverviewView />;
-  }
+  return view === "board" ? <BoardView /> : <OverviewView />;
 }

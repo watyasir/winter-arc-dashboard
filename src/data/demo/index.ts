@@ -41,13 +41,13 @@ export const demoData: DashboardData = {
   views: {
     overview: {
       title: "Sunday, 18 October",
-      subtitle: "Winter Arc day 23 · 3 tasks due today · Instinct synced 9 min ago",
+      subtitle: "Winter Arc day 23 · 3 tasks due today · 12-day streak",
     },
     inbox: { title: "Inbox", subtitle: "4 unread · Claude logged 2 bank alerts today" },
     board: { title: "Board", subtitle: "11 open · 2 overdue · 2 waiting on others" },
     instinct: { title: "Instinct", subtitle: "Your on-the-go assistant, kept in sync with this dashboard" },
   },
-  navBadges: { inbox: "4", board: "11" },
+  navBadges: { board: "11" },
   trackers: [
     { label: "Workout", done: true, value: "Push" },
     { label: "Study", done: true, value: "90 min" },
@@ -271,6 +271,6 @@ export const demoData: DashboardData = {
       "Day 23 of 90 · streak 12\nToday: gym push day, study 90 min, German 20 min\nDue: bike servicing Tue, certificate file 26 Oct\nMoney: ₹18,200 saved in Oct\nWaiting on: job document check, QuickCart callback",
   },
   footnote:
-    "Sample data for the demo. The real app fills this from your check-ins, Gmail, the Personal Finance sheet and the Board.",
+    "Sample data for the demo. The real app fills this from your check-ins, workouts, the Personal Finance sheet and the Board.",
   isDemo: true,
 };
