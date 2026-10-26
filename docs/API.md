@@ -1,6 +1,6 @@
 # API
 
-Three endpoints for Claude's scheduled tasks, so logging and money updates reach the dashboard without opening the app. All amounts below are made up.
+Endpoints for Claude's scheduled tasks, so logging, money updates and the task Board reach the dashboard without opening the app. All amounts and tasks below are made up.
 
 Base URL: `https://yasiros.vercel.app`
 
@@ -159,4 +159,79 @@ Every call adds a snapshot (older ones stay as history). Needs the `money_snapsh
 curl -X POST https://yasiros.vercel.app/api/money \
   -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" \
   -d @snapshot.json
+```
+
+---
+
+## Tasks: POST /api/tasks, GET /api/tasks, DELETE /api/tasks/:external_id
+
+Keeps the Board in sync with Claude's task list. Every task has an `external_id`, the name Claude knows it by. Tasks added in the app get one automatically (`app-…`), so Claude can update or delete those too (`GET` lists them). Needs the tasks API migration (`supabase/migrations/20261027000002_tasks_api.sql`); without it these calls answer `500`.
+
+| Field | Rule |
+|---|---|
+| `external_id` | required, text, 1–100 characters, unique per task |
+| `title` | 1–120 characters. Required for a new task |
+| `status` | `todo`, `doing`, `waiting` or `done` (the Board columns: To do, In progress, Waiting on others, Done). Default `todo` |
+| `owner` | `Yasir`, `Claude` or `Both`. Default `Yasir` |
+| `area` | up to 40 characters, e.g. `Home`, `Health`, `Skills`. `null` = none |
+| `due_date` | `YYYY-MM-DD` or `null` |
+| `note` | up to 500 characters, shown on the card. `null` clears it |
+| `sort_order` | whole number, higher = more important. The highest `Home` task is pinned at the top of Overview. Default `0` |
+| `updated_by` | `Yasir` or `Claude`. Default `Claude` for API calls (the app sets `Yasir`) |
+
+Read-only in replies: `updated_at`, `done_at` (set when the task moves to Done).
+
+### POST /api/tasks
+
+Adds or updates by `external_id`: one task, a list, or `{ "tasks": [...] }` (1–100). A new `external_id` creates a task (needs `title`); a known one changes only the fields you send.
+
+```json
+{
+  "tasks": [
+    { "external_id": "home-move", "title": "Move to the new flat", "area": "Home", "due_date": "2026-11-15", "owner": "Both", "sort_order": 10, "note": "Book the movers first" },
+    { "external_id": "learn-sql", "title": "Finish the SQL course", "area": "Skills", "status": "doing" },
+    { "external_id": "app-1a2b3c4d5e6f7a8b", "status": "done" }
+  ]
+}
+```
+
+Reply `200`: how many were created and updated, plus each saved task.
+
+```json
+{
+  "ok": true,
+  "created": 2,
+  "updated": 1,
+  "tasks": [
+    { "external_id": "home-move", "title": "Move to the new flat", "status": "todo", "owner": "Both", "area": "Home", "due_date": "2026-11-15", "note": "Book the movers first", "sort_order": 10, "updated_at": "2026-10-27T03:00:00+00:00", "updated_by": "Claude", "done_at": null }
+  ]
+}
+```
+
+A body that doesn't fit gets `400` naming the field and list position, e.g. `"tasks[1].status: one of todo, doing, waiting, done."` or `"title: \"learn-sql\" is a new task, so it needs a title."` Nothing is saved when the body is rejected.
+
+```bash
+curl -X POST https://yasiros.vercel.app/api/tasks \
+  -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" \
+  -d '{"external_id":"learn-sql","status":"done"}'
+```
+
+### GET /api/tasks
+
+Every task, most important first (`sort_order`, then due date). `?status=todo,doing` keeps only those columns.
+
+```json
+{ "ok": true, "count": 1, "tasks": [{ "external_id": "learn-sql", "title": "Finish the SQL course", "status": "doing", "owner": "Yasir", "area": "Skills", "due_date": null, "note": null, "sort_order": 0, "updated_at": "2026-10-27T03:00:00+00:00", "updated_by": "Claude", "done_at": null }] }
+```
+
+```bash
+curl "https://yasiros.vercel.app/api/tasks?status=todo,doing,waiting" -H "Authorization: Bearer $API_TOKEN"
+```
+
+### DELETE /api/tasks/:external_id
+
+Deletes one task. Reply `200` `{ "ok": true, "deleted": "learn-sql" }`, or `404` when no task has that `external_id`. To finish a task, move it to `done` instead, so it stays in the Done column.
+
+```bash
+curl -X DELETE https://yasiros.vercel.app/api/tasks/learn-sql -H "Authorization: Bearer $API_TOKEN"
 ```
