@@ -107,11 +107,11 @@ export function WalletStack({
           style={{ zIndex: i + 1 }}
           className={`relative -mb-3.5 flex h-[50px] cursor-pointer items-start justify-between gap-2 rounded-t-2xl border-0 px-4 py-2.5 text-left text-[13px] font-semibold ${tabStyle[a.kind]}`}
         >
-          <span className="truncate">
+          <span className="min-w-0 truncate">
             {a.name}
             {a.due && ` · due ${a.due}`}
           </span>
-          <span className="font-rounded text-sm font-bold">{formatRupees(a.balance)}</span>
+          <span className="shrink-0 font-rounded text-sm font-bold whitespace-nowrap">{formatRupees(a.balance)}</span>
         </button>
       ))}
       <div
