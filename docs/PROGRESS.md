@@ -187,5 +187,13 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 ## Final pass (26 Oct 2026, overnight)
 - [x] New address `/winter-arc` (and `/demo/winter-arc`) opens the Winter Arc page; switching to it keeps `#winter-arc` in the address so a refresh stays there
 - [x] Clicked through `/demo` (all views and phone tabs), `/demo/winter-arc`, `/demo/log`, `/demo/progress`, `/login`, and signed-out `/`, `/log`, `/settings`, `/progress` at 1440px and 375px: no sideways scroll, no tap targets under 44px on the phone, no console errors
+- [x] Live, signed in (laptop width): `/`, `/winter-arc`, `/log`, `/settings`, `/progress` load with no errors; Money shows its empty state (table not created yet); `/api/summary` answers 503 until `API_TOKEN` is set
+
+## Tonight in 5 lines (26 Oct 2026)
+1. Layout split, rename to Yasir OS and the share card were already done and live, so they were skipped.
+2. New API for Claude's scheduled tasks: log tracker values, read today's summary, push money snapshots, all behind one token.
+3. Money tile now shows real snapshots: wallet stack per bank and card, left to spend, spend vs income, 50/20/30 vs target, top spends.
+4. `/winter-arc` now has its own address; every page checked on laptop and phone width.
+5. Money goes live after you run one migration and add `API_TOKEN` (morning checklist at the top).
 
 **Next up (old note):** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.
