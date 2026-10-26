@@ -33,8 +33,8 @@ export interface Account {
   balance: number;
   /** Cards only: next bill due date, e.g. "5 Nov". */
   due?: string;
-  /** Latest first. Positive = money in. */
-  transactions: { label: string; date: string; amount: number }[];
+  /** Latest first. Positive = money in. The finance snapshots don't carry these. */
+  transactions?: { label: string; date: string; amount: number }[];
 }
 
 /** One row in the Today checklist (desktop) and Focus list (phone). */
@@ -109,8 +109,12 @@ export interface DashboardData {
     updated: string;
     income: number;
     spent: number;
-    split: { needs: number; wants: number; savings: number };
-    fund: { name: string; pct: number; target: number };
+    /** What's left to spend this month (the wallet's front card). */
+    spendable: number;
+    /** % of income, actual against target (50/20/30 by default). */
+    split: Record<"needs" | "wants" | "savings", { actual: number; target: number }>;
+    /** Biggest spends first, at most 4. */
+    categories: { name: string; amount: number }[];
     accounts: Account[];
   } | null;
   /** Where the workout log and the weekly body check live (/log/... or /demo/log/...). */

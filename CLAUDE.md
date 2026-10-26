@@ -25,7 +25,7 @@ It is also a **public portfolio project**. Yasir is a vibe coder: he directs, pr
 | Charts | Recharts | Simple, good-looking trend charts |
 | Database + login | Supabase (Postgres + Auth) | Free tier, real database, email login |
 | Hosting | Vercel | Free tier, live link, auto-deploy from GitHub |
-| Money data | Google Sheets API (read-only) | Money already lives in his Personal Finance sheet |
+| Money data | Snapshots pushed to `POST /api/money` by Claude's finance task (no Google service account, 26 Oct 2026) | Money already lives in his Personal Finance sheet |
 
 Keep dependencies few. Ask before adding any new library.
 

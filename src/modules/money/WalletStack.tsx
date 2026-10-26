@@ -19,16 +19,23 @@ function tabLabel(a: Account) {
 }
 
 /**
- * Accounts as a stack of coloured tabs above a white front card with the total.
+ * Accounts as a stack of coloured tabs above a white front card with what's left to spend.
  * Clicking a tab shows that account in the same tile; Escape or "All accounts" goes back.
  */
-export function WalletStack({ accounts, savedThisMonth }: { accounts: Account[]; savedThisMonth: number }) {
+export function WalletStack({
+  accounts,
+  spendable,
+  savedThisMonth,
+}: {
+  accounts: Account[];
+  spendable: number;
+  savedThisMonth: number;
+}) {
   const [openId, setOpenId] = useState<string | null>(null);
   const lastOpened = useRef<string | null>(null);
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const detailRef = useRef<HTMLHeadingElement>(null);
   const open = accounts.find((a) => a.id === openId);
-  const total = accounts.reduce((sum, a) => sum + a.balance, 0);
 
   // Move focus into the detail when it opens, and back to its tab when it closes.
   useEffect(() => {
@@ -69,17 +76,19 @@ export function WalletStack({ accounts, savedThisMonth }: { accounts: Account[];
             {formatRupees(open.kind === "card" ? -open.balance : open.balance)}
           </div>
         </div>
-        <ul className="m-0 list-none p-0" aria-label="Last 5 transactions">
-          {open.transactions.slice(0, 5).map((t, i) => (
-            <li key={i} className="flex items-center gap-2.5 border-t border-sep py-2 text-[13px]">
-              <span className="flex-1">{t.label}</span>
-              <span className="text-xs text-sub">{t.date}</span>
-              <span className={`w-[84px] text-right font-semibold ${t.amount > 0 ? "text-sage-text" : "text-ink"}`}>
-                {formatSignedRupees(t.amount)}
-              </span>
-            </li>
-          ))}
-        </ul>
+        {open.transactions && open.transactions.length > 0 && (
+          <ul className="m-0 list-none p-0" aria-label="Last 5 transactions">
+            {open.transactions.slice(0, 5).map((t, i) => (
+              <li key={i} className="flex items-center gap-2.5 border-t border-sep py-2 text-[13px]">
+                <span className="flex-1">{t.label}</span>
+                <span className="text-xs text-sub">{t.date}</span>
+                <span className={`w-[84px] text-right font-semibold ${t.amount > 0 ? "text-sage-text" : "text-ink"}`}>
+                  {formatSignedRupees(t.amount)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     );
   }
@@ -110,13 +119,17 @@ export function WalletStack({ accounts, savedThisMonth }: { accounts: Account[];
         className="notch-top relative flex flex-col rounded-2xl border border-sep bg-base px-4 pt-3.5 pb-4"
       >
         <span className="self-start rounded-full border border-sep bg-base px-2.5 py-[3px] text-[11px] font-semibold">
-          {accounts.length} accounts
+          {accounts.length} {accounts.length === 1 ? "account" : "accounts"}
         </span>
         <div className="flex flex-wrap items-baseline gap-x-2 pt-3">
-          <span className="text-xs text-sub">Total balance</span>
-          <span className="text-xs font-semibold text-sage-text">+ {formatRupees(savedThisMonth)} saved this month</span>
+          <span className="text-xs text-sub">Available to spend</span>
+          {savedThisMonth >= 0 ? (
+            <span className="text-xs font-semibold text-sage-text">+ {formatRupees(savedThisMonth)} saved this month</span>
+          ) : (
+            <span className="text-xs font-semibold text-coral-text">{formatRupees(-savedThisMonth)} more spent than earned</span>
+          )}
         </div>
-        <div className="font-rounded text-[32px] font-bold">{formatRupees(total)}</div>
+        <div className="font-rounded text-[32px] font-bold">{formatRupees(spendable)}</div>
       </div>
     </div>
   );

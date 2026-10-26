@@ -3,6 +3,7 @@ import { addDays, formatAmount, formatValue, type Tracker } from "@/lib/trackers
 import type { DashboardData, SeasonDay, TodayItem } from "@/modules/types";
 import type { BodyCheck, Workout } from "@/lib/body";
 import { dueState, type Goal, type Task } from "@/lib/tasks";
+import { toMoneyTile, type MoneySnapshot } from "@/lib/money";
 import { buildBody } from "./body";
 import { buildGoals } from "./goals";
 import { daysBetween, headerDate, lastDays, shortDate, weekStart } from "./dates";
@@ -10,8 +11,8 @@ import { daysBetween, headerDate, lastDays, shortDate, weekStart } from "./dates
 /*
   Turns the real rows (trackers, entries, the active season) into the same DashboardData
   shape /demo uses, so both run on the same tiles. Pure: no database, easy to reason about.
-  Sources that aren't connected yet (money, mail) come back empty and
-  the tiles show what to do instead.
+  Sources that aren't connected yet (mail, or money before the first snapshot) come back
+  empty and the tiles show what to do instead.
 */
 
 export interface EntryRow {
@@ -43,6 +44,8 @@ export interface BuildInput {
   goals: Goal[];
   /** Linked-tracker totals by goal id. */
   goalTracked: Map<string, number>;
+  /** The latest money snapshot. Null/missing = none pushed yet. */
+  money?: MoneySnapshot | null;
 }
 
 /** How far back the dashboard reads: 7 weeks of weekly trends, plus the season if it started earlier. */
@@ -71,6 +74,7 @@ export function buildDashboardData({
   tasks,
   goals,
   goalTracked,
+  money,
 }: BuildInput): DashboardData {
   const values = new Map<string, number>();
   for (const e of entries) values.set(`${e.tracker_id}|${e.entry_date}`, Number(e.value));
@@ -150,7 +154,7 @@ export function buildDashboardData({
     arc: season ? buildArc(season, today, trackers, dailyGoals, hitOn) : null,
     stats: pickStatTrackers(trackers).map((t, i) => buildStat(t, STAT_TONES[i % STAT_TONES.length], today, valueOn)),
     today: trackers.map((t) => todayItem(t, valueOn(t, today), hitOn(t, today))),
-    money: null,
+    money: money ? toMoneyTile(money) : null,
     workoutHref: "/log/workout",
     bodyHref: "/log/body",
     goalsHref: "/log/goals",
@@ -177,7 +181,7 @@ export function buildDashboardData({
       ],
       digest: digest(season, today, streak, trackers, valueOn),
     },
-    footnote: "Your data, updated every time you log. Money shows up here once the finance sheet is connected.",
+    footnote: "Your data, updated every time you log. Money shows up here after the finance task sends its first snapshot.",
     isDemo: false,
   };
 }

@@ -1,5 +1,15 @@
 # Progress
 
+## Morning checklist for Yasir (26 Oct 2026)
+
+Steps 1, 2 and 4 of last night's list were already done and live, so nothing is needed for the rename or the share card (`SHARE_TOKEN` is already set). Only the new API + Money needs you:
+
+1. **Run the money migration.** Supabase → SQL Editor → paste all of `supabase/migrations/20261026000001_money_snapshots.sql` → Run. (Or ask a Claude session to do it in your Chrome.)
+2. **Make the API token.** In Terminal: `openssl rand -hex 32` and copy the result.
+3. **Add it to Vercel.** vercel.com/claude-0d67/yasiros → Settings → Environment Variables → name `API_TOKEN`, value = the token, Production → Save → Deployments → Redeploy the latest.
+4. **Check it.** Ask Claude to call `GET /api/summary` with the token (should answer `ok: true` with today's missing logs).
+5. **Point the finance task at it.** In Claude chat, give the finance task the token and `docs/API.md` → `POST /api/money`. The Money tile fills on the first snapshot. If the sheet only has one combined bank balance, add per-bank rows to it (or send one bank).
+
 One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.md`.
 
 | Phase | Name | Status |
@@ -10,9 +20,9 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 | 3 | Real dashboard | ✅ Done (20 Oct 2026) |
 | 4 | Workouts + body | ✅ Done (21 Oct 2026) |
 | 5 | Tasks + goals | ✅ Done (21 Oct 2026) |
-| 6 | Money (read from the sheet) | ⬜ Not started |
+| 6 | Money (snapshots via the API) | 🟡 Built 26 Oct; waiting on the migration + `API_TOKEN` (morning checklist) |
 | 7 | Winter Arc season + custom trackers | ✅ Done (21 Oct 2026) |
-| 8 | Automation (logging API) | ⬜ Not started |
+| 8 | Automation (logging API) | 🟡 Built 26 Oct; live once `API_TOKEN` is set (morning checklist) |
 | 8b | Mail nudges | ⏸ Parked (26 Oct), Yasir will re-plan |
 | 8c | Instinct link | ⏸ Parked (26 Oct), Yasir will re-plan |
 | 9 | Share + portfolio polish | ✅ Done (26 Oct 2026) |
@@ -165,4 +175,13 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - Measured before (live, signed in): page loads 190–760 ms (slow ones = Vercel starting a fresh server), view switch ~60 ms on the laptop. Fluid compute was already on; server already in Mumbai
 - Measured after (live): Log Today → check-in 14 ms (was 300–760 ms), Cancel → dashboard 10 ms, view switches 44–67 ms including two screen frames
 
-**Next up:** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.
+## Phase 8 + 6 checklist (26 Oct 2026, overnight)
+- [x] `POST /api/log`, `GET /api/summary`, `POST /api/money`, all behind env `API_TOKEN` (Bearer header, constant-time check). No token set = 503 and the app works as usual; wrong token = 401
+- [x] Migration `20261026000001_money_snapshots.sql`: owner-locked `money_snapshots` (month, income, expenses, categories, needs/wants/savings actual vs target 50/20/30, banks, cards with dues + due date, spendable, updated_at). Not run yet
+- [x] Money tile reads the latest snapshot: wallet stack (tab per bank and card, front card = available to spend), spend vs income, split bars with target markers, top 4 spends, "Updated <time>". Empty state until the first snapshot (also if the table doesn't exist yet). `/demo` stays fake, now in the same shape
+- [x] No Google service account: BUILD_PLAN, README, CLAUDE.md and `.env.example` updated (`LOG_API_TOKEN` and the Google sheet vars replaced by `API_TOKEN`)
+- [x] `docs/API.md` with example bodies (made-up amounts, no real bank names)
+- [x] Checked: snapshot checker on good and bad bodies; 503 / 401 locally; Money tile at 1440px and 375px on /demo (no sideways scroll); build passes; `npx hig-doctor .` clean
+- [ ] Full round trip (save + read through the database) not tested: needs the secret key, which only Vercel has. Check after the morning checklist
+
+**Next up (old note):** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.

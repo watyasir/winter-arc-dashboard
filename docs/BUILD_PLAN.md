@@ -64,16 +64,15 @@ Build the full dashboard **visually**, on fake data. It's the most satisfying ph
 
 ---
 
-## Phase 6: Money (read from your sheet)
+## Phase 6: Money (snapshots pushed by Claude)
 
-**Leaning (21 Oct 2026, not final; brainstorm with Claude chat before Sat 24 Oct):** no Google service account. Claude's scheduled finance task pushes a money snapshot to `POST /api/money` twice a day, using the Phase 8 API pattern. The sheet has one combined bank balance plus per-card dues, not per-bank balances (per-bank would need new sheet rows: open decision). Tracker targets get finalized in this phase too. If this holds, the setup and kickoff prompt below get replaced.
+**Decided 26 Oct 2026:** no Google service account. The app never reads the sheet. Claude's scheduled finance task reads the Personal Finance sheet and pushes a snapshot to `POST /api/money` (same `API_TOKEN` as Phase 8), e.g. twice a day. Built together with Phase 8.
 
-**You do:** a one-time Google Cloud setup so the app can *read* the Personal Finance sheet (Claude Code will guide you). Share the sheet with the service account as **Viewer only**.
+**Snapshot:** month, income, expenses, per-category spends, needs/wants/savings actual vs target (targets 50/20/30), each bank's balance, each card's unpaid dues + due date, available spendable, updated_at. Stored in the owner-locked `money_snapshots` table; the tiles read the latest one. Body format in `docs/API.md`.
 
-**Kickoff prompt:**
-> Phase 6. Read-only connection to my Personal Finance Google Sheet using a Google service account (sheet ID in env, never in code). Read the current month's income total, expense total, per-category spends, card dues and available spendable from the PERSONAL tab. Cache it for 1 hour. Tiles: this month's spend vs income, top categories, needs/wants/savings split, savings goal progress. Never write to the sheet.
+**Tiles:** wallet stack (one tab per bank and per card, front card = available spendable), spend vs income, 50/20/30 bars with target markers, top categories, "Updated <time>". Empty state until the first snapshot; `/demo` stays fake.
 
-> Before this session, ask Claude (chat) for the exact cell map of the sheet so Claude Code reads the right rows.
+**You do:** run the migration in Supabase, set `API_TOKEN` in Vercel, then point the finance task at the endpoint (Claude chat). Per-bank balances need rows in the sheet if it only has a combined balance.
 
 ---
 
@@ -90,6 +89,8 @@ Build the full dashboard **visually**, on fake data. It's the most satisfying ph
 
 **Kickoff prompt:**
 > Phase 8. Add a secure logging API (POST /api/log with a secret token) so my Claude scheduled tasks can log entries for me. Add a daily summary endpoint that returns today's missing logs and the Winter Arc status as JSON. Document both in docs/API.md.
+
+**Built 26 Oct 2026** with Phase 6: `POST /api/log`, `GET /api/summary`, `POST /api/money`, all behind env `API_TOKEN` (no token set = 503, the app still works).
 
 **After this:** Claude (chat) connects your existing scheduled tasks to it, so check-in reminders and logs from Instinct reach the dashboard without you.
 

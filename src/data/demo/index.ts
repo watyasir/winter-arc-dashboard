@@ -113,9 +113,19 @@ export const demoData: DashboardData = {
     updated: "9:52 PM",
     income: 50000,
     spent: 31800,
-    split: { needs: 48, wants: 15, savings: 37 },
-    fund: { name: "Travel fund", pct: 52, target: 40000 },
-    // Made-up accounts. Real ones come read-only from the finance sheet in Phase 6.
+    spendable: 14600,
+    split: {
+      needs: { actual: 48, target: 50 },
+      wants: { actual: 15, target: 20 },
+      savings: { actual: 37, target: 30 },
+    },
+    categories: [
+      { name: "Rent", amount: 12000 },
+      { name: "Food", amount: 7400 },
+      { name: "Travel", amount: 4100 },
+      { name: "Shopping", amount: 3300 },
+    ],
+    // Made-up accounts. Real ones arrive as snapshots through POST /api/money (Phase 6).
     accounts: [
       {
         id: "savings",
@@ -296,6 +306,6 @@ export const demoData: DashboardData = {
       "Day 23 of 90 · streak 12\nToday: gym push day, study 90 min, German 20 min\nDue: bike servicing Tue, certificate file 26 Oct\nMoney: ₹18,200 saved in Oct\nWaiting on: job document check, QuickCart callback",
   },
   footnote:
-    "Sample data for the demo. The real app fills this from your check-ins, workouts, the Personal Finance sheet and the Board.",
+    "Sample data for the demo. The real app fills this from your check-ins, workouts, money snapshots and the Board.",
   isDemo: true,
 };

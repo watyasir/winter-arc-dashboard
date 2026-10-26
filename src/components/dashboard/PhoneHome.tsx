@@ -180,9 +180,9 @@ function TodayTab({ onMoney }: { onMoney: () => void }) {
           onClick={onMoney}
           tone="sage"
           label="Money"
-          value={money ? formatRupees(money.income - money.spent) : "–"}
+          value={money ? formatRupees(money.spendable) : "–"}
           unit=""
-          note={money ? `Saved in ${money.month}` : "Connects with the money phase"}
+          note={money ? `Left to spend in ${money.month}` : "No snapshot yet"}
         />
       </section>
 

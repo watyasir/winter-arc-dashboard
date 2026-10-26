@@ -13,7 +13,8 @@ It's also a portfolio project. I'm a vibe coder: I planned, designed, directed a
 - **Workouts and body:** log sets in seconds with "Repeat last workout", see lift progress and a weekly weight chart against a goal.
 - **Tasks and goals:** a Board (To do / In progress / Waiting / Done), due-today and overdue tiles, goals linked to trackers.
 - **Shareable progress card** (`/progress`): a portrait card made for a phone screenshot, plus a private link for an accountability group.
-- **Money** (in progress): read-only from an existing Google Sheet, shown as a wallet stack.
+- **Money:** a scheduled Claude task reads an existing finance sheet and pushes a snapshot to the API; the dashboard shows it as a wallet stack (one tab per bank and card, front card = left to spend), spend vs income, a 50/20/30 split against target and the top spends.
+- **API for automations:** `POST /api/log`, `GET /api/summary` and `POST /api/money`, behind one secret token ([`docs/API.md`](docs/API.md)), so Claude's scheduled tasks can log and read without anyone opening the app.
 - **Demo mode:** `/demo` runs the whole app on made-up data, so anyone can click around.
 
 ## Screenshots
@@ -37,7 +38,7 @@ All taken from `/demo` (sample data):
 | Styling | Tailwind CSS | Every colour and font is a token in one file |
 | Database + login | Supabase (Postgres + Auth) | Real database, email sign-in, row-level security |
 | Hosting | Vercel (Mumbai region) | Auto-deploys from GitHub, runs next to the database |
-| Money data | Google Sheets (read-only) | Money already lives in a finance sheet |
+| Money data | Snapshots pushed to `POST /api/money` | Money already lives in a finance sheet; a Claude task reads it, so the app needs no Google access |
 
 The look is "Teal and grey": a grey frame, white cards and one dark teal hero card, with Apple's Human Interface Guidelines for behaviour (44px touch targets, visible focus, reduced motion respected). Full spec in [`docs/DESIGN.md`](docs/DESIGN.md).
 

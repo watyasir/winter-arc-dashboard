@@ -201,3 +201,17 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **What Yasir had to do himself:** sign in once on the new address.
 **Screenshot to take:** none.
 **Next:** Phase 6 (money).
+
+## Session 13 — 26 Oct 2026 — Phase 8 + 6: API and money snapshots (overnight, unattended)
+**Goal:** Let Claude's scheduled tasks log and push money numbers without anyone opening the app, and show money on the dashboard.
+**What I asked Claude Code to do:** "Work through the list unattended while I sleep: layout split, rename, Phase 8 + 6 with no Google service account, Phase 9, final pass. Anything that needs me goes on a morning checklist."
+**What got built:**
+- Three API endpoints behind one secret token: log tracker values, read today's summary (logged, missing, Winter Arc status), and save a money snapshot. With no token set they politely refuse and the app carries on.
+- A `money_snapshots` table, and a Money tile that reads the latest snapshot: a wallet stack with a tab per bank and card and "available to spend" on the front, spend vs income, the 50/20/30 split against target, top spends.
+- `docs/API.md` with example bodies.
+**What broke and how we fixed it:**
+- The layout split, rename and share card were already done in earlier sessions, so those steps were skipped.
+- The money table may not exist yet when the new code goes live, so the dashboard treats a failed money read as "no snapshot yet" instead of an error.
+**What Yasir had to do himself:** run the migration, make `API_TOKEN` and add it to Vercel (morning checklist).
+**Screenshot to take:** `/demo` Money tile on a phone (Money tab).
+**Next:** connect the finance task to `POST /api/money`; then tracker targets.

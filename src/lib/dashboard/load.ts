@@ -1,6 +1,7 @@
 import "server-only";
 import type { createClient } from "@/lib/supabase/server";
 import { loadBodyChecks, loadWeightGoal, loadWorkouts } from "@/lib/body-store";
+import { MONEY_COLUMNS, type MoneySnapshot } from "@/lib/money";
 import { loadGoals, loadTasks } from "@/lib/task-store";
 import { loadTrackers } from "@/lib/tracker-store";
 import { addDays, todayISO } from "@/lib/trackers";
@@ -38,7 +39,7 @@ export async function loadEntries(supabase: Supabase, from: string, to: string, 
 export async function loadDashboardData(supabase: Supabase, email: string): Promise<DashboardData | null> {
   const today = todayISO();
   const historyStart = addDays(today, -HISTORY_DAYS);
-  const [trackers, seasonResult, workouts, bodyChecks, weightGoal, tasks, goals, recent] = await Promise.all([
+  const [trackers, seasonResult, workouts, bodyChecks, weightGoal, tasks, goals, recent, moneyResult] = await Promise.all([
     loadTrackers(supabase),
     supabase.from("seasons").select("name, start_date, length_days, targets").eq("is_active", true).maybeSingle<SeasonRow>(),
     loadWorkouts(supabase, { since: addDays(today, -BODY_WEEKS * 7) }),
@@ -48,6 +49,8 @@ export async function loadDashboardData(supabase: Supabase, email: string): Prom
     loadTasks(supabase),
     loadGoals(supabase),
     loadEntries(supabase, historyStart, today),
+    // Not fatal: before the money migration runs (or with no snapshot yet) the tile shows its empty state.
+    supabase.from("money_snapshots").select(MONEY_COLUMNS).order("updated_at", { ascending: false }).limit(1).maybeSingle<MoneySnapshot>(),
   ]);
   if (!trackers || seasonResult.error || !workouts || !bodyChecks || weightGoal === undefined || !tasks || !goals || !recent) return null;
   const season = seasonResult.data;
@@ -71,6 +74,7 @@ export async function loadDashboardData(supabase: Supabase, email: string): Prom
     tasks,
     goals: goals.goals,
     goalTracked: goals.tracked,
+    money: moneyResult.error ? null : moneyResult.data,
     ownerInitial: email.trim().charAt(0).toUpperCase() || "Me",
   });
 }
