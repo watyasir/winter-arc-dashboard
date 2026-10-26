@@ -233,3 +233,21 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **What Yasir had to do himself:** nothing.
 **Screenshot to take:** none (nothing visible changed).
 **Next:** tracker targets for the season.
+
+## Session 15 — 26 Oct 2026 — Tasks API + Board on real tasks
+**Goal:** Let Claude keep Yasir's task Board in sync, and make the Board quick to use by hand.
+**What I asked Claude Code to do:** "Tasks API (upsert by external_id, list, delete), Board with 4 columns, drag, tap to edit, owner/area/due/note on each card, latest 20 done, and a pinned top Home task on Overview."
+**What got built:**
+- A migration adding a note, an importance order, an `external_id` and "last changed by" to tasks. Tasks made in the app get an `external_id` too, so Claude can update those as well.
+- `POST/GET/DELETE /api/tasks` behind the same token as the other endpoints, documented with made-up examples in `docs/API.md`.
+- The Board: drag cards between columns on a laptop, tap any card to edit it in one sheet (a bottom sheet on the phone, where moving is done by picking the column). Notes show on the card. Done shows the latest 20 with "Show all".
+- A slim "Top priority" card at the top of Overview: the open Home task with the highest order.
+**What broke and how we fixed it:**
+- Another Claude session was cleaning up the same folder at the same time. This session first added only new files (the API), then waited for that session's commit before touching the Board.
+- The pre-commit privacy check read the migration's date number as a card number; the comment was reworded.
+- hig-doctor flagged `autoFocus` on the sheet's title box; removed it, since a modal sheet already puts the cursor on its first field.
+- The live Board keeps loading tasks before the migration runs (it falls back to the old columns), so nothing breaks overnight.
+**What Yasir had to do himself:** run the tasks migration in Supabase (morning checklist).
+**Screenshot to take:** `/demo` Board with the edit sheet open, and the phone Today tab with the Top priority card.
+**Next:** improvements only.
+

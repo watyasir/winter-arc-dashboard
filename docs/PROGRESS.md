@@ -15,6 +15,9 @@
 | 8c | Instinct link | ❌ Dropped (27 Oct 2026), code deleted |
 | 9 | Share + portfolio polish | ✅ Done (26 Oct 2026) |
 
+## Morning checklist (for Yasir)
+- [ ] Run the tasks migration in Supabase: open the SQL editor, paste `supabase/migrations/20261027000002_tasks_api.sql`, Run. Until then the Board shows tasks but can't save adds, edits or moves, and `/api/tasks` answers 500.
+
 ## Decisions & schedule (21 Oct 2026)
 
 **Decisions**
@@ -199,3 +202,14 @@
 5. Money goes live after you run one migration and add `API_TOKEN` (morning checklist at the top).
 
 **Next up (old note):** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.
+
+## Tasks API + Board (26 Oct 2026, night)
+- [x] Migration `20261027000002_tasks_api.sql`: tasks get `note`, `sort_order`, `external_id` (unique per user; app-made tasks get `app-…` automatically), `updated_by` (Yasir/Claude). Status, owner, area, due date, updated_at were already there. **Not run yet** (morning checklist)
+- [x] `POST /api/tasks` (one or many, upsert by external_id; new tasks need a title, known ones change only what's sent), `GET /api/tasks` (`?status=todo,doing`), `DELETE /api/tasks/:external_id`, same `API_TOKEN`. API says owner `Yasir`, the database keeps `Me`. Documented in `docs/API.md`
+- [x] Board: To do · In progress · Waiting on others · Done. Cards show owner chip, area, due date (yellow within 3 days, coral overdue) and note; most important first. Drag between columns on the laptop; tap a card to edit (title, note, area, due, who's on it, column, delete); "Add task" opens the same sheet. Done shows the latest 20 with "Show all"
+- [x] Overview's In progress tile and the phone Board tab use the same tasks; `/demo` stays on fake tasks
+- [x] Top priority pin: the open "Home" task with the highest order shows as a slim card at the top of Overview (laptop and phone), with its due date; tap opens the Board
+- [x] Checked on `/demo` at 1440px and 375px: drag, edit, add, pin; no sideways scroll, no phone targets under 44px, no console errors. `npx hig-doctor .` clean, knip clean, build passes
+- Not checked live: the API against the real database (needs the migration first)
+
+Build complete. From here: improvements only.
