@@ -113,7 +113,7 @@ export function BodyCheckForm({
         </label>
       </Group>
 
-      <Link href={cancelHref} className="self-center text-[15px]">
+      <Link href={cancelHref} className="flex min-h-11 items-center self-center text-[15px]">
         Back to dashboard
       </Link>
       {footer}
