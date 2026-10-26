@@ -1,16 +1,10 @@
 # Progress
 
-## Morning checklist for Yasir (26 Oct 2026)
+## Left for Yasir (26 Oct 2026)
 
-Steps 1, 2 and 4 of last night's list were already done and live, so nothing is needed for the rename or the share card (`SHARE_TOKEN` is already set). Only the new API + Money needs you:
+Migration run, `API_TOKEN` set in Vercel, live API tested. One thing left:
 
-1. **Run the money migration.** Supabase → SQL Editor → paste all of `supabase/migrations/20261026000001_money_snapshots.sql` → Run. (Or ask a Claude session to do it in your Chrome.)
-2. **Make the API token.** In Terminal: `openssl rand -hex 32` and copy the result.
-3. **Add it to Vercel.** vercel.com/claude-0d67/yasiros → Settings → Environment Variables → name `API_TOKEN`, value = the token, Production → Save → Deployments → Redeploy the latest.
-4. **Check it.** Ask Claude to call `GET /api/summary` with the token (should answer `ok: true` with today's missing logs).
-5. **Point the finance task at it.** In Claude chat, give the finance task the token and `docs/API.md` → `POST /api/money`. The Money tile fills on the first snapshot. If the sheet only has one combined bank balance, add per-bank rows to it (or send one bank).
-
-One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.md`.
+1. **Point the finance task at the API.** In Claude chat, give the finance task the token (in `.env.local` as `API_TOKEN`, or make a new one and update Vercel) and the `POST /api/money` section of `docs/API.md`. The Money tile fills on the first snapshot. If the sheet only has one combined bank balance, add per-bank rows to it (or send one bank).
 
 | Phase | Name | Status |
 |---|---|---|
@@ -20,9 +14,9 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 | 3 | Real dashboard | ✅ Done (20 Oct 2026) |
 | 4 | Workouts + body | ✅ Done (21 Oct 2026) |
 | 5 | Tasks + goals | ✅ Done (21 Oct 2026) |
-| 6 | Money (snapshots via the API) | 🟡 Built 26 Oct; waiting on the migration + `API_TOKEN` (morning checklist) |
+| 6 | Money (snapshots via the API) | 🟡 Live 26 Oct; waiting on the first snapshot from the finance task |
 | 7 | Winter Arc season + custom trackers | ✅ Done (21 Oct 2026) |
-| 8 | Automation (logging API) | 🟡 Built 26 Oct; live once `API_TOKEN` is set (morning checklist) |
+| 8 | Automation (logging API) | ✅ Done (26 Oct 2026) |
 | 8b | Mail nudges | ⏸ Parked (26 Oct), Yasir will re-plan |
 | 8c | Instinct link | ⏸ Parked (26 Oct), Yasir will re-plan |
 | 9 | Share + portfolio polish | ✅ Done (26 Oct 2026) |
@@ -182,7 +176,11 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] No Google service account: BUILD_PLAN, README, CLAUDE.md and `.env.example` updated (`LOG_API_TOKEN` and the Google sheet vars replaced by `API_TOKEN`)
 - [x] `docs/API.md` with example bodies (made-up amounts, no real bank names)
 - [x] Checked: snapshot checker on good and bad bodies; 503 / 401 locally; Money tile at 1440px and 375px on /demo (no sideways scroll); build passes; `npx hig-doctor .` clean
-- [ ] Full round trip (save + read through the database) not tested: needs the secret key, which only Vercel has. Check after the morning checklist
+- [x] Migration run in Supabase (26 Oct, via the SQL editor); snapshot insert dry-run in a rolled-back transaction: accepted, row-level security on, 0 rows left
+- [x] `API_TOKEN` in Vercel (Production), redeployed. Live tests: summary 200 with real data; wrong/missing token 401; unknown tracker, bad value, future date, bad money body all 400; a real `/api/log` save (today's sleep value written back unchanged) 200
+- [x] Fixed: `/api/log` said `"ok": true` when nothing was saved; now `"ok": false` with the skipped list
+- [x] Signed-in pages at 375px (inside a 375px frame on the live site): no sideways scroll; "Back to dashboard" on workout and body pages raised to 44px
+- [ ] First real money snapshot (needs the finance task pointed at `POST /api/money`)
 
 ## Final pass (26 Oct 2026, overnight)
 - [x] New address `/winter-arc` (and `/demo/winter-arc`) opens the Winter Arc page; switching to it keeps `#winter-arc` in the address so a refresh stays there
