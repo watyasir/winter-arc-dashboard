@@ -1,11 +1,5 @@
 # Progress
 
-## Left for Yasir (26 Oct 2026)
-
-Migration run, `API_TOKEN` set in Vercel, live API tested. One thing left:
-
-1. **Point the finance task at the API.** In Claude chat, give the finance task the token (in `.env.local` as `API_TOKEN`, or make a new one and update Vercel) and the `POST /api/money` section of `docs/API.md`. The Money tile fills on the first snapshot. If the sheet only has one combined bank balance, add per-bank rows to it (or send one bank).
-
 | Phase | Name | Status |
 |---|---|---|
 | 0 | Setup: scaffold, git, GitHub, Vercel | ✅ Done (19 Oct 2026) |
@@ -14,7 +8,7 @@ Migration run, `API_TOKEN` set in Vercel, live API tested. One thing left:
 | 3 | Real dashboard | ✅ Done (20 Oct 2026) |
 | 4 | Workouts + body | ✅ Done (21 Oct 2026) |
 | 5 | Tasks + goals | ✅ Done (21 Oct 2026) |
-| 6 | Money (snapshots via the API) | 🟡 Live 26 Oct; waiting on the first snapshot from the finance task |
+| 6 | Money (snapshots via the API) | ✅ Done (26 Oct 2026) |
 | 7 | Winter Arc season + custom trackers | ✅ Done (21 Oct 2026) |
 | 8 | Automation (logging API) | ✅ Done (26 Oct 2026) |
 | 8b | Mail nudges | ⏸ Parked (26 Oct), Yasir will re-plan |
@@ -182,7 +176,8 @@ Migration run, `API_TOKEN` set in Vercel, live API tested. One thing left:
 - [x] Signed-in pages at 375px (inside a 375px frame on the live site): no sideways scroll; "Back to dashboard" on workout and body pages raised to 44px
 - [x] Finance task connected (26 Oct): its first tries were refused (one 401 wrong token, one 400 bad field; Vercel logs didn't say which field)
 - [x] `/api/money` now accepts amounts as text ("₹12,000", "48%"), names the exact bad field and list position, and logs the reason (no amounts) in Vercel
-- [ ] First real money snapshot: the finance task needs to send again
+- [x] First real snapshot saved 26 Oct, 10:37 PM (201); Money tile checked live at laptop and phone size. The finance task now sends one at 8:45 AM and 8:45 PM
+- [x] Fixed: a long card name pushed its amount onto a hidden second line; names now shorten with "…" and amounts always show
 
 ## Final pass (26 Oct 2026, overnight)
 - [x] New address `/winter-arc` (and `/demo/winter-arc`) opens the Winter Arc page; switching to it keeps `#winter-arc` in the address so a refresh stays there

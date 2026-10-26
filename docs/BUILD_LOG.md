@@ -216,4 +216,5 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 - Follow-up: live tests found `/api/log` saying "ok" when nothing saved (fixed); signed-in phone check found two small "Back to dashboard" links (raised to 44px).
 **Screenshot to take:** `/demo` Money tile on a phone (Money tab).
 - Final pass: `/winter-arc` now has its own address (it opens the Winter Arc view); every page checked at laptop and phone width.
-**Next:** connect the finance task to `POST /api/money`; then tracker targets.
+- Hookup: the finance task's first tries were refused (wrong token, then one field that didn't fit). The API now accepts amounts written as text ("₹12,000"), names the exact bad field, and logs why. The next try saved, and the Money tile showed real numbers.
+**Next:** tracker targets for the season.
