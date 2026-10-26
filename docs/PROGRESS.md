@@ -180,7 +180,9 @@ Migration run, `API_TOKEN` set in Vercel, live API tested. One thing left:
 - [x] `API_TOKEN` in Vercel (Production), redeployed. Live tests: summary 200 with real data; wrong/missing token 401; unknown tracker, bad value, future date, bad money body all 400; a real `/api/log` save (today's sleep value written back unchanged) 200
 - [x] Fixed: `/api/log` said `"ok": true` when nothing was saved; now `"ok": false` with the skipped list
 - [x] Signed-in pages at 375px (inside a 375px frame on the live site): no sideways scroll; "Back to dashboard" on workout and body pages raised to 44px
-- [ ] First real money snapshot (needs the finance task pointed at `POST /api/money`)
+- [x] Finance task connected (26 Oct): its first tries were refused (one 401 wrong token, one 400 bad field; Vercel logs didn't say which field)
+- [x] `/api/money` now accepts amounts as text ("₹12,000", "48%"), names the exact bad field and list position, and logs the reason (no amounts) in Vercel
+- [ ] First real money snapshot: the finance task needs to send again
 
 ## Final pass (26 Oct 2026, overnight)
 - [x] New address `/winter-arc` (and `/demo/winter-arc`) opens the Winter Arc page; switching to it keeps `#winter-arc` in the address so a refresh stays there
