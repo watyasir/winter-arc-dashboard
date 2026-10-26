@@ -24,7 +24,7 @@ One phase = one Claude Code session. Each phase ends with something that works a
 Build the full dashboard **visually**, on fake data. It's the most satisfying phase and your first portfolio screenshot.
 
 **Kickoff prompt:**
-> Phase 1. Read docs/DESIGN.md and the files in docs/design-reference/. Build the design tokens (v6 "Teal and grey", see DESIGN.md §2b) and the full dashboard at /demo with fake data from src/data/demo: sidebar with rainbow folders and trackers tree, header card with dashed rule, Overview (season strip, stats with sparklines, Today, Inbox preview, Money, Weight, Goals, Habits, In progress), plus Inbox, Board and Instinct views switched from the sidebar, all on fake data. Match the reference files exactly. Show me how to view it.
+> Phase 1. Read docs/DESIGN.md and the files in docs/design-reference/. Build the design tokens (v6 "Teal and grey", see DESIGN.md §2b) and the full dashboard at /demo with fake data from src/data/demo: sidebar with rainbow folders and trackers tree, header card with dashed rule, Overview (season strip, stats with sparklines, Today, Money, Weight, Goals, Habits, In progress), plus the Board view switched from the sidebar, all on fake data. Match the reference files exactly. Show me how to view it.
 
 **Done when:** `/demo` looks finished on phone and laptop.
 
@@ -92,35 +92,17 @@ Build the full dashboard **visually**, on fake data. It's the most satisfying ph
 
 **Built 26 Oct 2026** with Phase 6: `POST /api/log`, `GET /api/summary`, `POST /api/money`, all behind env `API_TOKEN` (no token set = 503, the app still works).
 
-**After this:** Claude (chat) connects your existing scheduled tasks to it, so check-in reminders and logs from Instinct reach the dashboard without you.
+**After this:** Claude (chat) connects your existing scheduled tasks to it, so check-in reminders and logs reach the dashboard without you.
 
 ---
 
-## Phase 8b — PARKED (26 Oct 2026)
+## Phases 8b and 8c — DROPPED (27 Oct 2026)
 
-Scrapped for now by Yasir; he will plan a better approach later. Do not build. Original notes kept below for reference.
-
-Original title: Mail nudges (changed 21 Oct 2026, replaces the full Gmail inbox)
-
-Yasir reads and replies in Gmail itself. The dashboard only shows a short list of emails that need his attention. No Google OAuth, no weekly re-login, no Google Cloud setup: Claude (which already has Gmail access) scans the inbox on a schedule and posts nudges through the Phase 8 logging API.
-
-**Kickoff prompt:**
-> Phase 8b. Replace the Inbox view with "Mail nudges": a mail_nudges table (sender, subject, reason, priority, gmail_thread_id, received_at, status open/done/snoozed) and POST /api/nudges using the same secret token as /api/log. Overview tile + Inbox view list open nudges; each row has "Open in Gmail" (https://mail.google.com/mail/u/0/#inbox/<thread id>), "Done" and "Snooze 1 day". Never store email bodies. Remove the old Gmail OAuth plan and the 7-day sign-out tie to Gmail from the docs. Document the endpoint in docs/API.md.
-
-**After this:** Claude (chat) sets up a scheduled task that checks Gmail and posts nudges (needs reply, bills/dues, bank or college action items).
-
-## Phase 8c — PARKED (26 Oct 2026)
-
-Scrapped for now by Yasir; he will plan a better approach later. Do not build. Original notes kept below for reference.
-
-Original title: Instinct link
-
-**Kickoff prompt:**
-> Phase 8c. Add the Instinct view from the design: instinct_requests table and API, the header status pill (waiting → answered → disappears), the "What Instinct can see" switches, a read-only /instinct page protected by a secret token that shows the current picture as plain text for only the switched-on categories, and a 7:30 AM IST digest email to Instinct.
+Mail nudges (8b) and the Instinct link (8c) were dropped for good. Their code, demo data and docs were deleted; a migration drops their tables if they exist. Don't rebuild them.
 
 ## Phase 9: Share + portfolio polish
 
-**Scheduled (21 Oct 2026):** Fri 23 Oct night, after 8, 8b and 8c. Build it on `/demo` data; drop it to a later night if it's past 1:30 AM.
+**Scheduled (21 Oct 2026):** Fri 23 Oct night, after 8. Build it on `/demo` data; drop it to a later night if it's past 1:30 AM.
 
 **Kickoff prompt:**
 > Phase 9. Add a "progress card" page that shows my Winter Arc stats in a shareable layout (for my accountability group). Then write a strong README: what it is, screenshots from /demo, stack, how it grows, and a short "how I built it with AI" section drawn from docs/BUILD_LOG.md.

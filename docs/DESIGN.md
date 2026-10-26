@@ -33,7 +33,7 @@ A light "paper on a desk" feel. The window background is the Latte **crust** gre
 | `green` | `#40A02B` | `#2E7A1E` | Done / on target / saved money |
 | `peach` | `#FE640B` | `#B8460B` | Due soon / warning / missed day outline |
 | `red` | `#D20F39` | `#B00D30` | Overdue / errors |
-| `mauve` | `#8839EF` | `#7029D0` | Winter Arc (season, today marker, Instinct pill) |
+| `mauve` | `#8839EF` | `#7029D0` | Winter Arc (season, today marker) |
 | `pink` | `#EC83D0` | `#A3218E` | Claude (owner chips) |
 | `teal` | `#179299` | (`#179299` ok ≥18px) | Move-out fund, trackers tree |
 | `yellow` | `#E49320` | not for text | Waiting mailbox dot, Board folder |
@@ -43,7 +43,7 @@ A light "paper on a desk" feel. The window background is the Latte **crust** gre
 **Rule:** the bright fills fail contrast as small text on `base`. Small coloured text always uses the text-safe variant. The fills are for dots, bars, rings, icons and chips with a tinted background.
 
 ### Rainbow folder order (navigation + section bars)
-Overview `red` · Inbox `peach` · Board `yellow` · Instinct `green` · Trackers tree `teal` · then `sky`, `sapphire #209FB5`, `blue`, `lavender`, `mauve` for future sections. Section heading bars: Today red, Inbox peach, Money green, Weight sky, Goals lavender, Habits teal, In progress yellow, Ask Instinct green. These colours are for **navigation identity only**. They don't carry status meaning.
+Overview `red` · Board `yellow` · Trackers tree `teal` · then `sky`, `sapphire #209FB5`, `blue`, `lavender`, `mauve` for future sections. Section heading bars: Today red, Money green, Weight sky, Goals lavender, Habits teal, In progress yellow. These colours are for **navigation identity only**. They don't carry status meaning.
 
 ### Type
 - Font: system stack `-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif` (SF on Yasir's Mac, like Obsidian's default). Numbers: `ui-rounded, "SF Pro Rounded", …` bold. Never bundle SF font files.
@@ -82,7 +82,7 @@ Component greys are pure neutral (R = G = B). The app background is a cool grey 
 | `sage` | `#6E9C93` | `#3D6E64` (5.8) | Done / on target / saved money |
 | `yellow` | `#F2C230` | `#8A6200` (5.5) | Due soon / warning / missed-day outline. Dark text on it, never white |
 | `coral` | `#E0684B` | `#B4432A` (5.6) | Overdue / errors / money out |
-| `arc` | `#155A63` | `#155A63` (7.9) | Winter Arc identity (logo tile, Instinct pill) |
+| `arc` | `#155A63` | `#155A63` (7.9) | Winter Arc identity (logo tile, Winter Arc nav tile) |
 | `cyan` | `#4FB3BF` | `#1A6A70` (6.3) | Claude (owner chips) |
 | others | `#3D8A80`, `#6FA8B6`, `#8FB3AA`, `#4F8F9A` | not for text | Section bars, extra series |
 Chips: fill at 12–16% alpha with the text-safe colour, fully rounded (999px), like the reference's "Urgent / Non urgent" pills.
@@ -104,19 +104,18 @@ Show bank accounts and cards as a stack of coloured tabs above a white front car
 ## 3. Layout (laptop and 24" monitor use the same fluid layout)
 ```
 ┌ crust frame ──────────────────────────────────────────────────────────┐
-│ ┌sidebar 236px┐ ┌ header card: title, subtitle | Instinct pill, search, Log Today ┐
-│ │ logo        │ └─────────────── dashed rule ───────────────────────────┘
-│ │ ▣ Overview  │  [Overview view]
-│ │ ▣ Inbox   4 │  season card: big "23 of 90" + 90-cell strip (30 per row)
-│ │ ▣ Board  17 │  stats row (5 cards, sparkline each)
-│ │ ▣ Instinct  │  Today · Inbox preview · Money
-│ │ ⌄ Trackers  │  Weight chart (2/3) · Goals (1/3)
-│ │ │ ☑ Workout │  Habits grid (2/3) · In progress (1/3)
-│ │ │ ☐ Water   │
+│ ┌sidebar 236px──┐ ┌ header card: title, subtitle | Day X/90 chip, Log Today ┐
+│ │ logo          │ └─────────────── dashed rule ───────────────────────────┘
+│ │ ▣ Overview    │  [Overview view]
+│ │ ▣ Winter Arc  │  Today · Tasks · Money
+│ │ ▣ Board    17 │  Body · Workouts · Goals
+│ │ ⌄ Trackers    │  Habits grid · In progress
+│ │ │ ☑ Workout   │
+│ │ │ ☐ Water     │
 │ └─────────────┘
 ```
 - Below 980px the sidebar becomes full width on top. Below 640px cards stack into one column.
-- Views: **Overview**, **Inbox** (mailboxes | list | reading pane), **Board** (4 columns on `mantle`), **Instinct** (ask box, recent exchanges | what Instinct can see, morning digest). Clicking the sidebar switches views; the selected item gets a `crust` background and bold text.
+- Views: **Overview**, **Winter Arc** (v6.1), **Board** (4 columns on `mantle`). Clicking the sidebar switches views; the selected item gets a `crust` background and bold text.
 
 ## 4. Components (match the reference files)
 - **Sidebar item:** 34px row, 24px rounded-square icon tile in its rainbow colour with a white stroke icon, label, count on the right in `subtext1`.
@@ -124,15 +123,13 @@ Show bank accounts and cards as a stack of coloured tabs above a white front car
 - **Season strip:** 90 cells, `grid-template-columns: repeat(30, 1fr)`, gap 4px, square cells, radius 5px. States: all targets `green`, most targets `greenLight`, missed = transparent with 1.5px `peach` outline, today `mauve`, upcoming `crust`. Each cell has a `title` / accessible label ("Day 8: missed"). Legend underneath uses the same shapes and words, so colour isn't the only signal.
 - **Stat card:** coloured dot + label, big rounded number + unit, 24px sparkline in the dot colour, one-line note.
 - **Today checklist:** whole row is a button that toggles; 22px rounded-square checkbox; done rows turn `subtext1`.
-- **Inbox:** unread = blue dot + bold sender/subject; label chips on `fill`; "Logged by Claude" chip on green tint; reading pane ends with a mauve-tinted "Claude" note box.
 - **Board card:** `base` with 1px `surface0` border, radius 10, title, owner chip (Me = blue tint/`#1F5BD8`, Claude = pink tint/`#A3218E`, Both = fill/`subtext1`), area, due date (peach text-safe when due within 3 days, red when overdue).
-- **Instinct status pill (header):** shows only while an Instinct request is waiting. Mauve avatar, "Asking Instinct · m:ss", indeterminate mauve bar (static at 50% under reduced motion). On reply: green tick + "Instinct replied in X" for ~3.5 s, then it disappears. `role="status" aria-live="polite"`.
-- **Buttons:** primary = blue fill, white text, radius 8, 36px tall (only one per view: "Log Today" / "Send to Instinct"). Plain = `fill`.
-- **Switches** (What Instinct can see): 46×28, green when on, inside list rows only.
+- **Buttons:** primary = blue fill, white text, radius 8, 36px tall (only one per view, e.g. "Log Today"). Plain = `fill`.
+- **Switches** (check-in): 46×28, green when on, inside list rows only.
 - **Charts:** weight = line + point marks in blue, light blue area, dashed green goal line labelled "Goal 65 kg", Y labels on the right, summary line above the chart ("▲ 2.1 kg since 23 Aug").
 
 ## 5. Interaction and motion
-- Only motion: the Instinct pill's indeterminate bar, checkbox state change, view switch (instant, no slide). Respect `prefers-reduced-motion`.
+- Only motion: checkbox state change, view switch (instant, no slide). Respect `prefers-reduced-motion`.
 - Visible focus ring: 2px `#1F5BD8`, offset 2px, on every button, link and input.
 - Hit targets ≥ 34px on desktop, 44px on phone.
 
@@ -140,9 +137,10 @@ Show bank accounts and cards as a stack of coloured tabs above a white front car
 Same tokens: `crust` background, `base` cards, large title "Today", Winter Arc card, 2×2 stats, Focus list, Money, floating tab bar (Today, Arc, Board, Money) plus a round blue "Log today" button that opens the check-in sheet. Check-in sheet: Sleep and Water steppers, three switches, Study and Mood segmented controls, blue "Done" that turns green "Saved ✓".
 
 ## 7. Copy rules
-Sentence case, plain verbs, no ALL-CAPS labels. Buttons say what happens ("Send to Instinct", "Log Today", "Open Inbox"). Empty states give the next step ("No workouts yet. Log your first one.").
+Sentence case, plain verbs, no ALL-CAPS labels. Buttons say what happens ("Log Today", "Open Board"). Empty states give the next step ("No workouts yet. Log your first one.").
 
 ## 8. Changelog (Claude Code: apply the latest entry if the code doesn't match)
+- **v6.2, 27 Oct 2026:** Inbox (mail nudges) and Instinct (view, status pill, "what Instinct can see", digest) dropped for good and deleted from the code. Views are Overview, Winter Arc and Board. The older mockups (`Main.dc.html`, `Phone.dc.html`) still show them; ignore those parts.
 - **v6.1, 26 Oct 2026:** layout split. Overview = whole life (Today, Tasks, Money, Body, Workouts, Goals, Habits, In progress) with Winter Arc reduced to a dark "Day X/90 →" chip in the header. New sidebar page **Winter Arc**: dark teal hero with the 90-day strip, targets this week, streaks per tracker, week-by-week % chart, Share card button. Sidebar: Overview, Winter Arc, Board, Trackers (Inbox and Instinct hidden, parked). Mockups: `docs/design-reference/LifeOverview.dc.html`, `WinterArcPage.dc.html`. Same v6 tokens. **Phone (under 640px):** tab bar stays Today · Arc · Board · Money + round Log button. *Today tab* = the life Overview stacked in one column: greeting + "Day X/90 →" chip, Today checklist, Tasks (due + overdue), a 2×2 of Body / Workouts / Goals / Money summary, Habits grid (last 2 weeks so it fits), In progress. *Arc tab* = the Winter Arc page stacked: hero card (big day number, streak/best/targets row, 90-day strip at 15 cells per row), Targets this week, Streaks as a 2-column grid, Week-by-week chart scrollable sideways if it doesn't fit, Share card button. 44px targets, no horizontal page scroll.
 - **v6, 20 Oct 2026:** "Teal and grey" per §2b. Replaces the Catppuccin accents and rainbow folders with deep teal `#0F4C4A` + sage + yellow + coral; pill-shaped nav, buttons, segments and chips; Winter Arc season card becomes the dark teal gradient hero; Money tile gets the wallet stack of account tabs. Mockups updated. Supersedes v5.
 - **v5, 20 Oct 2026:** "Grey gradient". Neutrals switched to Zendesk Garden greys per §2b; soft grey gradients on frame, sidebar, header, cards, board columns and plain buttons; 1px `#D8DCDE` card borders; text `#293239`, secondary `#5C6970`. Accents, layout and components unchanged. No dark mode.

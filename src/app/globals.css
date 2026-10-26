@@ -16,7 +16,6 @@
 
   /* Neutrals: pure greys, no colour cast */
   --color-base: #ffffff;
-  --color-mantle: #f5f5f5;
   --color-column: #f3f3f3;
   --color-crust: #ededed;
   --color-sep: #e5e5e5;
@@ -33,18 +32,15 @@
   --color-brand-hover: #0a3533;
   --color-sage: #6e9c93; /* done / on target / saved */
   --color-sage-text: #3d6e64;
-  --color-sage-light: #b9d3cd;
   --color-yellow: #f2c230; /* due soon / warning */
   --color-yellow-text: #8a6200;
   --color-coral: #e0684b; /* overdue / errors / money out */
   --color-coral-text: #b4432a;
   --color-arc: #155a63; /* Winter Arc identity */
-  --color-arc-text: #155a63;
   --color-cyan: #4fb3bf; /* Claude */
   --color-cyan-text: #1a6a70;
 
   /* Teal ramp: nav icon tiles, section bars, extra series. Not for text. */
-  --color-ramp2: #2d6e6a;
   --color-ramp3: #4f8780;
   --color-pine: #3d8a80;
   --color-mist: #6fa8b6;

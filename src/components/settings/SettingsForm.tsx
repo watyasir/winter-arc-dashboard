@@ -14,7 +14,7 @@ import { AREA_ORDER, formatDayLabel, type Tracker, type TrackerArea, type Tracke
   The one primary button is the season's.
 */
 
-export interface SettingsActions {
+interface SettingsActions {
   saveSeason: (s: SeasonInput) => Promise<SaveResult>;
   addTracker: (t: TrackerInput) => Promise<SaveResult>;
   resetTestData: () => Promise<SaveResult>;

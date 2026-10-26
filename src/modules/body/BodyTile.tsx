@@ -1,11 +1,12 @@
 "use client";
 
 import { Card } from "@/components/Card";
+import { Chip } from "@/components/Chip";
 import { CardHeader, SectionHeading } from "@/components/SectionHeading";
 import { EmptyNote } from "@/components/EmptyNote";
+import { PillLink } from "@/components/PillLink";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 import { kg } from "@/lib/body";
-import { CheckFooter } from "@/modules/weight/WeightTile";
 
 /** Life Overview's Body tile (v6.1): latest weight, change, a small trend line against the goal, the weekly check. */
 export function BodyTile({ className = "flex-[1_1_280px]" }: { className?: string }) {
@@ -57,5 +58,19 @@ export function BodyTile({ className = "flex-[1_1_280px]" }: { className?: strin
       </svg>
       <CheckFooter />
     </Card>
+  );
+}
+
+/** Last check date (with a "Due" chip after 7 days) and the link to the weekly body check. */
+function CheckFooter() {
+  const { bodyCheck, bodyHref } = useDashboard().data;
+  return (
+    <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-1">
+      <span className="flex items-center gap-2 text-xs text-sub">
+        {bodyCheck.lastLabel ? `Last body check · ${bodyCheck.lastLabel}` : "No body check yet"}
+        {bodyCheck.due && bodyCheck.lastLabel && <Chip tone="yellow">Due</Chip>}
+      </span>
+      <PillLink href={bodyHref}>Weekly body check</PillLink>
+    </div>
   );
 }

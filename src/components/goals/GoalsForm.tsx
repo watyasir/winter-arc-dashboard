@@ -22,14 +22,14 @@ export interface GoalRow {
   trackerName: string | null;
 }
 
-export interface GoalActions {
+interface GoalActions {
   add: (g: NewGoal) => Promise<SaveResult>;
   update: (id: string, current: number) => Promise<SaveResult>;
   remove: (id: string) => Promise<SaveResult>;
 }
 
 /** Trackers whose totals make sense as goal progress (not 1–5 scales). */
-export type LinkableTracker = Pick<Tracker, "id" | "name" | "type" | "unit">;
+type LinkableTracker = Pick<Tracker, "id" | "name" | "type" | "unit">;
 
 const unitFor = (t: LinkableTracker) => (t.type === "duration_minutes" ? "hr" : t.type === "checkbox" ? "days" : (t.unit ?? ""));
 

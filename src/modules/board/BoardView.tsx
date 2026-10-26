@@ -11,7 +11,7 @@ import { OwnerChip } from "./OwnerChip";
 
 const columnTone: Record<TaskStatus, Tone> = { todo: "neutral", doing: "brand", waiting: "yellow", done: "sage" };
 
-/** Four columns on mantle. Each card has a column picker to move it; "Add task" adds to that column. */
+/** Four columns. Each card has a column picker to move it; "Add task" adds to that column. */
 export function BoardView() {
   const { tasks, taskError } = useDashboard();
   return (

@@ -7,7 +7,7 @@ import { shortDate, todayISO } from "./trackers";
   Matches supabase/migrations/20261026000001_money_snapshots.sql.
 */
 
-export type SplitKey = "needs" | "wants" | "savings";
+type SplitKey = "needs" | "wants" | "savings";
 export type Split = Record<SplitKey, { actual: number; target: number }>;
 
 export interface MoneySnapshot {
@@ -29,7 +29,7 @@ export interface MoneySnapshot {
 export const MONEY_COLUMNS = "month, income, expenses, categories, split, banks, cards, spendable, updated_at";
 
 /** Needs 50 / wants 20 / savings 30, unless the snapshot says otherwise. */
-export const DEFAULT_SPLIT_TARGETS: Record<SplitKey, number> = { needs: 50, wants: 20, savings: 30 };
+const DEFAULT_SPLIT_TARGETS: Record<SplitKey, number> = { needs: 50, wants: 20, savings: 30 };
 
 const SPLIT_KEYS: SplitKey[] = ["needs", "wants", "savings"];
 const MAX_AMOUNT = 1e10;
@@ -148,7 +148,7 @@ export function parseMoneySnapshot(body: unknown, now = new Date()): Parsed {
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 /** "9:52 PM" today, "25 Oct, 9:52 PM" on other days (India time). */
-export function updatedLabel(iso: string, now = new Date()): string {
+function updatedLabel(iso: string, now = new Date()): string {
   const at = new Date(iso);
   const time = new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", hour: "numeric", minute: "2-digit", hour12: true })
     .format(at)

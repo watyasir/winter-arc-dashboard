@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef } from "react";
 
-/** Blue text link-style button ("Open Inbox", "Open Board"). */
+/** Blue text link-style button ("Open Board"). */
 export function TextButton({ className = "", ...props }: ComponentPropsWithoutRef<"button">) {
   return (
     <button

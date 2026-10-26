@@ -12,9 +12,8 @@ import { WorkoutsTile } from "./workouts/WorkoutsTile";
   Every Overview tile is registered here. Adding a module = adding one entry.
   Tiles in the same row sit side by side and wrap (each tile sets its own flex width).
   v6.1: the Overview is the whole life; Winter Arc has its own page (src/modules/arc).
-  Not on the Overview now, code kept: season, stats, weight chart, lifts (and the parked Inbox preview).
 */
-export interface TileDef {
+interface TileDef {
   id: string;
   row: number;
   Component: ComponentType;

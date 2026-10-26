@@ -8,22 +8,9 @@ export type { Owner, Task };
   (src/data/demo); from Phase 3 the real dashboard fills it from Supabase.
 */
 
-export type ViewId = "overview" | "arc" | "inbox" | "board" | "instinct";
+export type ViewId = "overview" | "arc" | "board";
 
 export type SeasonDay = "all" | "most" | "missed" | "today" | "upcoming";
-
-export interface Mail {
-  id: string;
-  from: string;
-  subject: string;
-  time: string;
-  label: string;
-  box: string;
-  unread: boolean;
-  loggedByClaude?: boolean;
-  body: string;
-  claudeNote: string;
-}
 
 /** One bank account or card in the Money wallet stack. Card balances are negative (amount owed). */
 export interface Account {
@@ -102,7 +89,6 @@ export interface DashboardData {
     /** % of tracker targets hit in each season week. null = week not started yet. */
     weeks: (number | null)[];
   } | null;
-  stats: { label: string; value: string; unit: string; note: string; tone: Tone; trend: number[] }[];
   today: TodayItem[];
   money: {
     month: string;
@@ -130,13 +116,6 @@ export interface DashboardData {
     /** The latest session, for "Repeat last workout". null = none logged yet. */
     last: { name: string; when: string; summary: string } | null;
   };
-  /** Top set per session for the most-done exercises. Empty = nothing weighted logged yet. */
-  lifts: {
-    exercise: string;
-    /** Kilograms, oldest session first. */
-    tops: number[];
-    sinceLabel: string;
-  }[];
   weight: {
     unit: string;
     /** null = no goal weight set. */
@@ -165,18 +144,7 @@ export interface DashboardData {
   settingsHref: string | null;
   goals: { name: string; progress: string; pct: number; by: string; tone: Tone }[];
   habits: { name: string; days: boolean[] }[];
-  mailboxes: { label: string; tone: Tone; count: string }[];
-  mailboxNote: string;
-  mails: Mail[];
   /** Open tasks plus the ones done in the last two weeks. */
   tasks: Task[];
-  instinct: {
-    draftQuestion: string;
-    exchanges: { question: string; answer: string; meta: string; status: "answered" | "paused" }[];
-    shares: { key: string; label: string; on: boolean }[];
-    digest: string;
-  };
   footnote: string;
-  /** True on /demo: pretend actions (Instinct replies) run instead of real ones. */
-  isDemo: boolean;
 }

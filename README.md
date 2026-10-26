@@ -66,7 +66,7 @@ Every session followed the same loop: one phase per session, a short prompt from
 - **A privacy scare, caught early.** Before the first push, a check found real details in the design mockups (names, a card number, amounts). They were replaced before anything went public, and the pre-commit privacy check came out of it.
 - **Bugs found by looking, not guessing.** A "Log Today" button had teal text on a teal background because a global link rule won; the weight chart's labels shrank too small on phones; a 30-per-row season strip turned into dots on a phone (now 15 per row).
 - **Speed, from one response header.** The dashboard took 1–2 s after a check-in. Vercel's `x-vercel-id` header showed the server code running in the US while the database sat in Mumbai, so every read crossed the world. One line in `vercel.json` moved it to Mumbai.
-- **Scope cuts are decisions too.** A Gmail inbox and an AI-assistant link were designed, then parked when simpler options looked better. Their code stays in the repo, hidden.
+- **Scope cuts are decisions too.** A Gmail inbox and an AI-assistant link were designed, then dropped when simpler options looked better. Their code was deleted, not hidden, to keep the app lean.
 
 What I did myself: sign-ups, approving logins, and every product and design call. Claude Code wrote and tested the code; the full session-by-session story is in [`docs/BUILD_LOG.md`](docs/BUILD_LOG.md), and the phase plan in [`docs/BUILD_PLAN.md`](docs/BUILD_PLAN.md).
 

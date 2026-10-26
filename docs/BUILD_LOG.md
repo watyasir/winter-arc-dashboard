@@ -218,3 +218,18 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 - Final pass: `/winter-arc` now has its own address (it opens the Winter Arc view); every page checked at laptop and phone width.
 - Hookup: the finance task's first tries were refused (wrong token, then one field that didn't fit). The API now accepts amounts written as text ("₹12,000"), names the exact bad field, and logs why. The next try saved, and the Money tile showed real numbers.
 **Next:** tracker targets for the season.
+
+## Session 14 — 27 Oct 2026 — Cleanup for speed
+**Goal:** A smaller, simpler codebase: drop the parked features for good and delete everything unused.
+**What I asked Claude Code to do:** "Mail nudges and the Instinct link are dropped permanently. Delete all their code, docs and table; run a dead-code check and npm prune; rebuild and check nothing broke."
+**What got built:**
+- Inbox, Instinct, the status pill and all their demo data and state: deleted, not hidden. The sidebar and phone tabs only ever show Overview, Winter Arc and Board.
+- A dead-code check (knip) found five tiles nothing showed anymore (stats, due today, overdue, lift progress, weight chart), plus a chart component, unused icons, colours and helpers. All deleted; knip now reports nothing.
+- A migration that drops the two planned tables if they exist (they never did).
+- New rule in CLAUDE.md: keep the code lean, no hidden or parked features.
+**What broke and how we fixed it:**
+- Dropping database tables was blocked as a data deletion, so Claude checked read-only instead: neither table existed, so nothing needed dropping.
+- Another Claude session was building a tasks API in the same folder at the same time, so this commit only includes this session's files.
+**What Yasir had to do himself:** nothing.
+**Screenshot to take:** none (nothing visible changed).
+**Next:** tracker targets for the season.

@@ -62,7 +62,6 @@ function useLayout(): "phone" | "desktop" | "both" {
   );
 }
 
-// Inbox and Instinct views are parked (Phases 8b, 8c), so only Overview, Winter Arc and Board are reachable.
 function CurrentView() {
   const { view } = useDashboard();
   if (view === "arc") return <WinterArcView />;

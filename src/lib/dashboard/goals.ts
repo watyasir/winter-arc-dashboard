@@ -25,7 +25,7 @@ export function buildGoals(goals: Goal[], tracked: Map<string, number>, trackers
 }
 
 /** Current progress and the unit it's in. Linked time trackers count in hours. */
-export function goalNow(g: Goal, tracked: Map<string, number>, trackers: Tracker[]): { now: number; unit: string | null } {
+function goalNow(g: Goal, tracked: Map<string, number>, trackers: Tracker[]): { now: number; unit: string | null } {
   const tracker = g.trackerId ? trackers.find((t) => t.id === g.trackerId) : undefined;
   if (!tracker) return { now: g.current, unit: g.unit };
   const total = tracked.get(g.id) ?? 0;

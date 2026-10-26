@@ -29,17 +29,3 @@ export const toneBg: Record<Tone, string> = {
   lagoon: "bg-lagoon",
   neutral: "bg-overlay",
 };
-
-export const toneStroke: Record<Tone, string> = {
-  brand: "stroke-brand",
-  sage: "stroke-sage",
-  yellow: "stroke-yellow",
-  coral: "stroke-coral",
-  arc: "stroke-arc",
-  cyan: "stroke-cyan",
-  pine: "stroke-pine",
-  mist: "stroke-mist",
-  seafoam: "stroke-seafoam",
-  lagoon: "stroke-lagoon",
-  neutral: "stroke-overlay",
-};

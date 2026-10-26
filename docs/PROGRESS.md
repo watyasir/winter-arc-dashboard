@@ -11,8 +11,8 @@
 | 6 | Money (snapshots via the API) | ✅ Done (26 Oct 2026) |
 | 7 | Winter Arc season + custom trackers | ✅ Done (21 Oct 2026) |
 | 8 | Automation (logging API) | ✅ Done (26 Oct 2026) |
-| 8b | Mail nudges | ⏸ Parked (26 Oct), Yasir will re-plan |
-| 8c | Instinct link | ⏸ Parked (26 Oct), Yasir will re-plan |
+| 8b | Mail nudges | ❌ Dropped (27 Oct 2026), code deleted |
+| 8c | Instinct link | ❌ Dropped (27 Oct 2026), code deleted |
 | 9 | Share + portfolio polish | ✅ Done (26 Oct 2026) |
 
 ## Decisions & schedule (21 Oct 2026)
@@ -183,6 +183,13 @@
 - [x] New address `/winter-arc` (and `/demo/winter-arc`) opens the Winter Arc page; switching to it keeps `#winter-arc` in the address so a refresh stays there
 - [x] Clicked through `/demo` (all views and phone tabs), `/demo/winter-arc`, `/demo/log`, `/demo/progress`, `/login`, and signed-out `/`, `/log`, `/settings`, `/progress` at 1440px and 375px: no sideways scroll, no tap targets under 44px on the phone, no console errors
 - [x] Live, signed in (laptop width): `/`, `/winter-arc`, `/log`, `/settings`, `/progress` load with no errors; Money shows its empty state (table not created yet); `/api/summary` answers 503 until `API_TOKEN` is set
+
+## Cleanup for speed (27 Oct 2026)
+- [x] Mail nudges (8b) and the Instinct link (8c) dropped for good: Inbox and Instinct views, the Instinct status pill, their demo data, types and state deleted; their env placeholders removed
+- [x] Migration `20261027000001_drop_nudges_instinct.sql` (drops `instinct_requests` and `mail_nudges` if they exist). Checked read-only in Supabase: neither table exists, so there was nothing to run
+- [x] Dead code (`npx knip`, config in `knip.json`): removed the unused Stats, Due today, Overdue, Lift progress and Weight tiles, the Sparkline, their data (`stats`, `lifts`), 3 unused icons, 4 unused colour tokens and a few unused helpers; knip now reports nothing
+- [x] `npm prune`; build cache cleared and rebuilt; `/demo` checked at 1440px and 375px (all views and phone tabs, check-in pages, share card): no sideways scroll, no small tap targets, no console errors; `npx hig-doctor .` clean
+- [x] CLAUDE.md rule: keep the code lean, no hidden or parked features. Docs (CLAUDE.md, DESIGN.md v6.2, BUILD_PLAN.md, README) updated
 
 ## Tonight in 5 lines (26 Oct 2026)
 1. Layout split, rename to Yasir OS and the share card were already done and live, so they were skipped.

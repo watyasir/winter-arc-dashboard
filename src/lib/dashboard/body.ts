@@ -1,13 +1,13 @@
-import { groupSets, kg, MEASURES, workoutSummary, type BodyCheck, type Workout } from "@/lib/body";
+import { kg, MEASURES, workoutSummary, type BodyCheck, type Workout } from "@/lib/body";
 import type { DashboardData } from "@/modules/types";
 import { daysBetween, relativeDay, shortDate, weekStart, weekdayShort } from "./dates";
 
 /*
-  Workouts and body checks -> the Workouts, Lift progress and Weight tiles.
+  Workouts and body checks -> the Workouts and Body tiles (and the share card's weight change).
   Pure, like build.ts. /demo runs its fake workouts through this too.
 */
 
-export interface BodyInput {
+interface BodyInput {
   /** Latest first. */
   workouts: Workout[];
   /** Latest first. */
@@ -19,14 +19,12 @@ export interface BodyInput {
   weekTarget: number | null;
 }
 
-/** How far back the Weight chart and Lift progress look. */
+/** How far back the weight trend looks. */
 export const BODY_WEEKS = 12;
-const MAX_LIFTS = 4;
-const LIFT_POINTS = 8;
 
 export function buildBody({ workouts, bodyChecks, weightGoal, today, workoutDays = [], weekTarget }: BodyInput): Pick<
   DashboardData,
-  "workouts" | "lifts" | "weight" | "bodyCheck"
+  "workouts" | "weight" | "bodyCheck"
 > {
   const monday = weekStart(today);
   const thisWeek = workouts.filter((w) => w.date >= monday && w.date <= today);
@@ -40,33 +38,9 @@ export function buildBody({ workouts, bodyChecks, weightGoal, today, workoutDays
       week: thisWeek.map((w) => ({ day: weekdayShort(w.date), name: w.name, summary: workoutSummary(w.sets) })),
       last: last ? { name: last.name, when: relativeDay(last.date, today), summary: workoutSummary(last.sets) } : null,
     },
-    lifts: buildLifts(workouts, today),
     weight: buildWeight(bodyChecks, weightGoal, today),
     bodyCheck: buildBodyCheck(bodyChecks, today),
   };
-}
-
-/** Heaviest set per session for the exercises done most often (weighted sets only). */
-function buildLifts(workouts: Workout[], today: string): DashboardData["lifts"] {
-  const recent = [...workouts.filter((w) => daysBetween(w.date, today) < BODY_WEEKS * 7)].reverse(); // oldest first
-  const byExercise = new Map<string, { exercise: string; sessions: { date: string; top: number }[] }>();
-  for (const w of recent) {
-    for (const g of groupSets(w.sets)) {
-      const weights = g.sets.map((s) => s.weight).filter((v): v is number => v != null && v > 0);
-      if (weights.length === 0) continue;
-      const key = g.exercise.toLowerCase();
-      const entry = byExercise.get(key) ?? { exercise: g.exercise, sessions: [] };
-      entry.sessions.push({ date: w.date, top: Math.max(...weights) });
-      byExercise.set(key, entry);
-    }
-  }
-  return [...byExercise.values()]
-    .sort((a, b) => b.sessions.length - a.sessions.length || b.sessions.at(-1)!.date.localeCompare(a.sessions.at(-1)!.date))
-    .slice(0, MAX_LIFTS)
-    .map(({ exercise, sessions }) => {
-      const shown = sessions.slice(-LIFT_POINTS);
-      return { exercise, tops: shown.map((s) => s.top), sinceLabel: shortDate(shown[0].date) };
-    });
 }
 
 function buildWeight(checks: BodyCheck[], goal: number | null, today: string): DashboardData["weight"] {

@@ -1,4 +1,3 @@
-import type { Tone } from "@/lib/tones";
 import { addDays, formatAmount, formatValue, type Tracker } from "@/lib/trackers";
 import type { DashboardData, SeasonDay, TodayItem } from "@/modules/types";
 import type { BodyCheck, Workout } from "@/lib/body";
@@ -6,12 +5,12 @@ import { dueState, type Goal, type Task } from "@/lib/tasks";
 import { toMoneyTile, type MoneySnapshot } from "@/lib/money";
 import { buildBody } from "./body";
 import { buildGoals } from "./goals";
-import { daysBetween, headerDate, lastDays, shortDate, weekStart } from "./dates";
+import { daysBetween, headerDate, lastDays, shortDate } from "./dates";
 
 /*
   Turns the real rows (trackers, entries, the active season) into the same DashboardData
   shape /demo uses, so both run on the same tiles. Pure: no database, easy to reason about.
-  Sources that aren't connected yet (mail, or money before the first snapshot) come back
+  Sources with nothing in them yet (money before the first snapshot) come back
   empty and the tiles show what to do instead.
 */
 
@@ -29,7 +28,7 @@ export interface SeasonRow {
   targets: Record<string, number>;
 }
 
-export interface BuildInput {
+interface BuildInput {
   trackers: Tracker[];
   entries: EntryRow[];
   season: SeasonRow | null;
@@ -51,14 +50,8 @@ export interface BuildInput {
 /** How far back the dashboard reads: 7 weeks of weekly trends, plus the season if it started earlier. */
 export const HISTORY_DAYS = 49;
 
-const STAT_TONES: Tone[] = ["arc", "sage", "yellow", "brand", "pine"];
-const FEATURED_STATS = ["sleep", "workout", "study", "water", "steps"];
 const HABIT_DAYS = 28;
 
-/** One decimal at most, no trailing ".0": 7 -> "7", 6.25 -> "6.3". */
-function oneDecimal(n: number): string {
-  return String(Math.round(n * 10) / 10);
-}
 
 // ---------------------------------------------------------------- the build
 
@@ -138,12 +131,10 @@ export function buildDashboardData({
           ? `${fullDate(season.start_date)} → ${fullDate(addDays(season.start_date, season.length_days - 1))} · ${season.length_days} days`
           : "No season set up yet",
       },
-      inbox: { title: "Inbox", subtitle: "Gmail isn't connected yet" },
       board: {
         title: "Board",
         subtitle: open.length === 0 ? "No open tasks" : `${open.length} open${overdue ? ` · ${overdue} overdue` : ""}${dueToday ? ` · ${dueToday} due today` : ""}`,
       },
-      instinct: { title: "Instinct", subtitle: "Your on-the-go assistant, kept in sync with this dashboard" },
     },
     navBadges: open.length ? { board: String(open.length) } : {},
     trackers: trackers.map((t) => {
@@ -152,7 +143,6 @@ export function buildDashboardData({
     }),
     season: season ? buildSeason(season, today, dayStatus, counts, dailyGoals.length) : null,
     arc: season ? buildArc(season, today, trackers, dailyGoals, hitOn) : null,
-    stats: pickStatTrackers(trackers).map((t, i) => buildStat(t, STAT_TONES[i % STAT_TONES.length], today, valueOn)),
     today: trackers.map((t) => todayItem(t, valueOn(t, today), hitOn(t, today))),
     money: money ? toMoneyTile(money) : null,
     workoutHref: "/log/workout",
@@ -164,25 +154,8 @@ export function buildDashboardData({
     habits: trackers
       .filter((t) => t.type === "checkbox" || dailyTarget(t) != null)
       .map((t) => ({ name: t.name, days: lastDays(today, HABIT_DAYS).map((d) => hitOn(t, d)) })),
-    mailboxes: [],
-    mailboxNote: "",
-    mails: [],
     tasks,
-    instinct: {
-      draftQuestion: "",
-      exchanges: [],
-      shares: [
-        { key: "tasks", label: "Board and tasks", on: true },
-        { key: "arc", label: "Winter Arc progress", on: true },
-        { key: "money", label: "Money summary", on: true },
-        { key: "inbox", label: "Inbox summary", on: true },
-        { key: "body", label: "Workouts and weight", on: true },
-        { key: "health", label: "Health reports", on: false },
-      ],
-      digest: digest(season, today, streak, trackers, valueOn),
-    },
     footnote: "Your data, updated every time you log. Money shows up here after the finance task sends its first snapshot.",
-    isDemo: false,
   };
 }
 
@@ -319,75 +292,6 @@ function buildArc(
   };
 }
 
-function pickStatTrackers(trackers: Tracker[]): Tracker[] {
-  const featured = FEATURED_STATS.map((slug) => trackers.find((t) => t.slug === slug)).filter((t): t is Tracker => !!t);
-  const rest = trackers.filter((t) => !featured.includes(t) && t.target != null);
-  return [...featured, ...rest].slice(0, 5);
-}
-
-type ValueOn = (t: Tracker, date: string) => number | undefined;
-
-function buildStat(t: Tracker, tone: Tone, today: string, valueOn: ValueOn): DashboardData["stats"][number] {
-  const week = weekStart(today);
-  const thisWeek = lastDays(today, daysBetween(week, today) + 1);
-  const last7 = lastDays(today, 7);
-  const empty = (note: string) => ({ label: t.name, value: "–", unit: "", note, tone, trend: last7.map(() => 0) });
-
-  // Weekly yes/no (workouts): times this week against the weekly target.
-  if (t.type === "checkbox") {
-    const doneIn = (days: string[]) => days.filter((d) => (valueOn(t, d) ?? 0) >= 1).length;
-    const count = doneIn(thisWeek);
-    const target = t.target_period === "weekly" && t.target != null ? Number(t.target) : 7;
-    const trend = Array.from({ length: 7 }, (_, i) => {
-      const start = addDays(week, (i - 6) * 7);
-      return doneIn(lastDays(addDays(start, 6), 7).filter((d) => d <= today));
-    });
-    return {
-      label: t.name,
-      value: String(count),
-      unit: `of ${target}`,
-      note: count >= target ? "This week · target hit" : count === 0 ? `None yet this week` : "This week",
-      tone,
-      trend,
-    };
-  }
-
-  // Time (study): hours this week against the weekly total.
-  if (t.type === "duration_minutes") {
-    const minutes = thisWeek.reduce((sum, d) => sum + (valueOn(t, d) ?? 0), 0);
-    const weekly = t.target == null ? null : t.target_period === "weekly" ? Number(t.target) : Number(t.target) * 7;
-    const left = weekly == null ? 0 : weekly - minutes;
-    return {
-      label: t.name,
-      value: oneDecimal(minutes / 60),
-      unit: weekly == null ? "hr" : `of ${oneDecimal(weekly / 60)} hr`,
-      note: weekly == null ? "This week" : left <= 0 ? "Weekly target hit" : `${oneDecimal(left / 60)} hr left this week`,
-      tone,
-      trend: last7.map((d) => (valueOn(t, d) ?? 0) / 60),
-    };
-  }
-
-  // Numbers and 1-5 scales: average of the days logged in the last 7.
-  const logged = last7.map((d) => valueOn(t, d)).filter((v): v is number => v !== undefined);
-  if (logged.length === 0) return empty(`No ${t.name.toLowerCase()} logged this week`);
-  const avg = logged.reduce((a, b) => a + b, 0) / logged.length;
-  const target = dailyTarget(t);
-  const shown = target != null && target >= 100 ? formatAmount(Math.round(avg)) : oneDecimal(avg);
-  return {
-    label: t.name,
-    value: t.type === "scale_1_5" ? (t.scale_labels?.[Math.round(avg) - 1] ?? shown) : shown,
-    unit: t.type === "scale_1_5" ? "" : (t.unit ?? ""),
-    note:
-      target == null
-        ? "7-day average"
-        : avg >= target
-          ? "7-day average, on target"
-          : `7-day average, target ${formatAmount(target)}${t.unit ? ` ${t.unit}` : ""}`,
-    tone,
-    trend: last7.map((d) => valueOn(t, d) ?? 0),
-  };
-}
-
 function todayItem(t: Tracker, value: number | undefined, hit: boolean): TodayItem {
   if (t.type === "checkbox") return { label: t.name, area: t.area, done: value !== undefined && hit, trackerId: t.id };
   const target = dailyTarget(t);
@@ -398,25 +302,4 @@ function todayItem(t: Tracker, value: number | undefined, hit: boolean): TodayIt
     if (target != null && t.type === "duration_minutes") note = `${formatValue(t, value)} of ${formatValue(t, target)}`;
   }
   return { label: t.name, area: note, done: value !== undefined && hit, href: "/log" };
-}
-
-function digest(season: SeasonRow | null, today: string, streak: number, trackers: Tracker[], valueOn: ValueOn): string {
-  const lines: string[] = [];
-  if (season) {
-    const day = daysBetween(season.start_date, today) + 1;
-    if (day >= 1 && day <= season.length_days) lines.push(`Day ${day} of ${season.length_days} · streak ${streak}`);
-  } else {
-    lines.push(`Streak ${streak} ${streak === 1 ? "day" : "days"}`);
-  }
-  const yesterday = addDays(today, -1);
-  const logged = trackers
-    .map((t) => {
-      const v = valueOn(t, yesterday);
-      if (v === undefined) return null;
-      if (t.type === "checkbox") return v >= 1 ? t.name.toLowerCase() : null;
-      return `${t.name.toLowerCase()} ${formatValue(t, v)}`;
-    })
-    .filter(Boolean);
-  lines.push(logged.length ? `Yesterday: ${logged.join(", ")}` : "Yesterday: nothing logged");
-  return lines.join("\n");
 }

@@ -38,6 +38,7 @@ Keep dependencies few. Ask before adding any new library.
 - **Only Yasir can log in** to the real dashboard (allow-list one email via env var `ALLOWED_EMAIL`).
 - **Logging must be fast.** The daily check-in should take under 60 seconds on a phone. If a feature makes logging slower, say so before building it.
 - **Mobile first.** Design for a 390px wide phone screen, then widen for desktop.
+- **Keep the code lean:** delete unused code, no hidden or parked features. Run a dead-code check (`npx knip`) before finishing a phase.
 - All money in Indian rupees, formatted Indian style: ₹1,25,000. Dates as `18 Oct 2026`. Timezone `Asia/Kolkata`.
 
 ## How the app grows (important)
@@ -65,10 +66,7 @@ Short version:
 - **One fluid layout** for laptop and 24" monitor; sidebar stacks on top under 980px.
 - **Colour has one meaning each:** blue interactive, green done, peach due soon, red overdue, mauve Winter Arc, pink Claude. Small coloured text uses the text-safe variants in DESIGN.md. Never colour alone.
 - **Apple HIG still governs behaviour:** one primary button per view, 44px phone targets, visible focus, reduced motion respected, charts with a summary line and right-side axis labels. Run `npx hig-doctor .` before finishing each phase.
-- Views: Overview · Inbox · Board · Instinct (details in DESIGN.md §3–4).
-- **Mail nudges, not a full inbox (21 Oct 2026):** Yasir uses Gmail directly. The dashboard shows only emails needing his attention, posted by a Claude scheduled task through the API (Phase 8b). No Gmail OAuth. Never store email bodies. **PARKED 26 Oct 2026: do not build.**
-- **Instinct:** every Claude→Instinct request is a row in `instinct_requests` (question, sent_at, status waiting/answered/paused, answer, answered_at). While any row is waiting, the header shows the mauve status pill with elapsed time; when answered it turns green for ~3.5 s and disappears. Dashboard only, no push. **PARKED 26 Oct 2026: do not build.**
-- **Instinct access:** a read-only `/instinct` page (secret token in the URL, no login) giving Instinct the full current picture as plain, well-labelled text, limited to the categories switched on in "What Instinct can see" (health off by default). Plus a morning digest email to the Instinct address (env var `INSTINCT_EMAIL`, never in code) at 7:30 AM IST. **PARKED 26 Oct 2026: do not build.**
+- Views: Overview · Winter Arc · Board (details in DESIGN.md §3–4). Mail nudges and the Instinct link were dropped for good (27 Oct 2026); don't bring them back.
 
 Define all colours and fonts as tokens in one place (`tailwind.config` + CSS variables). Never hard-code a colour in a component.
 
