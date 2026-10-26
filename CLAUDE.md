@@ -14,7 +14,7 @@ It is also a **public portfolio project**. Yasir is a vibe coder: he directs, pr
    - add an entry to `docs/BUILD_LOG.md` (template below)
    - commit with a clear message
 5. **Save progress as you go, not only at the end** (usage limits can cut a session off mid-task). After each finished step: tick it in `docs/PROGRESS.md` with one line on what's done and what's next, and commit (`git commit -m "..."`). When a new session starts or Yasir types "continue", read `docs/PROGRESS.md` and `git status` first, finish any half-done step, then carry on.
-6. If something needs Yasir (a sign-up, a key, a click in a dashboard), stop and give him short numbered steps. Don't guess or work around it.
+6. Do dashboard work yourself (Supabase SQL editor and migrations, Vercel and GitHub settings, via Chrome or a CLI), even when the request says "add it to the checklist" or "for the morning": do it, then record it as done. Only hand Yasir what you're not allowed to do (sign-ups, passwords, typing secret keys, payments, deleting data), as short numbered steps.
 
 ## Stack
 

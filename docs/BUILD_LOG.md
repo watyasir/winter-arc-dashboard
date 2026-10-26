@@ -247,7 +247,7 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 - The pre-commit privacy check read the migration's date number as a card number; the comment was reworded.
 - hig-doctor flagged `autoFocus` on the sheet's title box; removed it, since a modal sheet already puts the cursor on its first field.
 - The live Board keeps loading tasks before the migration runs (it falls back to the old columns), so nothing breaks overnight.
-**What Yasir had to do himself:** run the tasks migration in Supabase (morning checklist).
+**What Yasir had to do himself:** nothing. Claude first put the migration on a morning checklist for him; he pointed out Claude can do it, so Claude ran it in the Supabase SQL editor and tested the live API. The rule that caused the miss ("give Yasir steps for dashboard clicks") was rewritten in CLAUDE.md.
 **Screenshot to take:** `/demo` Board with the edit sheet open, and the phone Today tab with the Top priority card.
 **Next:** improvements only.
 
