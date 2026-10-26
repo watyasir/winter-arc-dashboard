@@ -214,4 +214,5 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 - The money table may not exist yet when the new code goes live, so the dashboard treats a failed money read as "no snapshot yet" instead of an error.
 **What Yasir had to do himself:** run the migration, make `API_TOKEN` and add it to Vercel (morning checklist).
 **Screenshot to take:** `/demo` Money tile on a phone (Money tab).
+- Final pass: `/winter-arc` now has its own address (it opens the Winter Arc view); every page checked at laptop and phone width.
 **Next:** connect the finance task to `POST /api/money`; then tracker targets.

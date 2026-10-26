@@ -184,4 +184,8 @@ One phase per session. Full details and kickoff prompts are in `docs/BUILD_PLAN.
 - [x] Checked: snapshot checker on good and bad bodies; 503 / 401 locally; Money tile at 1440px and 375px on /demo (no sideways scroll); build passes; `npx hig-doctor .` clean
 - [ ] Full round trip (save + read through the database) not tested: needs the secret key, which only Vercel has. Check after the morning checklist
 
+## Final pass (26 Oct 2026, overnight)
+- [x] New address `/winter-arc` (and `/demo/winter-arc`) opens the Winter Arc page; switching to it keeps `#winter-arc` in the address so a refresh stays there
+- [x] Clicked through `/demo` (all views and phone tabs), `/demo/winter-arc`, `/demo/log`, `/demo/progress`, `/login`, and signed-out `/`, `/log`, `/settings`, `/progress` at 1440px and 375px: no sideways scroll, no tap targets under 44px on the phone, no console errors
+
 **Next up (old note):** Phase 6 (money from the Personal Finance sheet; get the sheet's cell map from Claude chat first). Optional: use Reset test data in /settings before 26 Oct so Winter Arc starts clean. Supabase's built-in email allows only 2 sign-in emails per hour.

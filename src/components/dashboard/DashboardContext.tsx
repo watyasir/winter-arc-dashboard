@@ -58,9 +58,16 @@ export function DashboardProvider({
 }) {
   const [view, setViewState] = useState<ViewId>("overview");
   // View switches are instant and start at the top of the page (DESIGN.md §5).
+  // The Winter Arc page has its own address (/winter-arc redirects to /#winter-arc), kept on refresh.
   const setView = useCallback((next: ViewId) => {
     setViewState(next);
     window.scrollTo({ top: 0 });
+    history.replaceState(history.state, "", next === "arc" ? "#winter-arc" : location.pathname + location.search);
+  }, []);
+  useEffect(() => {
+    // The hash only exists in the browser, so it's read after the first render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (location.hash === "#winter-arc") setViewState("arc");
   }, []);
   const [todayDone, setTodayDone] = useState(() => data.today.map((t) => t.done));
   const [todayError, setTodayError] = useState<string | null>(null);
