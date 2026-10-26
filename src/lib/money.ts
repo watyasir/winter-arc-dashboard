@@ -8,7 +8,7 @@ import { shortDate, todayISO } from "./trackers";
 */
 
 type SplitKey = "needs" | "wants" | "savings";
-export type Split = Record<SplitKey, { actual: number; target: number }>;
+type Split = Record<SplitKey, { actual: number; target: number }>;
 
 export interface MoneySnapshot {
   /** YYYY-MM */

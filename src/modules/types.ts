@@ -42,6 +42,7 @@ export type ToggleTodayAction = (trackerId: string, done: boolean) => Promise<{ 
 /** Saves task changes. Only the real dashboard passes these; the demo changes stay on the page. */
 export interface TaskActions {
   add: (task: NewTask) => Promise<{ ok: boolean }>;
+  update: (id: string, task: NewTask) => Promise<{ ok: boolean }>;
   move: (id: string, status: TaskStatus) => Promise<{ ok: boolean }>;
   remove: (id: string) => Promise<{ ok: boolean }>;
 }

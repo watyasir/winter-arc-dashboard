@@ -10,6 +10,7 @@ import { toneBg, type Tone } from "@/lib/tones";
 import { ArcStreaksTile, ArcTargetsTile, ArcWeeksTile } from "@/modules/arc/ArcTiles";
 import { BoardView } from "@/modules/board/BoardView";
 import { InProgressTile } from "@/modules/board/InProgressTile";
+import { PinnedTask } from "@/modules/board/PinnedTask";
 import { HabitsTile } from "@/modules/habits/HabitsTile";
 import { MoneyTile } from "@/modules/money/MoneyTile";
 import { SeasonTile } from "@/modules/season/SeasonTile";
@@ -132,6 +133,8 @@ function TodayTab({ onMoney }: { onMoney: () => void }) {
           <ArcChip onOpen={() => setView("arc")} />
         </div>
       </header>
+
+      <PinnedTask />
 
       <PhoneSection title={`Today · ${doneCount} of ${data.today.length} done`}>
         <PhoneCard className="px-4">

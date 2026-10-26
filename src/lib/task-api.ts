@@ -16,7 +16,7 @@ const OWNERS: Record<string, Owner> = { yasir: "Me", me: "Me", claude: "Claude",
 export const apiOwner = (owner: Owner) => (owner === "Me" ? "Yasir" : owner);
 
 /** One task's changes, in database columns. Only the fields that were sent. */
-export interface TaskUpsert {
+interface TaskUpsert {
   external_id: string;
   title?: string;
   status?: TaskStatus;

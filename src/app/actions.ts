@@ -23,17 +23,33 @@ export async function toggleTodayTracker(trackerId: string, done: boolean): Prom
   return { ok: true };
 }
 
+/** The columns the Board's sheet saves. Changes from the app are marked as Yasir's. */
+const taskRow = (task: NewTask) => ({
+  title: task.title.trim(),
+  area: task.area.trim(),
+  due_date: task.due || null,
+  status: task.status,
+  note: task.note.trim() || null,
+  owner: task.owner,
+  updated_by: "Yasir",
+});
+
 /** Adds a task from the Board. */
 export async function addTask(task: NewTask): Promise<{ ok: boolean }> {
   if (taskProblem(task)) return { ok: false };
   const { supabase, user } = await requireUser();
-  const { error } = await supabase.from("tasks").insert({
-    user_id: user.id,
-    title: task.title.trim(),
-    area: task.area.trim(),
-    due_date: task.due || null,
-    status: task.status,
-  });
+  const { error } = await supabase.from("tasks").insert({ user_id: user.id, ...taskRow(task) });
+  if (error) return { ok: false };
+  refresh();
+  return { ok: true };
+}
+
+/** Saves the Board's edit sheet. */
+export async function updateTask(id: string, task: NewTask): Promise<{ ok: boolean }> {
+  if (taskProblem(task)) return { ok: false };
+  const { supabase } = await requireUser();
+  // Row-level security limits this to the user's own tasks.
+  const { error } = await supabase.from("tasks").update(taskRow(task)).eq("id", id);
   if (error) return { ok: false };
   refresh();
   return { ok: true };
@@ -43,8 +59,7 @@ export async function addTask(task: NewTask): Promise<{ ok: boolean }> {
 export async function moveTask(id: string, status: TaskStatus): Promise<{ ok: boolean }> {
   if (!TASK_STATUSES.includes(status)) return { ok: false };
   const { supabase } = await requireUser();
-  // Row-level security limits this to the user's own tasks.
-  const { error } = await supabase.from("tasks").update({ status }).eq("id", id);
+  const { error } = await supabase.from("tasks").update({ status, updated_by: "Yasir" }).eq("id", id);
   if (error) return { ok: false };
   refresh();
   return { ok: true };

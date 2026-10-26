@@ -1,6 +1,6 @@
 /*
   Task and goal shapes, shared by the real dashboard and /demo.
-  Matches supabase/migrations/20261021000001_tasks_goals.sql.
+  Matches supabase/migrations/20261021000001_tasks_goals.sql and 20261027000002_tasks_api.sql.
 */
 
 export type TaskStatus = "todo" | "doing" | "waiting" | "done";
@@ -14,22 +14,33 @@ export interface Task {
   due: string | null;
   status: TaskStatus;
   owner: Owner;
+  /** A short line under the title, or null. */
+  note: string | null;
+  /** Higher = more important. Claude sets it through the API. */
+  order: number;
+  /** ISO time the task moved to Done, or null. */
+  doneAt: string | null;
 }
 
+/** What the Board's add and edit sheet saves. */
 export interface NewTask {
   title: string;
   area: string;
   due: string | null;
   status: TaskStatus;
+  note: string;
+  owner: Owner;
 }
 
 /** The Board columns, in order. */
 export const TASK_COLUMNS: { status: TaskStatus; name: string }[] = [
   { status: "todo", name: "To do" },
   { status: "doing", name: "In progress" },
-  { status: "waiting", name: "Waiting" },
+  { status: "waiting", name: "Waiting on others" },
   { status: "done", name: "Done" },
 ];
+
+export const OWNERS: Owner[] = ["Me", "Claude", "Both"];
 
 export const TASK_STATUSES = TASK_COLUMNS.map((c) => c.status);
 
@@ -42,7 +53,21 @@ export function taskProblem(t: NewTask): string | null {
   if (t.area.trim().length > 40) return "Keep the area under 40 characters.";
   if (t.due && !ISO_DATE.test(t.due)) return "Pick a due date from the calendar.";
   if (!TASK_STATUSES.includes(t.status)) return "Pick a column.";
+  if (t.note.trim().length > 500) return "Keep the note under 500 characters.";
+  if (!OWNERS.includes(t.owner)) return "Pick who's on it.";
   return null;
+}
+
+/** Board order: most important first, then soonest due. Done: latest done first. */
+export function boardOrder(a: Task, b: Task): number {
+  if (a.status === "done" && b.status === "done") return (b.doneAt ?? "").localeCompare(a.doneAt ?? "");
+  if (a.order !== b.order) return b.order - a.order;
+  return (a.due ?? "9999").localeCompare(b.due ?? "9999");
+}
+
+/** The pinned card on Overview: the open "Home" task with the highest order. */
+export function topHomeTask(tasks: Task[]): Task | undefined {
+  return tasks.filter((t) => t.status !== "done" && t.area.trim().toLowerCase() === "home").sort(boardOrder)[0];
 }
 
 /** "soon" = due within 3 days (yellow), "overdue" = past due (coral). Done tasks are never late. */

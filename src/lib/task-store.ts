@@ -4,21 +4,38 @@ import type { Goal, Owner, Task, TaskStatus } from "./tasks";
 
 type Supabase = Awaited<ReturnType<typeof createClient>>;
 
-/** How long done tasks stay in the Done column. */
-const DONE_DAYS = 14;
+type TaskRow = {
+  id: string;
+  title: string;
+  area: string;
+  due_date: string | null;
+  status: TaskStatus;
+  owner: Owner;
+  note?: string | null;
+  sort_order?: number;
+  done_at: string | null;
+};
 
-/** Open tasks plus the ones done in the last two weeks, soonest due first. Null = database error. */
+const BASE_COLUMNS = "id, title, area, due_date, status, owner, done_at";
+
+/** Every task (the Board shows the latest 20 done, with "Show all"). Null = database error. */
 export async function loadTasks(supabase: Supabase): Promise<Task[] | null> {
-  const doneSince = new Date(Date.now() - DONE_DAYS * 86_400_000).toISOString();
-  const { data, error } = await supabase
-    .from("tasks")
-    .select("id, title, area, due_date, status, owner")
-    .or(`status.neq.done,done_at.gte.${doneSince}`)
-    .order("due_date", { ascending: true, nullsFirst: false })
-    .order("created_at")
-    .returns<{ id: string; title: string; area: string; due_date: string | null; status: TaskStatus; owner: Owner }[]>();
+  const read = (columns: string) => supabase.from("tasks").select(columns).order("created_at").returns<TaskRow[]>();
+  let { data, error } = await read(`${BASE_COLUMNS}, note, sort_order`);
+  // Until the tasks API migration (supabase/migrations/…_tasks_api.sql) is run, note and sort_order don't exist yet.
+  if (error?.code === "42703") ({ data, error } = await read(BASE_COLUMNS));
   if (error || !data) return null;
-  return data.map((t) => ({ id: t.id, title: t.title, area: t.area, due: t.due_date, status: t.status, owner: t.owner }));
+  return data.map((t) => ({
+    id: t.id,
+    title: t.title,
+    area: t.area,
+    due: t.due_date,
+    status: t.status,
+    owner: t.owner,
+    note: t.note ?? null,
+    order: t.sort_order ?? 0,
+    doneAt: t.done_at,
+  }));
 }
 
 /** Goals, nearest deadline first, with each linked tracker's total since the goal started. Null = database error. */

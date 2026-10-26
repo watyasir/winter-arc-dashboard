@@ -5,11 +5,12 @@ import { CardHeader, SectionHeading } from "@/components/SectionHeading";
 import { TextButton } from "@/components/TextButton";
 import { EmptyNote } from "@/components/EmptyNote";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
+import { boardOrder } from "@/lib/tasks";
 import { OwnerChip } from "./OwnerChip";
 
 export function InProgressTile({ className = "flex-[1_1_280px]" }: { className?: string }) {
   const { tasks, setView } = useDashboard();
-  const doing = tasks.filter((t) => t.status === "doing");
+  const doing = tasks.filter((t) => t.status === "doing").sort(boardOrder);
   return (
     <Card aria-label="Board summary" className={`flex flex-col gap-2.5 ${className}`}>
       <CardHeader aside={<TextButton onClick={() => setView("board")}>Open Board</TextButton>}>

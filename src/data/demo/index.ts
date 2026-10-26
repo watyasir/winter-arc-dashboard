@@ -1,4 +1,5 @@
-import type { DashboardData, SeasonDay } from "@/modules/types";
+import type { Owner, TaskStatus } from "@/lib/tasks";
+import type { DashboardData, SeasonDay, Task } from "@/modules/types";
 import { DEMO_TODAY, demoBody } from "./body";
 
 /*
@@ -30,6 +31,18 @@ const habits = habitSeeds.map(([name, rate], hi) => ({
     return name === "Workout" ? d % 7 !== 3 && d % 7 !== 6 && r < 0.95 : r < rate;
   }),
 }));
+
+function demoTask(
+  id: string,
+  title: string,
+  owner: Owner,
+  area: string,
+  due: string | null,
+  status: TaskStatus,
+  extra: Partial<Pick<Task, "note" | "order" | "doneAt">> = {},
+): Task {
+  return { id, title, owner, area, due, status, note: null, order: 0, doneAt: null, ...extra };
+}
 
 export const demoData: DashboardData = {
   ownerLine: "Life, tracked",
@@ -172,20 +185,21 @@ export const demoData: DashboardData = {
   ],
   habits,
   tasks: [
-    { id: "t1", title: "Winter Arc kickoff", owner: "Both", area: "Winter Arc", due: "2026-10-18", status: "todo" },
-    { id: "t2", title: "Renew library card", owner: "Me", area: "Errands", due: "2026-10-18", status: "todo" },
-    { id: "t3", title: "Book dentist check-up", owner: "Me", area: "Health", due: "2026-10-16", status: "todo" },
-    { id: "t4", title: "November finance review", owner: "Both", area: "Money", due: "2026-10-20", status: "todo" },
-    { id: "t5", title: "Cancel unused music app", owner: "Claude", area: "Subscriptions", due: null, status: "todo" },
-    { id: "t6", title: "Yasir OS design", owner: "Both", area: "Build", due: null, status: "doing" },
-    { id: "t7", title: "Course completion certificate", owner: "Both", area: "Learning", due: "2026-10-18", status: "doing" },
-    { id: "t8", title: "Two delivery refund disputes", owner: "Claude", area: "Disputes", due: "2026-10-15", status: "doing" },
-    { id: "t9", title: "Habit app review", owner: "Claude", area: "Build", due: null, status: "doing" },
-    { id: "t10", title: "New job: document check", owner: "Claude", area: "Work", due: null, status: "waiting" },
-    { id: "t11", title: "Course mentor: batch reply", owner: "Claude", area: "Learning", due: "2026-10-21", status: "waiting" },
-    { id: "t12", title: "Dashboard project brief", owner: "Claude", area: "Build", due: null, status: "done" },
-    { id: "t13", title: "Weekly review agent", owner: "Claude", area: "Build", due: null, status: "done" },
-    { id: "t14", title: "Finance logging + email bridge", owner: "Claude", area: "Build", due: null, status: "done" },
+    demoTask("t0", "Move to the new flat", "Both", "Home", "2026-10-20", "todo", { order: 10, note: "Book the movers, then pack the kitchen" }),
+    demoTask("t1", "Winter Arc kickoff", "Both", "Winter Arc", "2026-10-18", "todo"),
+    demoTask("t2", "Renew library card", "Me", "Errands", "2026-10-18", "todo"),
+    demoTask("t3", "Book dentist check-up", "Me", "Health", "2026-10-16", "todo"),
+    demoTask("t4", "November finance review", "Both", "Money", "2026-10-20", "todo", { note: "Claude drafts the numbers first" }),
+    demoTask("t5", "Cancel unused music app", "Claude", "Subscriptions", null, "todo"),
+    demoTask("t6", "Yasir OS design", "Both", "Build", null, "doing", { order: 2 }),
+    demoTask("t7", "Course completion certificate", "Both", "Learning", "2026-10-18", "doing"),
+    demoTask("t8", "Two delivery refund disputes", "Claude", "Disputes", "2026-10-15", "doing", { note: "Waiting 48 h before the second follow-up" }),
+    demoTask("t9", "Habit app review", "Claude", "Build", null, "doing"),
+    demoTask("t10", "New job: document check", "Claude", "Work", null, "waiting", { note: "HR said by Friday" }),
+    demoTask("t11", "Course mentor: batch reply", "Claude", "Learning", "2026-10-21", "waiting"),
+    demoTask("t12", "Dashboard project brief", "Claude", "Build", null, "done", { doneAt: "2026-10-17T10:00:00+05:30" }),
+    demoTask("t13", "Weekly review agent", "Claude", "Build", null, "done", { doneAt: "2026-10-16T10:00:00+05:30" }),
+    demoTask("t14", "Finance logging + email bridge", "Claude", "Build", null, "done", { doneAt: "2026-10-15T10:00:00+05:30" }),
   ],
   footnote:
     "Sample data for the demo. The real app fills this from your check-ins, workouts, money snapshots and the Board.",

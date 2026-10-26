@@ -1,19 +1,39 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useState, type DragEvent } from "react";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 import { Chip } from "@/components/Chip";
-import { Icon } from "@/components/Icon";
 import { toneBg, type Tone } from "@/lib/tones";
-import { TASK_COLUMNS, taskProblem, type Task, type TaskStatus } from "@/lib/tasks";
+import { boardOrder, TASK_COLUMNS, type Task, type TaskStatus } from "@/lib/tasks";
 import { DueLabel } from "./DueLabel";
 import { OwnerChip } from "./OwnerChip";
+import { TaskSheet, type SheetTarget } from "./TaskSheet";
 
 const columnTone: Record<TaskStatus, Tone> = { todo: "neutral", doing: "brand", waiting: "yellow", done: "sage" };
 
-/** Four columns. Each card has a column picker to move it; "Add task" adds to that column. */
+/** How many done tasks show before "Show all". */
+const DONE_SHOWN = 20;
+
+/**
+ * Four columns. Drag a card to another column (laptop); tap a card to edit it, including its
+ * column (phone and keyboard). "Add task" opens the same sheet for that column.
+ */
 export function BoardView() {
-  const { tasks, taskError } = useDashboard();
+  const { tasks, taskError, moveTask } = useDashboard();
+  const [sheet, setSheet] = useState<SheetTarget | null>(null);
+  const [dragging, setDragging] = useState<string | null>(null);
+  const [over, setOver] = useState<TaskStatus | null>(null);
+  const [allDone, setAllDone] = useState(false);
+
+  const drop = (e: DragEvent, status: TaskStatus) => {
+    e.preventDefault();
+    const id = e.dataTransfer.getData("text/plain");
+    const task = tasks.find((t) => t.id === id);
+    if (task && task.status !== status) moveTask(id, status);
+    setOver(null);
+    setDragging(null);
+  };
+
   return (
     <div className="flex flex-col gap-3">
       {taskError && (
@@ -23,129 +43,106 @@ export function BoardView() {
       )}
       <div className="grid grid-cols-[repeat(auto-fit,minmax(230px,1fr))] gap-3.5">
         {TASK_COLUMNS.map((col) => {
-          const cards = tasks.filter((t) => t.status === col.status);
+          const all = tasks.filter((t) => t.status === col.status).sort(boardOrder);
+          const cards = col.status === "done" && !allDone ? all.slice(0, DONE_SHOWN) : all;
           return (
-            <section key={col.status} aria-label={col.name} className="flex min-w-0 flex-col gap-2 rounded-[20px] border border-sep bg-column p-3">
+            <section
+              key={col.status}
+              aria-label={col.name}
+              onDragOver={(e) => {
+                if (!dragging) return;
+                e.preventDefault();
+                setOver(col.status);
+              }}
+              onDragLeave={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOver(null);
+              }}
+              onDrop={(e) => drop(e, col.status)}
+              className={`flex min-w-0 flex-col gap-2 rounded-[20px] border bg-column p-3 ${over === col.status ? "border-brand" : "border-sep"}`}
+            >
               <div className="flex items-center justify-between px-1.5 py-1">
                 <h2 className="m-0 flex items-center gap-2 text-sm font-bold">
                   <span aria-hidden="true" className={`size-[9px] rounded-full ${toneBg[columnTone[col.status]]}`} />
                   {col.name}
                 </h2>
-                <Chip>{cards.length}</Chip>
+                <Chip>{all.length}</Chip>
               </div>
               {cards.map((k) => (
-                <TaskCard key={k.id} task={k} />
+                <TaskCard
+                  key={k.id}
+                  task={k}
+                  dragging={dragging === k.id}
+                  onOpen={() => setSheet({ task: k, status: k.status })}
+                  onDragStart={() => setDragging(k.id)}
+                  onDragEnd={() => {
+                    setDragging(null);
+                    setOver(null);
+                  }}
+                />
               ))}
-              {col.status !== "done" && <AddTask status={col.status} column={col.name} />}
+              {col.status === "done" && all.length > DONE_SHOWN && (
+                <button
+                  type="button"
+                  onClick={() => setAllDone((a) => !a)}
+                  className="min-h-11 cursor-pointer rounded-xl border-0 bg-transparent text-xs font-semibold text-brand-text hover:bg-fill sm:min-h-[38px]"
+                >
+                  {allDone ? `Show the latest ${DONE_SHOWN}` : `Show all ${all.length}`}
+                </button>
+              )}
+              {col.status !== "done" && (
+                <button
+                  type="button"
+                  onClick={() => setSheet({ status: col.status })}
+                  className="min-h-11 cursor-pointer rounded-xl border border-dashed border-overlay bg-transparent text-xs font-semibold text-sub hover:bg-fill sm:min-h-[38px]"
+                >
+                  Add task
+                </button>
+              )}
             </section>
           );
         })}
       </div>
+      {sheet && <TaskSheet target={sheet} onClose={() => setSheet(null)} />}
     </div>
   );
 }
 
-function TaskCard({ task }: { task: Task }) {
-  const { data, moveTask, deleteTask } = useDashboard();
+function TaskCard({
+  task,
+  dragging,
+  onOpen,
+  onDragStart,
+  onDragEnd,
+}: {
+  task: Task;
+  dragging: boolean;
+  onOpen: () => void;
+  onDragStart: () => void;
+  onDragEnd: () => void;
+}) {
+  const { data } = useDashboard();
   const done = task.status === "done";
   return (
-    <div className="flex flex-col gap-2 rounded-[10px] border border-sep bg-base px-3 py-[11px]">
-      <span className={`text-[13px] leading-[1.35] font-medium ${done ? "text-sub line-through" : ""}`}>
-        {done && <span className="sr-only">Done: </span>}
-        {task.title}
-      </span>
-      <div className="flex flex-wrap items-center gap-1.5">
+    <button
+      type="button"
+      draggable
+      onClick={onOpen}
+      onDragStart={(e) => {
+        e.dataTransfer.setData("text/plain", task.id);
+        e.dataTransfer.effectAllowed = "move";
+        onDragStart();
+      }}
+      onDragEnd={onDragEnd}
+      aria-label={`${done ? "Done: " : ""}${task.title}. Edit`}
+      className={`flex w-full cursor-pointer flex-col gap-1.5 rounded-[10px] border border-sep bg-base px-3 py-[11px] text-left text-ink hover:border-overlay ${dragging ? "opacity-50" : ""}`}
+    >
+      <span className={`text-[13px] leading-[1.35] font-medium ${done ? "text-sub line-through" : ""}`}>{task.title}</span>
+      {task.note && <span className="line-clamp-2 text-xs leading-[1.4] text-sub">{task.note}</span>}
+      <span className="mt-0.5 flex w-full flex-wrap items-center gap-1.5">
         <OwnerChip owner={task.owner} />
         {task.area && <span className="text-xs text-sub">{task.area}</span>}
         <DueLabel task={task} today={data.todayISO} className="ml-auto" />
-      </div>
-      <div className="flex items-center gap-1.5">
-        <select
-          aria-label={`Column for ${task.title}`}
-          value={task.status}
-          onChange={(e) => moveTask(task.id, e.target.value as TaskStatus)}
-          className="min-h-11 flex-1 cursor-pointer rounded-full border border-sep bg-fill px-3 text-xs font-semibold text-ink sm:min-h-8"
-        >
-          {TASK_COLUMNS.map((c) => (
-            <option key={c.status} value={c.status}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-        <button
-          type="button"
-          aria-label={`Delete ${task.title}`}
-          onClick={() => window.confirm(`Delete "${task.title}"?`) && deleteTask(task.id)}
-          className="flex size-11 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-sub hover:bg-fill sm:size-8"
-        >
-          <Icon name="x" size={14} strokeWidth={2.4} className="stroke-current" />
-        </button>
-      </div>
-    </div>
-  );
-}
-
-const inputClass = "min-h-11 w-full rounded-full border border-sep bg-base px-3 text-[13px] text-ink placeholder:text-sub sm:min-h-9";
-
-/** "Add task" opens a small form at the bottom of the column: title, then optional area and due date. */
-function AddTask({ status, column }: { status: TaskStatus; column: string }) {
-  const { addTask } = useDashboard();
-  const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [area, setArea] = useState("");
-  const [due, setDue] = useState("");
-  const [problem, setProblem] = useState<string | null>(null);
-  const titleRef = useRef<HTMLInputElement>(null);
-  // Opening the form (a tap on "Add task") puts the cursor in the title box.
-  useEffect(() => {
-    if (open) titleRef.current?.focus();
-  }, [open]);
-
-  if (!open) {
-    return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="min-h-11 cursor-pointer rounded-xl border border-dashed border-overlay bg-transparent text-xs font-semibold text-sub hover:bg-fill sm:min-h-[38px]"
-      >
-        Add task
-      </button>
-    );
-  }
-
-  const submit = (e: FormEvent) => {
-    e.preventDefault();
-    const task = { title, area, due: due || null, status };
-    const p = taskProblem(task);
-    if (p) return setProblem(p);
-    addTask(task);
-    setTitle("");
-    setArea("");
-    setDue("");
-    setProblem(null);
-    titleRef.current?.focus();
-  };
-
-  return (
-    <form onSubmit={submit} aria-label={`Add a task to ${column}`} className="flex flex-col gap-2 rounded-[10px] border border-sep bg-base p-2.5">
-      <input ref={titleRef} aria-label="Task title" placeholder="What needs doing?" value={title} onChange={(e) => setTitle(e.target.value)} maxLength={120} className={inputClass} />
-      <div className="flex gap-2">
-        <input aria-label="Area" placeholder="Area" value={area} onChange={(e) => setArea(e.target.value)} maxLength={40} className={`${inputClass} min-w-0 flex-1`} />
-        <input aria-label="Due date" type="date" value={due} onChange={(e) => setDue(e.target.value)} className={`${inputClass} w-auto flex-1`} />
-      </div>
-      {problem && (
-        <p role="alert" className="m-0 text-xs text-coral-text">
-          {problem}
-        </p>
-      )}
-      <div className="flex justify-end gap-2">
-        <button type="button" onClick={() => setOpen(false)} className="min-h-11 cursor-pointer rounded-full border-0 bg-transparent px-3 text-xs font-semibold text-brand-text sm:min-h-8">
-          Close
-        </button>
-        <button type="submit" className="min-h-11 cursor-pointer rounded-full border border-sep bg-base px-4 text-xs font-semibold text-ink hover:bg-fill-strong sm:min-h-8">
-          Add
-        </button>
-      </div>
-    </form>
+      </span>
+    </button>
   );
 }

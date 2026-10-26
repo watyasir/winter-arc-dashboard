@@ -16,10 +16,18 @@ interface DashboardState {
   /** Tasks as shown right now: changes appear at once and roll back if saving fails. */
   tasks: Task[];
   addTask: (task: NewTask) => void;
+  updateTask: (id: string, task: NewTask) => void;
   moveTask: (id: string, status: TaskStatus) => void;
   deleteTask: (id: string) => void;
   taskError: string | null;
 }
+
+/** A saved sheet as it shows on the Board straight away. */
+const shown = (task: NewTask) => ({ ...task, title: task.title.trim(), area: task.area.trim(), note: task.note.trim() || null });
+
+/** Moving into Done stamps the time, so it tops the Done column (the server does the same). */
+const withStatus = (task: Task, before: TaskStatus): Task =>
+  task.status === before ? task : { ...task, doneAt: task.status === "done" ? new Date().toISOString() : null };
 
 const DashboardContext = createContext<DashboardState | null>(null);
 
@@ -102,12 +110,15 @@ export function DashboardProvider({
   };
   const addTask = (task: NewTask) =>
     changeTasks(
-      (t) => [...t, { id: `new-${Date.now()}`, title: task.title.trim(), area: task.area.trim(), due: task.due, status: task.status, owner: "Me" }],
+      (t) => [...t, { id: `new-${Date.now()}`, ...shown(task), order: 0, doneAt: task.status === "done" ? new Date().toISOString() : null }],
       (a) => a.add(task),
       "Couldn't add the task.",
     );
+  // Tasks added a moment ago ("new-…") change on the page only, until the server sends their real id.
+  const updateTask = (id: string, task: NewTask) =>
+    changeTasks((t) => t.map((k) => (k.id === id ? withStatus({ ...k, ...shown(task) }, k.status) : k)), id.startsWith("new-") ? null : (a) => a.update(id, task), "Couldn't save the task.");
   const moveTask = (id: string, status: TaskStatus) =>
-    changeTasks((t) => t.map((k) => (k.id === id ? { ...k, status } : k)), id.startsWith("new-") ? null : (a) => a.move(id, status), "Couldn't move the task.");
+    changeTasks((t) => t.map((k) => (k.id === id ? withStatus({ ...k, status }, k.status) : k)), id.startsWith("new-") ? null : (a) => a.move(id, status), "Couldn't move the task.");
   const deleteTask = (id: string) =>
     changeTasks((t) => t.filter((k) => k.id !== id), id.startsWith("new-") ? null : (a) => a.remove(id), "Couldn't delete the task.");
 
@@ -120,6 +131,7 @@ export function DashboardProvider({
     todayError,
     tasks,
     addTask,
+    updateTask,
     moveTask,
     deleteTask,
     taskError,
