@@ -8,8 +8,8 @@ import { ownerClient, secretMatches, type ServiceClient } from "@/lib/owner";
   and the rest of the app works as usual.
 */
 
-export function apiError(status: number, error: string) {
-  return NextResponse.json({ ok: false, error }, { status, headers: { "Cache-Control": "no-store" } });
+export function apiError(status: number, error: string, extra: Record<string, unknown> = {}) {
+  return NextResponse.json({ ok: false, error, ...extra }, { status, headers: { "Cache-Control": "no-store" } });
 }
 
 export function apiOk(body: Record<string, unknown>, status = 200) {

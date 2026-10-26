@@ -70,5 +70,6 @@ export async function POST(request: Request) {
     revalidatePath("/");
     revalidatePath("/log");
   }
-  return apiOk({ date, saved, skipped }, saved.length > 0 ? 200 : 400);
+  if (saved.length === 0) return apiError(400, "Nothing saved: check the skipped entries.", { date, saved, skipped });
+  return apiOk({ date, saved, skipped });
 }
