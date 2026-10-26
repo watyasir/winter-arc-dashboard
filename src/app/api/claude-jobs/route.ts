@@ -40,3 +40,19 @@ export async function POST(request: Request) {
   revalidatePath("/", "layout");
   return apiOk({ saved: saved.length, jobs: saved.map((r) => r.data) });
 }
+
+/** Deletes one job: ?name=<name>, matched exactly. */
+export async function DELETE(request: Request) {
+  const auth = await authorizeApi(request);
+  if (auth instanceof Response) return auth;
+
+  const name = new URL(request.url).searchParams.get("name")?.trim();
+  if (!name) return apiError(400, "name: add ?name=<job name>.");
+  const { data, error } = await auth.supabase.from("claude_jobs").delete().eq("user_id", auth.ownerId).eq("name", name).select("name");
+  if (error) console.error(`DELETE /api/claude-jobs failed: ${error.message}`);
+  if (error) return apiError(500, "Couldn't delete the job. Try again.");
+  if (data.length === 0) return apiError(404, `No job named "${name}".`);
+
+  revalidatePath("/", "layout");
+  return apiOk({ deleted: name });
+}

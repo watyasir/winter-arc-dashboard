@@ -244,7 +244,7 @@ Deletes one task. Reply `200` `{ "ok": true, "deleted": "learn-sql" }`, or `404`
 curl -X DELETE https://yasiros.vercel.app/api/tasks/learn-sql -H "Authorization: Bearer $API_TOKEN"
 ```
 
-## Claude's scheduled tasks: GET and POST /api/claude-jobs
+## Claude's scheduled tasks: GET, POST and DELETE /api/claude-jobs
 
 Shown in their own panel beside the Board, never mixed with tasks. `POST` adds or updates by `name`: one job, a list, or `{ "jobs": [...] }` (1–50). Known jobs change only the fields you send.
 
@@ -262,6 +262,12 @@ curl -X POST https://yasiros.vercel.app/api/claude-jobs \
 ```
 
 Reply `200` `{ "ok": true, "saved": 1, "jobs": [...] }`. `GET` lists them, soonest next run first.
+
+`DELETE /api/claude-jobs?name=<name>` removes one job (exact name, URL-encoded). Reply `200` `{ "ok": true, "deleted": "Morning brief" }`, `404` when no job has that name, `400` without `name`.
+
+```bash
+curl -X DELETE "https://yasiros.vercel.app/api/claude-jobs?name=Morning%20brief" -H "Authorization: Bearer $API_TOKEN"
+```
 
 ## Day plan: GET and POST /api/day-plan
 
