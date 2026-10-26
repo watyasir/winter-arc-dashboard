@@ -9,7 +9,6 @@ export type Tone =
   | "yellow"
   | "coral"
   | "arc"
-  | "cyan"
   | "pine"
   | "mist"
   | "seafoam"
@@ -22,7 +21,6 @@ export const toneBg: Record<Tone, string> = {
   yellow: "bg-yellow",
   coral: "bg-coral",
   arc: "bg-arc",
-  cyan: "bg-cyan",
   pine: "bg-pine",
   mist: "bg-mist",
   seafoam: "bg-seafoam",

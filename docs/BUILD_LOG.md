@@ -251,3 +251,19 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **Screenshot to take:** `/demo` Board with the edit sheet open, and the phone Today tab with the Top priority card.
 **Next:** improvements only.
 
+
+## Session 16 — 27 Oct 2026 — My Day, calendar feed, Claude's jobs, action gate
+**Goal:** bring the Winter Arc day plan into the app, get it into Apple Calendar, keep Claude's own scheduled work apart from Yasir's tasks, and make due-soon tasks impossible to ignore.
+**What I asked Claude Code to do:** five things in one go: My Day on Overview retimed for a 1:30–10:30 PM shift with weekends off; an ICS calendar feed; a `claude_jobs` table + API + panel; owner tag colours; a blocking "action gate" pop-up with its own fields and log.
+**What got built:**
+- My Day: Now / Next and the full day, plus folded meals, gym, skin, prep and stock lists. The plan is stored in Supabase and sent by Claude through a new `/api/day-plan`, because the repo is public and the plan is health and food detail.
+- `/api/calendar.ics`: one weekly event per phase (phases after midnight move to the next weekday), tasks with due dates as all-day events.
+- `claude_jobs` + `/api/claude-jobs`, shown in a dashed Claude-orange panel beside the Board.
+- The action gate: a queue fixed when the page opens, the dashboard behind it blurred and `inert`, four answers, each saved, quieted until midnight IST and logged.
+**What broke and how we fixed it:**
+- Next.js stopped on reading the clock while pre-building `/demo`. The gate now works from today's date (an answer quiets a task until the next midnight, so "after the start of today" means answered today), and My Day reads the time only in the browser.
+- Bulk upserts of jobs with different fields would have reset the fields a job didn't send; jobs are saved one at a time.
+- Lint flagged a state update inside an effect (skipping deleted tasks); replaced with an "answered" list.
+**What Yasir had to do himself:** nothing. Claude found the plan in his "Winter Arc Day" artifact, ran the migration and loaded the plan through the live API.
+**Screenshot to take:** `/demo` with the gate card over the blurred dashboard, and the My Day card on the phone.
+**Next:** improvements only.

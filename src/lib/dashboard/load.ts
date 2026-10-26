@@ -1,6 +1,8 @@
 import "server-only";
 import type { createClient } from "@/lib/supabase/server";
 import { loadBodyChecks, loadWeightGoal, loadWorkouts } from "@/lib/body-store";
+import { JOB_COLUMNS } from "@/lib/claude-jobs";
+import { parseDayPlan } from "@/lib/day-plan";
 import { MONEY_COLUMNS, type MoneySnapshot } from "@/lib/money";
 import { loadGoals, loadTasks } from "@/lib/task-store";
 import { loadTrackers } from "@/lib/tracker-store";
@@ -39,7 +41,7 @@ export async function loadEntries(supabase: Supabase, from: string, to: string, 
 export async function loadDashboardData(supabase: Supabase, email: string): Promise<DashboardData | null> {
   const today = todayISO();
   const historyStart = addDays(today, -HISTORY_DAYS);
-  const [trackers, seasonResult, workouts, bodyChecks, weightGoal, tasks, goals, recent, moneyResult] = await Promise.all([
+  const [trackers, seasonResult, workouts, bodyChecks, weightGoal, tasks, goals, recent, moneyResult, planResult, jobsResult] = await Promise.all([
     loadTrackers(supabase),
     supabase.from("seasons").select("name, start_date, length_days, targets").eq("is_active", true).maybeSingle<SeasonRow>(),
     loadWorkouts(supabase, { since: addDays(today, -BODY_WEEKS * 7) }),
@@ -51,7 +53,11 @@ export async function loadDashboardData(supabase: Supabase, email: string): Prom
     loadEntries(supabase, historyStart, today),
     // Not fatal: before the money migration runs (or with no snapshot yet) the tile shows its empty state.
     supabase.from("money_snapshots").select(MONEY_COLUMNS).order("updated_at", { ascending: false }).limit(1).maybeSingle<MoneySnapshot>(),
+    // Not fatal either: no plan or jobs yet = their empty states.
+    supabase.from("day_plans").select("plan").maybeSingle(),
+    supabase.from("claude_jobs").select(JOB_COLUMNS).order("next_run", { ascending: true, nullsFirst: false }).order("name"),
   ]);
+  const plan = planResult.data ? parseDayPlan(planResult.data.plan) : null;
   if (!trackers || seasonResult.error || !workouts || !bodyChecks || weightGoal === undefined || !tasks || !goals || !recent) return null;
   const season = seasonResult.data;
 
@@ -75,6 +81,8 @@ export async function loadDashboardData(supabase: Supabase, email: string): Prom
     goals: goals.goals,
     goalTracked: goals.tracked,
     money: moneyResult.error ? null : moneyResult.data,
+    dayPlan: plan?.ok ? plan.plan : null,
+    claudeJobs: (jobsResult.data ?? []).map((j) => ({ name: j.name, schedule: j.schedule, status: j.status, lastRun: j.last_run, nextRun: j.next_run })),
     ownerInitial: email.trim().charAt(0).toUpperCase() || "Me",
   });
 }

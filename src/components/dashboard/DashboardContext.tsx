@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { nextMidnightIST, type GateChoice } from "@/lib/gate";
 import type { NewTask, Task, TaskStatus } from "@/lib/tasks";
 import type { DashboardData, TaskActions, ToggleTodayAction, ViewId } from "@/modules/types";
 
@@ -19,6 +20,8 @@ interface DashboardState {
   updateTask: (id: string, task: NewTask) => void;
   moveTask: (id: string, status: TaskStatus) => void;
   deleteTask: (id: string) => void;
+  /** An answer on the action gate. `due` only for "move". */
+  answerGate: (id: string, choice: GateChoice, due?: string) => void;
   taskError: string | null;
 }
 
@@ -110,7 +113,7 @@ export function DashboardProvider({
   };
   const addTask = (task: NewTask) =>
     changeTasks(
-      (t) => [...t, { id: `new-${Date.now()}`, ...shown(task), order: 0, doneAt: task.status === "done" ? new Date().toISOString() : null }],
+      (t) => [...t, { id: `new-${Date.now()}`, ...shown(task), order: 0, doneAt: task.status === "done" ? new Date().toISOString() : null, nextSteps: null, questions: [], chatName: null, quietUntil: null }],
       (a) => a.add(task),
       "Couldn't add the task.",
     );
@@ -121,6 +124,21 @@ export function DashboardProvider({
     changeTasks((t) => t.map((k) => (k.id === id ? withStatus({ ...k, status }, k.status) : k)), id.startsWith("new-") ? null : (a) => a.move(id, status), "Couldn't move the task.");
   const deleteTask = (id: string) =>
     changeTasks((t) => t.filter((k) => k.id !== id), id.startsWith("new-") ? null : (a) => a.remove(id), "Couldn't delete the task.");
+
+  const answerGate = (id: string, choice: GateChoice, due?: string) => {
+    const quiet = nextMidnightIST(data.todayISO);
+    const status: Partial<Record<GateChoice, TaskStatus>> = { done: "done", doing: "doing" };
+    changeTasks(
+      (t) =>
+        t.map((k) => {
+          if (k.id !== id) return k;
+          const next = { ...k, status: status[choice] ?? k.status, due: choice === "move" && due ? due : k.due, quietUntil: quiet };
+          return withStatus(next, k.status);
+        }),
+      id.startsWith("new-") ? null : (a) => a.gate(id, choice, due),
+      "Couldn't save your answer.",
+    );
+  };
 
   const value: DashboardState = {
     data,
@@ -134,6 +152,7 @@ export function DashboardProvider({
     updateTask,
     moveTask,
     deleteTask,
+    answerGate,
     taskError,
   };
 

@@ -3,11 +3,12 @@ import { TASK_STATUSES, type Owner, type TaskStatus } from "./tasks";
 /*
   Checking bodies for /api/tasks (docs/API.md). Claude's task list sends tasks by
   external_id; a new one needs a title, an existing one can send only what changed.
-  Matches supabase/migrations/20261027000002_tasks_api.sql.
+  Matches supabase/migrations/…_tasks_api.sql and …_my_day_gate_jobs.sql.
 */
 
 /** The columns sent back by GET /api/tasks and written by POST. */
-export const TASK_API_COLUMNS = "external_id, title, status, owner, area, due_date, note, sort_order, updated_at, updated_by, done_at";
+export const TASK_API_COLUMNS =
+  "external_id, title, status, owner, area, due_date, note, sort_order, next_steps, questions, chat_name, updated_at, updated_by, done_at";
 
 const MAX_TASKS = 100;
 
@@ -25,6 +26,9 @@ interface TaskUpsert {
   due_date?: string | null;
   note?: string | null;
   sort_order?: number;
+  next_steps?: string | null;
+  questions?: string[];
+  chat_name?: string | null;
   updated_by: "Yasir" | "Claude";
 }
 
@@ -56,7 +60,7 @@ export function parseTaskUpserts(body: unknown): Parsed {
     // Errors name the field, and its list position when a list was sent.
     const at = single ? "" : `tasks[${i}].`;
     if (!isObject(raw)) return fail(`${single ? "task" : `tasks[${i}]`}: send an object.`);
-    const { external_id, title, status, owner, area, due_date, note, sort_order, updated_by } = raw;
+    const { external_id, title, status, owner, area, due_date, note, sort_order, next_steps, questions, chat_name, updated_by } = raw;
 
     if (typeof external_id !== "string" || !external_id.trim() || external_id.trim().length > 100) {
       return fail(`${at}external_id: text, 1 to 100 characters.`);
@@ -94,6 +98,21 @@ export function parseTaskUpserts(body: unknown): Parsed {
     if (sort_order !== undefined) {
       if (!Number.isInteger(sort_order) || Math.abs(sort_order as number) > 1e6) return fail(`${at}sort_order: a whole number (higher = more important).`);
       task.sort_order = sort_order as number;
+    }
+    if (next_steps !== undefined) {
+      if (next_steps !== null && (typeof next_steps !== "string" || next_steps.trim().length > 200)) return fail(`${at}next_steps: text, up to 200 characters, or null.`);
+      task.next_steps = next_steps?.trim() || null;
+    }
+    if (questions !== undefined) {
+      const list = questions === null ? [] : questions;
+      if (!Array.isArray(list) || list.length > 5 || list.some((q) => typeof q !== "string" || !q.trim() || q.trim().length > 140)) {
+        return fail(`${at}questions: a list of up to 5 questions, each up to 140 characters (the card shows 2).`);
+      }
+      task.questions = list.map((q: string) => q.trim());
+    }
+    if (chat_name !== undefined) {
+      if (chat_name !== null && (typeof chat_name !== "string" || chat_name.trim().length > 100)) return fail(`${at}chat_name: text, up to 100 characters, or null.`);
+      task.chat_name = chat_name?.trim() || null;
     }
     if (updated_by !== undefined) {
       if (updated_by !== "Yasir" && updated_by !== "Claude") return fail(`${at}updated_by: Yasir or Claude (default Claude).`);

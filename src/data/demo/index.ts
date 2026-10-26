@@ -1,6 +1,7 @@
 import type { Owner, TaskStatus } from "@/lib/tasks";
 import type { DashboardData, SeasonDay, Task } from "@/modules/types";
 import { DEMO_TODAY, demoBody } from "./body";
+import { demoClaudeJobs, demoDayPlan } from "./day-plan";
 
 /*
   Fake data for /demo. Every name, amount and number here is made up.
@@ -39,9 +40,9 @@ function demoTask(
   area: string,
   due: string | null,
   status: TaskStatus,
-  extra: Partial<Pick<Task, "note" | "order" | "doneAt">> = {},
+  extra: Partial<Pick<Task, "note" | "order" | "doneAt" | "nextSteps" | "questions" | "chatName">> = {},
 ): Task {
-  return { id, title, owner, area, due, status, note: null, order: 0, doneAt: null, ...extra };
+  return { id, title, owner, area, due, status, note: null, order: 0, doneAt: null, nextSteps: null, questions: [], chatName: null, quietUntil: null, ...extra };
 }
 
 export const demoData: DashboardData = {
@@ -188,12 +189,17 @@ export const demoData: DashboardData = {
     demoTask("t0", "Move to the new flat", "Both", "Home", "2026-10-20", "todo", { order: 10, note: "Book the movers, then pack the kitchen" }),
     demoTask("t1", "Winter Arc kickoff", "Both", "Winter Arc", "2026-10-18", "todo"),
     demoTask("t2", "Renew library card", "Me", "Errands", "2026-10-18", "todo"),
-    demoTask("t3", "Book dentist check-up", "Me", "Health", "2026-10-16", "todo"),
+    demoTask("t3", "Book dentist check-up", "Me", "Health", "2026-10-16", "todo", { note: 'Next: call the clinic at 10 AM, ask for a Saturday slot | Chat: "Health admin"' }),
     demoTask("t4", "November finance review", "Both", "Money", "2026-10-20", "todo", { note: "Claude drafts the numbers first" }),
     demoTask("t5", "Cancel unused music app", "Claude", "Subscriptions", null, "todo"),
     demoTask("t6", "Yasir OS design", "Both", "Build", null, "doing", { order: 2 }),
     demoTask("t7", "Course completion certificate", "Both", "Learning", "2026-10-18", "doing"),
-    demoTask("t8", "Two delivery refund disputes", "Claude", "Disputes", "2026-10-15", "doing", { note: "Waiting 48 h before the second follow-up" }),
+    demoTask("t8", "Two delivery refund disputes", "Claude", "Disputes", "2026-10-15", "doing", {
+      note: "Waiting 48 h before the second follow-up",
+      nextSteps: "Claude sends the second follow-up; you forward the delivery photos first.",
+      questions: ["Do you still have the photos from the 12 Oct delivery?", "OK to escalate to the consumer helpline if there's no reply by Friday?"],
+      chatName: "Refund disputes",
+    }),
     demoTask("t9", "Habit app review", "Claude", "Build", null, "doing"),
     demoTask("t10", "New job: document check", "Claude", "Work", null, "waiting", { note: "HR said by Friday" }),
     demoTask("t11", "Course mentor: batch reply", "Claude", "Learning", "2026-10-21", "waiting"),
@@ -201,6 +207,8 @@ export const demoData: DashboardData = {
     demoTask("t13", "Weekly review agent", "Claude", "Build", null, "done", { doneAt: "2026-10-16T10:00:00+05:30" }),
     demoTask("t14", "Finance logging + email bridge", "Claude", "Build", null, "done", { doneAt: "2026-10-15T10:00:00+05:30" }),
   ],
+  dayPlan: demoDayPlan,
+  claudeJobs: demoClaudeJobs,
   footnote:
     "Sample data for the demo. The real app fills this from your check-ins, workouts, money snapshots and the Board.",
 };

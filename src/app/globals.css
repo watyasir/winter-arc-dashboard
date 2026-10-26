@@ -37,8 +37,10 @@
   --color-coral: #e0684b; /* overdue / errors / money out */
   --color-coral-text: #b4432a;
   --color-arc: #155a63; /* Winter Arc identity */
-  --color-cyan: #4fb3bf; /* Claude */
-  --color-cyan-text: #1a6a70;
+  /* Owner tags: Claude orange, Yasir soft teal, Both neutral grey */
+  --color-claude: #d97757;
+  --color-claude-text: #9c4a2b;
+  --color-yasir: #5e9c96;
 
   /* Teal ramp: nav icon tiles, section bars, extra series. Not for text. */
   --color-ramp3: #4f8780;

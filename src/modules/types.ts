@@ -1,3 +1,6 @@
+import type { ClaudeJob } from "@/lib/claude-jobs";
+import type { DayPlan } from "@/lib/day-plan";
+import type { GateChoice } from "@/lib/gate";
 import type { Tone } from "@/lib/tones";
 import type { NewTask, Owner, Task, TaskStatus } from "@/lib/tasks";
 
@@ -45,6 +48,8 @@ export interface TaskActions {
   update: (id: string, task: NewTask) => Promise<{ ok: boolean }>;
   move: (id: string, status: TaskStatus) => Promise<{ ok: boolean }>;
   remove: (id: string) => Promise<{ ok: boolean }>;
+  /** An answer on the action gate (also logged). `due` only for "move". */
+  gate: (id: string, choice: GateChoice, due?: string) => Promise<{ ok: boolean }>;
 }
 
 /*
@@ -147,5 +152,9 @@ export interface DashboardData {
   habits: { name: string; days: boolean[] }[];
   /** Open tasks plus the ones done in the last two weeks. */
   tasks: Task[];
+  /** My Day on Overview (src/lib/day-plan.ts). null = no plan sent yet. */
+  dayPlan: DayPlan | null;
+  /** Claude's scheduled tasks, beside the Board. */
+  claudeJobs: ClaudeJob[];
   footnote: string;
 }

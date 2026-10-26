@@ -11,19 +11,20 @@ type TaskRow = {
   due_date: string | null;
   status: TaskStatus;
   owner: Owner;
-  note?: string | null;
-  sort_order?: number;
+  note: string | null;
+  sort_order: number;
   done_at: string | null;
+  next_steps: string | null;
+  questions: string[] | null;
+  chat_name: string | null;
+  gate_quiet_until: string | null;
 };
 
-const BASE_COLUMNS = "id, title, area, due_date, status, owner, done_at";
+const TASK_COLUMNS = "id, title, area, due_date, status, owner, done_at, note, sort_order, next_steps, questions, chat_name, gate_quiet_until";
 
 /** Every task (the Board shows the latest 20 done, with "Show all"). Null = database error. */
 export async function loadTasks(supabase: Supabase): Promise<Task[] | null> {
-  const read = (columns: string) => supabase.from("tasks").select(columns).order("created_at").returns<TaskRow[]>();
-  let { data, error } = await read(`${BASE_COLUMNS}, note, sort_order`);
-  // Until the tasks API migration (supabase/migrations/…_tasks_api.sql) is run, note and sort_order don't exist yet.
-  if (error?.code === "42703") ({ data, error } = await read(BASE_COLUMNS));
+  const { data, error } = await supabase.from("tasks").select(TASK_COLUMNS).order("created_at").returns<TaskRow[]>();
   if (error || !data) return null;
   return data.map((t) => ({
     id: t.id,
@@ -32,9 +33,13 @@ export async function loadTasks(supabase: Supabase): Promise<Task[] | null> {
     due: t.due_date,
     status: t.status,
     owner: t.owner,
-    note: t.note ?? null,
-    order: t.sort_order ?? 0,
+    note: t.note,
+    order: t.sort_order,
     doneAt: t.done_at,
+    nextSteps: t.next_steps,
+    questions: t.questions ?? [],
+    chatName: t.chat_name,
+    quietUntil: t.gate_quiet_until,
   }));
 }
 

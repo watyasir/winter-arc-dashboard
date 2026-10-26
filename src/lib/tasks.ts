@@ -1,6 +1,6 @@
 /*
   Task and goal shapes, shared by the real dashboard and /demo.
-  Matches supabase/migrations/20261021000001_tasks_goals.sql and 20261027000002_tasks_api.sql.
+  Matches supabase/migrations/…_tasks_goals.sql, …_tasks_api.sql and …_my_day_gate_jobs.sql.
 */
 
 export type TaskStatus = "todo" | "doing" | "waiting" | "done";
@@ -20,6 +20,12 @@ export interface Task {
   order: number;
   /** ISO time the task moved to Done, or null. */
   doneAt: string | null;
+  /** For the action gate (src/lib/gate.ts), set by Claude through the API. */
+  nextSteps: string | null;
+  questions: string[];
+  chatName: string | null;
+  /** Answered on the gate: not asked again before this ISO time. */
+  quietUntil: string | null;
 }
 
 /** What the Board's add and edit sheet saves. */

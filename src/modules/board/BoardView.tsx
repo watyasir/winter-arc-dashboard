@@ -5,6 +5,7 @@ import { useDashboard } from "@/components/dashboard/DashboardContext";
 import { Chip } from "@/components/Chip";
 import { toneBg, type Tone } from "@/lib/tones";
 import { boardOrder, TASK_COLUMNS, type Task, type TaskStatus } from "@/lib/tasks";
+import { ClaudeJobsPanel } from "./ClaudeJobsPanel";
 import { DueLabel } from "./DueLabel";
 import { OwnerChip } from "./OwnerChip";
 import { TaskSheet, type SheetTarget } from "./TaskSheet";
@@ -41,66 +42,69 @@ export function BoardView() {
           {taskError}
         </p>
       )}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(230px,1fr))] gap-3.5">
-        {TASK_COLUMNS.map((col) => {
-          const all = tasks.filter((t) => t.status === col.status).sort(boardOrder);
-          const cards = col.status === "done" && !allDone ? all.slice(0, DONE_SHOWN) : all;
-          return (
-            <section
-              key={col.status}
-              aria-label={col.name}
-              onDragOver={(e) => {
-                if (!dragging) return;
-                e.preventDefault();
-                setOver(col.status);
-              }}
-              onDragLeave={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOver(null);
-              }}
-              onDrop={(e) => drop(e, col.status)}
-              className={`flex min-w-0 flex-col gap-2 rounded-[20px] border bg-column p-3 ${over === col.status ? "border-brand" : "border-sep"}`}
-            >
-              <div className="flex items-center justify-between px-1.5 py-1">
-                <h2 className="m-0 flex items-center gap-2 text-sm font-bold">
-                  <span aria-hidden="true" className={`size-[9px] rounded-full ${toneBg[columnTone[col.status]]}`} />
-                  {col.name}
-                </h2>
-                <Chip>{all.length}</Chip>
-              </div>
-              {cards.map((k) => (
-                <TaskCard
-                  key={k.id}
-                  task={k}
-                  dragging={dragging === k.id}
-                  onOpen={() => setSheet({ task: k, status: k.status })}
-                  onDragStart={() => setDragging(k.id)}
-                  onDragEnd={() => {
-                    setDragging(null);
-                    setOver(null);
-                  }}
-                />
-              ))}
-              {col.status === "done" && all.length > DONE_SHOWN && (
-                <button
-                  type="button"
-                  onClick={() => setAllDone((a) => !a)}
-                  className="min-h-11 cursor-pointer rounded-xl border-0 bg-transparent text-xs font-semibold text-brand-text hover:bg-fill sm:min-h-[38px]"
-                >
-                  {allDone ? `Show the latest ${DONE_SHOWN}` : `Show all ${all.length}`}
-                </button>
-              )}
-              {col.status !== "done" && (
-                <button
-                  type="button"
-                  onClick={() => setSheet({ status: col.status })}
-                  className="min-h-11 cursor-pointer rounded-xl border border-dashed border-overlay bg-transparent text-xs font-semibold text-sub hover:bg-fill sm:min-h-[38px]"
-                >
-                  Add task
-                </button>
-              )}
-            </section>
-          );
-        })}
+      <div className="grid gap-3.5 min-[1200px]:grid-cols-[minmax(0,1fr)_260px]">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3.5">
+          {TASK_COLUMNS.map((col) => {
+            const all = tasks.filter((t) => t.status === col.status).sort(boardOrder);
+            const cards = col.status === "done" && !allDone ? all.slice(0, DONE_SHOWN) : all;
+            return (
+              <section
+                key={col.status}
+                aria-label={col.name}
+                onDragOver={(e) => {
+                  if (!dragging) return;
+                  e.preventDefault();
+                  setOver(col.status);
+                }}
+                onDragLeave={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOver(null);
+                }}
+                onDrop={(e) => drop(e, col.status)}
+                className={`flex min-w-0 flex-col gap-2 rounded-[20px] border bg-column p-3 ${over === col.status ? "border-brand" : "border-sep"}`}
+              >
+                <div className="flex items-center justify-between px-1.5 py-1">
+                  <h2 className="m-0 flex items-center gap-2 text-sm font-bold">
+                    <span aria-hidden="true" className={`size-[9px] rounded-full ${toneBg[columnTone[col.status]]}`} />
+                    {col.name}
+                  </h2>
+                  <Chip>{all.length}</Chip>
+                </div>
+                {cards.map((k) => (
+                  <TaskCard
+                    key={k.id}
+                    task={k}
+                    dragging={dragging === k.id}
+                    onOpen={() => setSheet({ task: k, status: k.status })}
+                    onDragStart={() => setDragging(k.id)}
+                    onDragEnd={() => {
+                      setDragging(null);
+                      setOver(null);
+                    }}
+                  />
+                ))}
+                {col.status === "done" && all.length > DONE_SHOWN && (
+                  <button
+                    type="button"
+                    onClick={() => setAllDone((a) => !a)}
+                    className="min-h-11 cursor-pointer rounded-xl border-0 bg-transparent text-xs font-semibold text-brand-text hover:bg-fill sm:min-h-[38px]"
+                  >
+                    {allDone ? `Show the latest ${DONE_SHOWN}` : `Show all ${all.length}`}
+                  </button>
+                )}
+                {col.status !== "done" && (
+                  <button
+                    type="button"
+                    onClick={() => setSheet({ status: col.status })}
+                    className="min-h-11 cursor-pointer rounded-xl border border-dashed border-overlay bg-transparent text-xs font-semibold text-sub hover:bg-fill sm:min-h-[38px]"
+                  >
+                    Add task
+                  </button>
+                )}
+              </section>
+            );
+          })}
+        </div>
+        <ClaudeJobsPanel />
       </div>
       {sheet && <TaskSheet target={sheet} onClose={() => setSheet(null)} />}
     </div>

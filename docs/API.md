@@ -208,6 +208,14 @@ Reply `200`: how many were created and updated, plus each saved task.
 }
 ```
 
+**Action gate fields** (the pop-up before the dashboard, for open tasks due within 3 days): `next_steps` (up to 200 characters), `questions` (a list of up to 5, each up to 140; the card shows 2 and then "More questions in chat"), `chat_name` (the Claude chat with the details, up to 100). Send `null` to clear. Without `next_steps`, the card reads a note written as `Next: call the movers | Chat: "Flat move"`. A negative `sort_order` puts a task first in the gate's queue.
+
+```json
+{ "external_id": "home-move", "next_steps": "Call two movers for quotes", "questions": ["Weekday or weekend move?"], "chat_name": "Flat move" }
+```
+
+Each answer on the gate (Done, Doing it now, Snooze to tomorrow, Move date) is saved to the task and logged in the `gate_log` table; the task isn't asked about again until the next midnight in India.
+
 A body that doesn't fit gets `400` naming the field and list position, e.g. `"tasks[1].status: one of todo, doing, waiting, done."` or `"title: \"learn-sql\" is a new task, so it needs a title."` Nothing is saved when the body is rejected.
 
 ```bash
@@ -221,7 +229,7 @@ curl -X POST https://yasiros.vercel.app/api/tasks \
 Every task, most important first (`sort_order`, then due date). `?status=todo,doing` keeps only those columns.
 
 ```json
-{ "ok": true, "count": 1, "tasks": [{ "external_id": "learn-sql", "title": "Finish the SQL course", "status": "doing", "owner": "Yasir", "area": "Skills", "due_date": null, "note": null, "sort_order": 0, "updated_at": "2026-10-27T03:00:00+00:00", "updated_by": "Claude", "done_at": null }] }
+{ "ok": true, "count": 1, "tasks": [{ "external_id": "learn-sql", "title": "Finish the SQL course", "status": "doing", "owner": "Yasir", "area": "Skills", "due_date": null, "note": null, "sort_order": 0, "next_steps": null, "questions": [], "chat_name": null, "updated_at": "2026-10-27T03:00:00+00:00", "updated_by": "Claude", "done_at": null }] }
 ```
 
 ```bash
@@ -235,3 +243,46 @@ Deletes one task. Reply `200` `{ "ok": true, "deleted": "learn-sql" }`, or `404`
 ```bash
 curl -X DELETE https://yasiros.vercel.app/api/tasks/learn-sql -H "Authorization: Bearer $API_TOKEN"
 ```
+
+## Claude's scheduled tasks: GET and POST /api/claude-jobs
+
+Shown in their own panel beside the Board, never mixed with tasks. `POST` adds or updates by `name`: one job, a list, or `{ "jobs": [...] }` (1–50). Known jobs change only the fields you send.
+
+| Field | What |
+|---|---|
+| `name` | required, up to 100 characters |
+| `schedule` | text for people, e.g. `"Daily 8:45 AM and PM"` |
+| `status` | `ok`, `failed`, `running`, `scheduled` or `paused` |
+| `last_run`, `next_run` | ISO times with offset, or `null` |
+
+```bash
+curl -X POST https://yasiros.vercel.app/api/claude-jobs \
+  -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" \
+  -d '{"name":"Morning brief","schedule":"Daily 8:00 AM","status":"ok","last_run":"2026-10-27T08:00:00+05:30","next_run":"2026-10-28T08:00:00+05:30"}'
+```
+
+Reply `200` `{ "ok": true, "saved": 1, "jobs": [...] }`. `GET` lists them, soonest next run first.
+
+## Day plan: GET and POST /api/day-plan
+
+The plan behind **My Day** on Overview and the routine in the calendar feed. It lives only in the database. `POST` replaces the whole plan:
+
+```json
+{
+  "phases": [
+    { "start": "07:30", "kind": "food", "title": "Wake, water, snack" },
+    { "start": "07:50", "kind": "move", "title": "Workout", "byDay": { "mon": "Gym A", "wed": "Gym B" } },
+    { "start": "13:30", "kind": "work", "title": "Shift", "days": ["mon", "tue", "wed", "thu", "fri"] },
+    { "start": "24:30", "kind": "sleep", "title": "Lights out" }
+  ],
+  "sections": [{ "title": "Stock list", "items": [{ "label": "Dairy", "text": "Milk, yoghurt" }] }]
+}
+```
+
+- A phase lasts until the next one starts. Times after midnight are written `24:30` and belong to the day before, so a day runs from waking to lights out.
+- `kind`: `sleep`, `care`, `food`, `move`, `work` or `mind`. `days` limits a phase to some weekdays (`mon`…`sun`); `byDay` swaps in that day's `detail`.
+- `sections` (up to 12, 30 items each) show as folded lists: meals, gym, prep, stock list.
+
+## Calendar feed: GET /api/calendar.ics?token=SHARE_TOKEN
+
+For Apple Calendar: File → New Calendar Subscription (or open the `webcal://` link) with `webcal://yasiros.vercel.app/api/calendar.ics?token=<SHARE_TOKEN>`. The day plan's phases repeat weekly on their days (India time); every task with a due date is an all-day event (done ones start with ✓). The calendar app fetches it again about every hour. A wrong token gets `404`. The token is the same one as the /progress share link, so anyone with that link could also read this feed.

@@ -210,3 +210,13 @@
 - [x] Live API test on the real database: create, partial update (status only), new task without title refused (400), `?status=done` filter, delete, second delete 404. The test task was deleted afterwards
 
 Build complete. From here: improvements only.
+
+## My Day, calendar, Claude's jobs, owner tags, action gate (27 Oct 2026)
+- [x] Migration `…_my_day_gate_jobs.sql`: tasks get `next_steps`, `questions`, `chat_name`, `gate_quiet_until`; new tables `gate_log`, `claude_jobs`, `day_plans` (row-level security on). Run in Supabase by Claude (27 Oct): success
+- [x] **My Day** on Overview (laptop and phone): Now / Next from the day plan (India time, moves on by itself), the full day with the current phase marked, and folded Meals, Gym A / B, Skin, hair, body, Prep, Stock list. The plan is data in Supabase, sent through `POST /api/day-plan`; `/demo` has a made-up one
+- [x] Yasir's Winter Arc Day plan (v3.1) retimed for the 1:30–10:30 PM shift: wake 7:30, gym 7:50, build block 10:00, ride 12:40, breaks 3:30 / 5:45 / 8:45, home 11:00, lights out 12:30 (7 h). Sat/Sun off: Saturday gym B, prep 10:30, Claude 4 h; Sunday rest, review 8:30 PM
+- [x] **Calendar feed** `/api/calendar.ics?token=SHARE_TOKEN`: weekly repeating phases + all tasks with due dates as all-day events; subscribe with `webcal://`
+- [x] **Claude's scheduled tasks**: `GET/POST /api/claude-jobs` (by name, same token), shown in a separate panel beside the Board (under it on smaller screens)
+- [x] **Owner tags**: Claude orange `#D97757`, Me soft teal, Both neutral
+- [x] **Action gate**: opens first on every visit for open tasks due within 3 days (overdue first, negative sort_order jumps the queue, max 3, one at a time). Dashboard blurred and locked; no close. Done · Doing it now · Snooze to tomorrow (hidden when more than a day overdue) · Move date. Each answer quiets the task until midnight IST and is logged in `gate_log`. Tasks API takes `next_steps`, `questions`, `chat_name`; a note "Next: … | Chat: "…"" works as a fallback
+- [x] Checked on `/demo` at 1440px and 375px: gate (Esc does nothing, keyboard works, all 3 answers), My Day, Board + jobs panel; no sideways scroll, phone targets 44px. knip, hig-doctor, lint and build clean

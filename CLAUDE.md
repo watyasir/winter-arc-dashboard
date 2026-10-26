@@ -64,9 +64,9 @@ Short version:
 - **Light theme only, "Teal and grey" (v6).** Grey frame, white cards, deep teal `#0F4C4A` brand colour, one dark teal gradient hero card, pill controls, wallet-stack Money tile. No dark mode. All values in DESIGN.md §2b (they override §2 and the older notes below).
 - **Look:** Yasir's Obsidian theme AnuPpuccin, light card layout. Flat `base #EFF1F5` cards with 16px corners on a `crust #DCE0E8` frame, no shadows, rainbow-folder colours in the sidebar, dashed rule under the page header, rounded-square checkboxes. Never copy AnuPpuccin's CSS (GPL-3.0); use only the Catppuccin Latte palette (MIT) and rebuild the look.
 - **One fluid layout** for laptop and 24" monitor; sidebar stacks on top under 980px.
-- **Colour has one meaning each:** blue interactive, green done, peach due soon, red overdue, mauve Winter Arc, pink Claude. Small coloured text uses the text-safe variants in DESIGN.md. Never colour alone.
+- **Colour has one meaning each:** blue interactive, green done, peach due soon, red overdue, mauve Winter Arc, Claude orange `#D97757` for Claude (v6.4). Small coloured text uses the text-safe variants in DESIGN.md. Never colour alone.
 - **Apple HIG still governs behaviour:** one primary button per view, 44px phone targets, visible focus, reduced motion respected, charts with a summary line and right-side axis labels. Run `npx hig-doctor .` before finishing each phase.
-- Views: Overview · Winter Arc · Board (details in DESIGN.md §3–4). Mail nudges and the Instinct link were dropped for good (27 Oct 2026); don't bring them back.
+- Views: Overview · Winter Arc · Board (details in DESIGN.md §3–4). Overview has My Day (the day plan, stored in Supabase, never in the repo); the Board has Claude's scheduled tasks beside it; the action gate opens before everything (v6.4). Mail nudges and the Instinct link were dropped for good (27 Oct 2026); don't bring them back.
 
 Define all colours and fonts as tokens in one place (`tailwind.config` + CSS variables). Never hard-code a colour in a component.
 

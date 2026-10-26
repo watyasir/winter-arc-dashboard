@@ -2,6 +2,7 @@ import type { ComponentType } from "react";
 import { InProgressTile } from "./board/InProgressTile";
 import { PinnedTask } from "./board/PinnedTask";
 import { BodyTile } from "./body/BodyTile";
+import { MyDayTile } from "./day/MyDayTile";
 import { GoalsTile } from "./goals/GoalsTile";
 import { HabitsTile } from "./habits/HabitsTile";
 import { MoneyTile } from "./money/MoneyTile";
@@ -22,12 +23,13 @@ interface TileDef {
 
 export const overviewTiles: TileDef[] = [
   { id: "pinned-task", row: 0, Component: PinnedTask },
-  { id: "today", row: 1, Component: TodayTile },
-  { id: "tasks", row: 1, Component: TasksTile },
-  { id: "money", row: 1, Component: MoneyTile },
-  { id: "body", row: 2, Component: BodyTile },
-  { id: "workouts", row: 2, Component: WorkoutsTile },
-  { id: "goals", row: 2, Component: GoalsTile },
-  { id: "habits", row: 3, Component: HabitsTile },
-  { id: "in-progress", row: 3, Component: InProgressTile },
+  { id: "my-day", row: 1, Component: MyDayTile },
+  { id: "today", row: 2, Component: TodayTile },
+  { id: "tasks", row: 2, Component: TasksTile },
+  { id: "money", row: 2, Component: MoneyTile },
+  { id: "body", row: 3, Component: BodyTile },
+  { id: "workouts", row: 3, Component: WorkoutsTile },
+  { id: "goals", row: 3, Component: GoalsTile },
+  { id: "habits", row: 4, Component: HabitsTile },
+  { id: "in-progress", row: 4, Component: InProgressTile },
 ];

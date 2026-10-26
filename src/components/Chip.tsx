@@ -2,10 +2,12 @@ import type { ReactNode } from "react";
 
 const tones = {
   neutral: "bg-fill text-sub",
-  me: "bg-brand/12 text-brand-text",
-  claude: "bg-cyan/12 text-cyan-text",
+  me: "bg-yasir/16 text-brand-text",
+  claude: "bg-claude/14 text-claude-text",
   sage: "bg-sage/14 text-sage-text",
   yellow: "bg-yellow/16 text-yellow-text",
+  coral: "bg-coral/12 text-coral-text",
+  brand: "bg-brand/12 text-brand-text",
 };
 
 export type ChipTone = keyof typeof tones;

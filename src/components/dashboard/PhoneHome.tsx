@@ -11,6 +11,7 @@ import { ArcStreaksTile, ArcTargetsTile, ArcWeeksTile } from "@/modules/arc/ArcT
 import { BoardView } from "@/modules/board/BoardView";
 import { InProgressTile } from "@/modules/board/InProgressTile";
 import { PinnedTask } from "@/modules/board/PinnedTask";
+import { MyDayTile } from "@/modules/day/MyDayTile";
 import { HabitsTile } from "@/modules/habits/HabitsTile";
 import { MoneyTile } from "@/modules/money/MoneyTile";
 import { SeasonTile } from "@/modules/season/SeasonTile";
@@ -106,7 +107,7 @@ function LargeTitle({ children }: { children: ReactNode }) {
   return <h1 className="m-0 text-[34px] leading-[1.1] font-bold tracking-[-0.02em]">{children}</h1>;
 }
 
-/** The life Overview, one column: greeting + Winter Arc chip, Today, Tasks, a 2x2 summary, Habits, In progress. */
+/** The life Overview, one column: greeting + Winter Arc chip, pin, My Day, Today, Tasks, a 2x2 summary, Habits, In progress. */
 function TodayTab({ onMoney }: { onMoney: () => void }) {
   const { data, todayDone, setView } = useDashboard();
   const { weight, workouts, goals, money } = data;
@@ -135,6 +136,8 @@ function TodayTab({ onMoney }: { onMoney: () => void }) {
       </header>
 
       <PinnedTask />
+
+      <MyDayTile />
 
       <PhoneSection title={`Today · ${doneCount} of ${data.today.length} done`}>
         <PhoneCard className="px-4">
