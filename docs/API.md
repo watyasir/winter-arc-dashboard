@@ -285,4 +285,4 @@ The plan behind **My Day** on Overview and the routine in the calendar feed. It 
 
 ## Calendar feed: GET /api/calendar.ics?token=SHARE_TOKEN
 
-For Apple Calendar: File → New Calendar Subscription (or open the `webcal://` link) with `webcal://yasiros.vercel.app/api/calendar.ics?token=<SHARE_TOKEN>`. The day plan's phases repeat weekly on their days (India time); every task with a due date is an all-day event (done ones start with ✓). The calendar app fetches it again about every hour. A wrong token gets `404`. The token is the same one as the /progress share link, so anyone with that link could also read this feed.
+For Apple Calendar: tap **Subscribe in Calendar** on `/progress` while signed in (it opens the `webcal://` link), or File → New Calendar Subscription with `webcal://yasiros.vercel.app/api/calendar.ics?token=<SHARE_TOKEN>`. The day plan's phases repeat weekly on their days (India time); every task with a due date is an all-day event (done ones start with ✓). The calendar app fetches it again about every hour. A wrong token gets `404`. The token is the same one as the /progress share link, so anyone with that link could also read this feed.

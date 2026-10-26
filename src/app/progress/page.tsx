@@ -39,7 +39,9 @@ async function ProgressContent({ searchParams }: Pick<PageProps<"/progress">, "s
   if (owner) {
     const data = await loadDashboardData(owner.supabase, owner.email);
     if (!data) return <LoadError />;
-    return <ProgressCard card={toShareCard(data)} sharePath={sharePath} backHref="/" />;
+    // Owner only: the calendar feed (docs/API.md) uses the same token.
+    const calendarPath = token ? `/api/calendar.ics?token=${encodeURIComponent(token)}` : null;
+    return <ProgressCard card={toShareCard(data)} sharePath={sharePath} calendarPath={calendarPath} backHref="/" />;
   }
 
   if (!isShareToken(typeof t === "string" ? t : undefined)) notFound();
