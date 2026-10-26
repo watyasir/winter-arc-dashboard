@@ -40,47 +40,83 @@ const MAX_ITEMS = 30;
 type Parsed = { ok: true; snapshot: MoneySnapshot } | { ok: false; error: string };
 
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
-const isAmount = (v: unknown, min = 0): v is number => typeof v === "number" && Number.isFinite(v) && v >= min && v < MAX_AMOUNT;
-const isName = (v: unknown): v is string => typeof v === "string" && v.trim().length > 0 && v.trim().length <= 40;
 const isDate = (v: unknown): v is string => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) && !Number.isNaN(Date.parse(v));
 
-/** Checks the JSON body of POST /api/money. Error messages name the field that's wrong. */
+/** A number, or text like "₹1,25,000", "-2,300" or "48%". Undefined = not a number. */
+function toNumber(v: unknown): number | undefined {
+  if (typeof v === "number") return Number.isFinite(v) ? v : undefined;
+  if (typeof v !== "string") return undefined;
+  const cleaned = v.replace(/[₹,%\s]/g, "").replace(/^Rs\.?/i, "").replace("−", "-");
+  if (!/^-?\d+(\.\d+)?$/.test(cleaned)) return undefined;
+  return Number(cleaned);
+}
+
+/** An amount in rupees from min up. Undefined = not one. */
+function toAmount(v: unknown, min = 0): number | undefined {
+  const n = toNumber(v);
+  return n !== undefined && n >= min && n < MAX_AMOUNT ? n : undefined;
+}
+
+/** A trimmed name, cut to 40 characters. Undefined = empty or not text. */
+function toName(v: unknown): string | undefined {
+  return typeof v === "string" && v.trim() ? v.trim().slice(0, 40) : undefined;
+}
+
+/**
+ * Checks the JSON body of POST /api/money. Amounts may be numbers or text like "₹12,000".
+ * Error messages name the field (and list position) that's wrong.
+ */
 export function parseMoneySnapshot(body: unknown, now = new Date()): Parsed {
   const fail = (error: string): Parsed => ({ ok: false, error });
   if (!isObject(body)) return fail("Send a JSON object.");
-  const { month, income, expenses, categories = [], split, banks = [], cards = [], spendable, updated_at } = body;
+  const { month, categories = [], split, banks = [], cards = [], updated_at } = body;
 
   if (typeof month !== "string" || !/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) return fail("month: use YYYY-MM, e.g. 2026-10.");
-  if (!isAmount(income)) return fail("income: a number, 0 or more.");
-  if (!isAmount(expenses)) return fail("expenses: a number, 0 or more.");
-  if (!isAmount(spendable, -MAX_AMOUNT)) return fail("spendable: a number.");
+  const income = toAmount(body.income);
+  if (income === undefined) return fail("income: a number, 0 or more.");
+  const expenses = toAmount(body.expenses);
+  if (expenses === undefined) return fail("expenses: a number, 0 or more.");
+  const spendable = toAmount(body.spendable, -MAX_AMOUNT);
+  if (spendable === undefined) return fail("spendable: a number.");
 
   if (!Array.isArray(categories) || categories.length > MAX_ITEMS) return fail(`categories: a list of up to ${MAX_ITEMS}.`);
-  for (const c of categories) {
-    if (!isObject(c) || !isName(c.name) || !isAmount(c.amount)) return fail("categories: each needs a name and an amount (0 or more).");
+  const parsedCategories: MoneySnapshot["categories"] = [];
+  for (const [i, c] of categories.entries()) {
+    const name = isObject(c) ? toName(c.name) : undefined;
+    const amount = isObject(c) ? toAmount(c.amount) : undefined;
+    if (name === undefined || amount === undefined) return fail(`categories[${i}]: needs a name and an amount (0 or more).`);
+    parsedCategories.push({ name, amount });
   }
 
   if (!isObject(split)) return fail("split: needs, wants and savings, each with an actual %.");
   const parsedSplit = {} as Split;
   for (const key of SPLIT_KEYS) {
     const part = split[key];
-    const target = isObject(part) && part.target !== undefined ? part.target : DEFAULT_SPLIT_TARGETS[key];
-    if (!isObject(part) || typeof part.actual !== "number" || !Number.isFinite(part.actual) || part.actual < -1000 || part.actual > 1000) {
-      return fail(`split.${key}.actual: a % of income.`);
-    }
-    if (typeof target !== "number" || target < 0 || target > 100) return fail(`split.${key}.target: a % from 0 to 100.`);
-    parsedSplit[key] = { actual: part.actual, target };
+    const actual = isObject(part) ? toNumber(part.actual) : undefined;
+    if (actual === undefined || actual < -1000 || actual > 1000) return fail(`split.${key}.actual: a % of income.`);
+    const target = isObject(part) && part.target != null ? toNumber(part.target) : DEFAULT_SPLIT_TARGETS[key];
+    if (target === undefined || target < 0 || target > 100) return fail(`split.${key}.target: a % from 0 to 100.`);
+    parsedSplit[key] = { actual, target };
   }
 
   if (!Array.isArray(banks) || banks.length > MAX_ITEMS) return fail(`banks: a list of up to ${MAX_ITEMS}.`);
-  for (const b of banks) {
-    if (!isObject(b) || !isName(b.name) || !isAmount(b.balance, -MAX_AMOUNT)) return fail("banks: each needs a name and a balance.");
+  const parsedBanks: MoneySnapshot["banks"] = [];
+  for (const [i, b] of banks.entries()) {
+    const name = isObject(b) ? toName(b.name) : undefined;
+    const balance = isObject(b) ? toAmount(b.balance, -MAX_AMOUNT) : undefined;
+    if (name === undefined || balance === undefined) return fail(`banks[${i}]: needs a name and a balance.`);
+    parsedBanks.push({ name, balance });
   }
 
   if (!Array.isArray(cards) || cards.length > MAX_ITEMS) return fail(`cards: a list of up to ${MAX_ITEMS}.`);
-  for (const c of cards) {
-    if (!isObject(c) || !isName(c.name) || !isAmount(c.dues)) return fail("cards: each needs a name and dues (0 or more).");
-    if (c.due_date != null && !isDate(c.due_date)) return fail("cards: due_date is YYYY-MM-DD or null.");
+  const parsedCards: MoneySnapshot["cards"] = [];
+  for (const [i, c] of cards.entries()) {
+    const name = isObject(c) ? toName(c.name) : undefined;
+    const dues = isObject(c) ? toAmount(c.dues) : undefined;
+    if (name === undefined || dues === undefined) return fail(`cards[${i}]: needs a name and dues (0 or more).`);
+    const due = isObject(c) && c.due_date !== "" ? (c.due_date ?? null) : null;
+    if (due !== null && !isDate(due)) return fail(`cards[${i}].due_date: YYYY-MM-DD or null.`);
+    parsedCards.push({ name, dues, due_date: due });
   }
 
   let updated = now.toISOString();
@@ -97,14 +133,10 @@ export function parseMoneySnapshot(body: unknown, now = new Date()): Parsed {
       month,
       income,
       expenses,
-      categories: (categories as { name: string; amount: number }[]).map((c) => ({ name: c.name.trim(), amount: c.amount })),
+      categories: parsedCategories,
       split: parsedSplit,
-      banks: (banks as { name: string; balance: number }[]).map((b) => ({ name: b.name.trim(), balance: b.balance })),
-      cards: (cards as { name: string; dues: number; due_date?: string | null }[]).map((c) => ({
-        name: c.name.trim(),
-        dues: c.dues,
-        due_date: c.due_date ?? null,
-      })),
+      banks: parsedBanks,
+      cards: parsedCards,
       spendable,
       updated_at: updated,
     },

@@ -132,6 +132,8 @@ Saves a money snapshot. The Money tiles show the latest one: wallet stack (a tab
 }
 ```
 
+Amounts and percentages may be plain numbers or text like `"₹12,000"`, `"-2,300"` or `"48%"`. Names longer than 40 characters are cut to 40. An empty `due_date` counts as `null`.
+
 | Field | Rule |
 |---|---|
 | `month` | `YYYY-MM` |
@@ -142,6 +144,8 @@ Saves a money snapshot. The Money tiles show the latest one: wallet stack (a tab
 | `cards` | up to 30 `{ name, dues, due_date }`; `dues` = unpaid amount, `due_date` = `YYYY-MM-DD` or `null` |
 | `spendable` | rupees left to spend this month (can be negative) |
 | `updated_at` | optional ISO time the numbers were read; default now; not in the future |
+
+A rejected body gets `400` with an `error` naming the field and list position, e.g. `"cards[0].due_date: YYYY-MM-DD or null."` The same message shows in Vercel's logs (never the amounts).
 
 Reply `201`:
 
