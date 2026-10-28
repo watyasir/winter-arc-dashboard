@@ -134,6 +134,7 @@ export function buildDashboardData({
           ? `${fullDate(season.start_date)} → ${fullDate(addDays(season.start_date, season.length_days - 1))} · ${season.length_days} days`
           : "No season set up yet",
       },
+      gallery: { title: "Gallery", subtitle: "Images and files Claude saved from chats" },
       board: {
         title: "Board",
         subtitle: open.length === 0 ? "No open tasks" : `${open.length} open${overdue ? ` · ${overdue} overdue` : ""}${dueToday ? ` · ${dueToday} due today` : ""}`,
@@ -154,6 +155,7 @@ export function buildDashboardData({
       .filter((t) => t.type === "checkbox" || dailyTarget(t) != null)
       .map((t) => ({ name: t.name, days: lastDays(today, HABIT_DAYS).map((d) => hitOn(t, d)) })),
     tasks,
+    gallery: null,
     claudeJobs: claudeJobs ?? [],
     footnote: "Your data, updated every time you log. Money shows up here after the finance task sends its first snapshot.",
   };

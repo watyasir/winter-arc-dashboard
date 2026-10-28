@@ -3,8 +3,9 @@
 import { useSyncExternalStore } from "react";
 import { WinterArcView } from "@/modules/arc/WinterArcView";
 import { BoardView } from "@/modules/board/BoardView";
+import { GalleryView } from "@/modules/gallery/GalleryView";
 import { ActionGate } from "@/modules/gate/ActionGate";
-import type { DashboardData, TaskActions, ToggleTodayAction } from "@/modules/types";
+import type { DashboardData, GalleryActions, TaskActions, ToggleTodayAction } from "@/modules/types";
 import { DashboardProvider, useDashboard } from "./DashboardContext";
 import { Header } from "./Header";
 import { OverviewView } from "./OverviewView";
@@ -19,14 +20,16 @@ export function Dashboard({
   data,
   onToggleToday,
   taskActions,
+  galleryActions,
 }: {
   data: DashboardData;
   onToggleToday?: ToggleTodayAction;
   taskActions?: TaskActions;
+  galleryActions?: GalleryActions;
 }) {
   const layout = useLayout();
   return (
-    <DashboardProvider data={data} onToggleToday={onToggleToday} taskActions={taskActions}>
+    <DashboardProvider data={data} onToggleToday={onToggleToday} taskActions={taskActions} galleryActions={galleryActions}>
       <ActionGate>
         {layout !== "desktop" && (
           <div className="sm:hidden">
@@ -71,5 +74,6 @@ function useLayout(): "phone" | "desktop" | "both" {
 function CurrentView() {
   const { view } = useDashboard();
   if (view === "arc") return <WinterArcView />;
+  if (view === "gallery") return <GalleryView />;
   return view === "board" ? <BoardView /> : <OverviewView />;
 }

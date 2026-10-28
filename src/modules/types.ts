@@ -1,5 +1,6 @@
 import type { ClaudeJob } from "@/lib/claude-jobs";
 import type { GateChoice } from "@/lib/gate";
+import type { GalleryItem } from "@/lib/gallery";
 import type { Tone } from "@/lib/tones";
 import type { NewTask, Owner, Task, TaskStatus } from "@/lib/tasks";
 
@@ -10,7 +11,7 @@ export type { Owner, Task };
   (src/data/demo); from Phase 3 the real dashboard fills it from Supabase.
 */
 
-export type ViewId = "overview" | "arc" | "board";
+export type ViewId = "overview" | "arc" | "board" | "gallery";
 
 export type SeasonDay = "all" | "most" | "missed" | "today" | "upcoming";
 
@@ -42,6 +43,12 @@ export interface TodayItem {
 export type ToggleTodayAction = (trackerId: string, done: boolean) => Promise<{ ok: boolean }>;
 
 /** Saves task changes. Only the real dashboard passes these; the demo changes stay on the page. */
+/** Reads and deletes gallery files. Only the real dashboard passes these; the demo uses data.gallery. */
+export interface GalleryActions {
+  list: () => Promise<{ ok: true; items: GalleryItem[] } | { ok: false }>;
+  remove: (id: string) => Promise<{ ok: boolean }>;
+}
+
 export interface TaskActions {
   add: (task: NewTask) => Promise<{ ok: boolean }>;
   update: (id: string, task: NewTask) => Promise<{ ok: boolean }>;
@@ -150,6 +157,8 @@ export interface DashboardData {
   habits: { name: string; days: boolean[] }[];
   /** Open tasks plus the ones done in the last two weeks. */
   tasks: Task[];
+  /** The demo's gallery. null on the real dashboard: the gallery loads when it's opened. */
+  gallery: GalleryItem[] | null;
   /** Claude's scheduled tasks, beside the Board. */
   claudeJobs: ClaudeJob[];
   footnote: string;

@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { Dashboard } from "@/components/dashboard/Dashboard";
 import { currentOwner } from "@/lib/auth";
 import { loadDashboardData } from "@/lib/dashboard/load";
-import { addTask, answerGate, deleteTask, moveTask, toggleTodayTracker, updateTask } from "./actions";
+import { addTask, answerGate, deleteGalleryItem, deleteTask, listGallery, moveTask, toggleTodayTracker, updateTask } from "./actions";
 
 /** Signed in as the owner: the real dashboard. Anyone else: a short welcome with the demo link. */
 export default function Home() {
@@ -28,7 +28,14 @@ async function HomeContent() {
   if (!dashboard) {
     return <p className="m-0 p-6 text-center text-[15px] text-coral-text">Couldn&apos;t load your dashboard. Refresh to try again.</p>;
   }
-  return <Dashboard data={dashboard} onToggleToday={toggleTodayTracker} taskActions={{ add: addTask, update: updateTask, move: moveTask, remove: deleteTask, gate: answerGate }} />;
+  return (
+    <Dashboard
+      data={dashboard}
+      onToggleToday={toggleTodayTracker}
+      taskActions={{ add: addTask, update: updateTask, move: moveTask, remove: deleteTask, gate: answerGate }}
+      galleryActions={{ list: listGallery, remove: deleteGalleryItem }}
+    />
+  );
 }
 
 function Welcome() {

@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { nextMidnightIST, type GateChoice } from "@/lib/gate";
 import type { NewTask, Task, TaskStatus } from "@/lib/tasks";
-import type { DashboardData, TaskActions, ToggleTodayAction, ViewId } from "@/modules/types";
+import type { DashboardData, GalleryActions, TaskActions, ToggleTodayAction, ViewId } from "@/modules/types";
 
 interface DashboardState {
   data: DashboardData;
@@ -23,6 +23,8 @@ interface DashboardState {
   /** An answer on the action gate. `due` only for "move". */
   answerGate: (id: string, choice: GateChoice, due?: string) => void;
   taskError: string | null;
+  /** Real dashboard only: lists and deletes gallery files. */
+  galleryActions?: GalleryActions;
 }
 
 /** A saved sheet as it shows on the Board straight away. */
@@ -44,6 +46,7 @@ export function DashboardProvider({
   data,
   onToggleToday,
   taskActions,
+  galleryActions,
   children,
 }: {
   data: DashboardData;
@@ -51,6 +54,7 @@ export function DashboardProvider({
   onToggleToday?: ToggleTodayAction;
   /** Real dashboard only: saves task changes. */
   taskActions?: TaskActions;
+  galleryActions?: GalleryActions;
   children: ReactNode;
 }) {
   const [view, setViewState] = useState<ViewId>("overview");
@@ -154,6 +158,7 @@ export function DashboardProvider({
     deleteTask,
     answerGate,
     taskError,
+    galleryActions,
   };
 
   return <DashboardContext.Provider value={value}>{children}</DashboardContext.Provider>;

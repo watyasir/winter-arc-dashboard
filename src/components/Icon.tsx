@@ -10,6 +10,7 @@ const paths = {
   rupee: "M7 5h10M7 9h10M7 5c6 0 6 8 0 8l7 6",
   plus: "M12 5v14M5 12h14",
   x: "M6 6l12 12M18 6 6 18",
+  image: "M4 5h16v14H4zM4 16l5-5 4 4 3-3 4 4M15.5 8.5h.01",
 };
 
 export type IconName = keyof typeof paths;

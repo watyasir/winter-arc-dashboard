@@ -2,6 +2,7 @@ import type { Owner, TaskStatus } from "@/lib/tasks";
 import type { DashboardData, SeasonDay, Task } from "@/modules/types";
 import { DEMO_TODAY, demoBody } from "./body";
 import { demoClaudeJobs } from "./claude-jobs";
+import { demoGallery } from "./gallery";
 
 /*
   Fake data for /demo. Every name, amount and number here is made up.
@@ -58,6 +59,7 @@ export const demoData: DashboardData = {
     },
     arc: { title: "Winter Arc", subtitle: "26 Sep 2026 → 24 Dec 2026 · 90 days" },
     board: { title: "Board", subtitle: "11 open · 2 overdue · 2 waiting on others" },
+    gallery: { title: "Gallery", subtitle: "Images and files Claude saved from chats" },
   },
   navBadges: { board: "11" },
   season: {
@@ -200,6 +202,7 @@ export const demoData: DashboardData = {
     demoTask("t13", "Weekly review agent", "Claude", "Build", null, "done", { doneAt: "2026-10-16T10:00:00+05:30" }),
     demoTask("t14", "Finance logging + email bridge", "Claude", "Build", null, "done", { doneAt: "2026-10-15T10:00:00+05:30" }),
   ],
+  gallery: demoGallery,
   claudeJobs: demoClaudeJobs,
   footnote:
     "Sample data for the demo. The real app fills this from your check-ins, workouts, money snapshots and the Board.",

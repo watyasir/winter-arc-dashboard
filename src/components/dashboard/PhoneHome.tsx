@@ -9,6 +9,7 @@ import { formatRupees } from "@/lib/format";
 import { toneBg, type Tone } from "@/lib/tones";
 import { ArcStreaksTile, ArcTargetsTile, ArcWeeksTile } from "@/modules/arc/ArcTiles";
 import { BoardView } from "@/modules/board/BoardView";
+import { GalleryView } from "@/modules/gallery/GalleryView";
 import { InProgressTile } from "@/modules/board/InProgressTile";
 import { HabitsTile } from "@/modules/habits/HabitsTile";
 import { MoneyTile } from "@/modules/money/MoneyTile";
@@ -20,17 +21,18 @@ import { useDashboard } from "./DashboardContext";
 
 /*
   The phone home screen, shown under 640px (DESIGN.md v6.1 phone section).
-  Today = the life Overview in one column; Arc = the Winter Arc page stacked; Board; Money.
+  Today = the life Overview in one column; Arc = the Winter Arc page stacked; Board; Gallery; Money.
   Floating tab bar with the round "Check-in" button (opens /log) next to it.
   The tab follows the dashboard's view, so "Open Board" or the Winter Arc chip switch tabs too.
 */
 
-type Tab = "today" | "arc" | "board" | "money";
+type Tab = "today" | "arc" | "board" | "gallery" | "money";
 
 const tabs: { id: Tab; label: string; icon: IconName }[] = [
   { id: "today", label: "Today", icon: "sun" },
   { id: "arc", label: "Arc", icon: "snowflake" },
   { id: "board", label: "Board", icon: "board" },
+  { id: "gallery", label: "Gallery", icon: "image" },
   { id: "money", label: "Money", icon: "rupee" },
 ];
 
@@ -38,11 +40,11 @@ export function PhoneHome() {
   const { data, view, setView } = useDashboard();
   // Money is phone-only, so it's kept here; the other tabs are the shared views.
   const [moneyOpen, setMoneyOpen] = useState(false);
-  const tab: Tab = moneyOpen ? "money" : view === "arc" ? "arc" : view === "board" ? "board" : "today";
+  const tab: Tab = moneyOpen ? "money" : view === "arc" || view === "board" || view === "gallery" ? view : "today";
 
   function open(t: Tab) {
     setMoneyOpen(t === "money");
-    setView(t === "arc" ? "arc" : t === "board" ? "board" : "overview");
+    setView(t === "today" || t === "money" ? "overview" : t);
     window.scrollTo({ top: 0 });
   }
 
@@ -55,6 +57,12 @@ export function PhoneHome() {
           <>
             <LargeTitle>Board</LargeTitle>
             <BoardView />
+          </>
+        )}
+        {tab === "gallery" && (
+          <>
+            <LargeTitle>Gallery</LargeTitle>
+            <GalleryView />
           </>
         )}
         {tab === "money" && (
@@ -78,7 +86,7 @@ export function PhoneHome() {
                 type="button"
                 aria-current={current ? "page" : undefined}
                 onClick={() => open(t.id)}
-                className={`flex min-h-12 min-w-[60px] cursor-pointer flex-col items-center justify-center gap-0.5 rounded-full border-0 px-1 py-1.5 text-[11px] font-semibold ${
+                className={`flex min-h-12 min-w-[50px] cursor-pointer flex-col items-center justify-center gap-0.5 rounded-full border-0 px-1 py-1.5 text-[11px] font-semibold ${
                   current ? "bg-brand/12 text-brand-text" : "bg-transparent text-ink"
                 }`}
               >

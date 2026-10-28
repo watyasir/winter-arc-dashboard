@@ -2,6 +2,7 @@
 
 import { refresh } from "next/cache";
 import { requireUser } from "@/lib/auth";
+import { fileNameFor, type GalleryItem, type GalleryMime } from "@/lib/gallery";
 import { canSnooze, GATE_CHOICES, nextMidnightIST, type GateChoice } from "@/lib/gate";
 import { TASK_STATUSES, taskProblem, type NewTask, type TaskStatus } from "@/lib/tasks";
 import { todayISO } from "@/lib/trackers";
@@ -101,3 +102,53 @@ export async function answerGate(id: string, choice: GateChoice, due?: string): 
   refresh();
   return { ok: true };
 }
+
+// ---------------------------------------------------------------- gallery
+
+/** The gallery, newest first, with signed links (1 hour) to each original. Read with the owner's own login. */
+export async function listGallery(): Promise<{ ok: true; items: GalleryItem[] } | { ok: false }> {
+  const { supabase } = await requireUser();
+  const { data, error } = await supabase
+    .from("gallery_items")
+    .select("id, title, category, description, file_path, mime, width, height, bytes, created_at")
+    .order("created_at", { ascending: false });
+  if (error) return { ok: false };
+  if (data.length === 0) return { ok: true, items: [] };
+  const signed = await supabase.storage.from("gallery").createSignedUrls(data.map((d) => d.file_path), 3600);
+  if (signed.error) return { ok: false };
+  const urls = new Map(signed.data.map((s) => [s.path, s.signedUrl]));
+  return {
+    ok: true,
+    items: data.flatMap((d) => {
+      const url = urls.get(d.file_path);
+      if (!url) return [];
+      const fileName = fileNameFor(d.title, d.mime as GalleryMime);
+      return [{
+        id: d.id,
+        title: d.title,
+        category: d.category,
+        description: d.description,
+        mime: d.mime as GalleryMime,
+        width: d.width,
+        height: d.height,
+        bytes: Number(d.bytes),
+        createdAt: d.created_at,
+        url,
+        downloadUrl: `${url}&download=${encodeURIComponent(fileName)}`,
+        fileName,
+      }];
+    }),
+  };
+}
+
+/** Deletes a gallery file and its entry (after the confirm in the viewer). */
+export async function deleteGalleryItem(id: string): Promise<{ ok: boolean }> {
+  const { supabase } = await requireUser();
+  const { data } = await supabase.from("gallery_items").select("file_path").eq("id", id).maybeSingle();
+  if (!data) return { ok: false };
+  const removed = await supabase.storage.from("gallery").remove([data.file_path]);
+  if (removed.error) return { ok: false };
+  const { error } = await supabase.from("gallery_items").delete().eq("id", id);
+  return { ok: !error };
+}
+

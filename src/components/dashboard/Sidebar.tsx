@@ -10,6 +10,7 @@ const nav: { id: ViewId; label: string; icon: IconName; tile: string }[] = [
   { id: "overview", label: "Overview", icon: "grid", tile: "bg-brand" },
   { id: "arc", label: "Winter Arc", icon: "snowflake", tile: "bg-arc" },
   { id: "board", label: "Board", icon: "board", tile: "bg-ramp3" },
+  { id: "gallery", label: "Gallery", icon: "image", tile: "bg-pine" },
 ];
 
 const rowBase =
