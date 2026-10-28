@@ -273,4 +273,6 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **What I asked Claude Code to do:** "Sidebar Check-in instead of Trackers, no Log Today button, no banner or My Day. Then 9 coloured calendar feeds, a gallery with an upload API, a PWA, a check-in that matches the day plan, and exam mode in the plan."
 **What got built:**
 - Layout: the sidebar is Overview, Winter Arc, Board and Check-in. The header has no Log Today button; the phone's round button is now "Check-in". The pinned banner and My Day are gone from Overview, with their code and demo data.
+- Calendar: nine colour-coded feeds (Sleep, Shift, Breaks, Meals, Gym & walk, Self-care, Build & study, Commute, Tasks due), each its own calendar in Apple Calendar with its own colour, listed in /settings with copy buttons. Phases can say which feed they belong to; otherwise simple rules (kind and title) decide.
+- Exam mode support: a phase can run only between two dates and then replaces the usual phase at that time. The feed splits the weeks so nothing shows twice.
 

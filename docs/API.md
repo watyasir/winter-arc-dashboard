@@ -271,7 +271,7 @@ curl -X DELETE "https://yasiros.vercel.app/api/claude-jobs?name=Morning%20brief"
 
 ## Day plan: GET and POST /api/day-plan
 
-The plan behind **My Day** on Overview and the routine in the calendar feed. It lives only in the database. `POST` replaces the whole plan:
+The plan behind the routine in the calendar feeds. It lives only in the database. `POST` replaces the whole plan:
 
 ```json
 {
@@ -287,8 +287,29 @@ The plan behind **My Day** on Overview and the routine in the calendar feed. It 
 
 - A phase lasts until the next one starts. Times after midnight are written `24:30` and belong to the day before, so a day runs from waking to lights out.
 - `kind`: `sleep`, `care`, `food`, `move`, `work` or `mind`. `days` limits a phase to some weekdays (`mon`…`sun`); `byDay` swaps in that day's `detail`.
-- `sections` (up to 12, 30 items each) show as folded lists: meals, gym, prep, stock list.
+- `cal` (optional) puts a phase in one of the 9 calendar feeds: `sleep`, `shift`, `breaks`, `meals`, `gym`, `care`, `build`, `commute`, `tasks`. Without it: kind `sleep` → sleep; a title starting with the word "Break" → breaks; a title with the word "ride" → commute; then kind `work` → shift, `food` → meals, `move` → gym, `mind` → build, `care` → care.
+- `from` / `until` (optional, `YYYY-MM-DD`, both included) limit a phase to some dates, for exam weeks and other one-offs. On those dates it **replaces any undated phase that starts at the same time**; a new time just adds a phase (and shortens the one before it). Example: `{ "start": "10:00", "kind": "mind", "title": "Exam revision · 1.5 h", "cal": "build", "days": ["mon","tue","wed","thu","fri"], "from": "2026-11-02" }`.
+- `sections` (up to 12, 30 items each) are kept with the plan (meals, gym, prep, stock list).
 
-## Calendar feed: GET /api/calendar.ics?token=SHARE_TOKEN
+## Calendar feeds: GET /api/calendar.ics?token=SHARE_TOKEN[&cat=<key>]
 
-For Apple Calendar: tap **Subscribe in Calendar** on `/progress` while signed in (it opens the `webcal://` link), or File → New Calendar Subscription with `webcal://yasiros.vercel.app/api/calendar.ics?token=<SHARE_TOKEN>`. The day plan's phases repeat weekly on their days (India time); every task with a due date is an all-day event (done ones start with ✓). The calendar app fetches it again about every hour. A wrong token gets `404`. The token is the same one as the /progress share link, so anyone with that link could also read this feed.
+Nine colour-coded calendars for Apple Calendar, one per `cat`:
+
+| `cat` | Calendar name | Colour |
+|---|---|---|
+| `sleep` | Yasir OS · Sleep | `#7C8CE8` |
+| `shift` | Yasir OS · Shift | `#2BB3A8` |
+| `breaks` | Yasir OS · Breaks | `#F5C842` |
+| `meals` | Yasir OS · Meals | `#FF9F45` |
+| `gym` | Yasir OS · Gym & walk | `#4CD07D` |
+| `care` | Yasir OS · Self-care | `#FF7EB6` |
+| `build` | Yasir OS · Build & study | `#A78BFA` |
+| `commute` | Yasir OS · Commute | `#A1A1AA` |
+| `tasks` | Yasir OS · Tasks due | `#FF5C5C` |
+
+Each feed sets `X-WR-CALNAME` and `X-APPLE-CALENDAR-COLOR`. Subscribe from **/settings → Calendar** (signed in): tap a name to open it as `webcal://`, or copy its link. `/progress` → **Subscribe in Calendar** leads there.
+
+- Phases repeat weekly on their days (India time). Dated phases (`from`/`until`) split the weeks into ranges, and each event repeats only until its range ends (`RRULE … UNTIL`), so an exam-week phase never doubles up with the one it replaces.
+- `tasks`: every task with a due date as an all-day event (done ones start with ✓).
+- Without `&cat`, the original all-in-one "Yasir OS" feed (everything above in one calendar) keeps working.
+- A wrong token or an unknown `cat` gets `404`. The token is the same one as the /progress share link, so anyone with that link could also read these feeds. The calendar app fetches them again about every hour.

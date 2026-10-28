@@ -6,12 +6,13 @@ import { Button } from "@/components/Button";
 import { fieldClass, StatusMessages, type Status } from "@/components/body/Sheet";
 import { Field, Group } from "@/components/FormGroup";
 import { parseNumber, type SaveResult } from "@/lib/body";
+import { CALENDARS } from "@/lib/calendar";
 import { SEASON_DAYS, seasonProblem, TRACKER_TYPES, trackerProblem, type SeasonInput, type TrackerInput } from "@/lib/settings";
 import { AREA_ORDER, formatDayLabel, type Tracker, type TrackerArea, type TrackerType } from "@/lib/trackers";
 
 /*
-  /settings: Winter Arc (start date + a daily target per tracker), a new tracker, and Reset test data.
-  The one primary button is the season's.
+  /settings: Winter Arc (start date + a daily target per tracker), a new tracker, the calendar
+  feeds, and Reset test data. The one primary button is the season's.
 */
 
 interface SettingsActions {
@@ -29,6 +30,7 @@ export function SettingsForm({
   season,
   defaultStart,
   actions,
+  calendarPath,
 }: {
   trackers: Tracker[];
   /** The active season, if there is one. */
@@ -36,6 +38,8 @@ export function SettingsForm({
   /** Next Monday, for a new season. */
   defaultStart: string;
   actions: SettingsActions;
+  /** /api/calendar.ics?token=…; null = SHARE_TOKEN isn't set. */
+  calendarPath: string | null;
 }) {
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col gap-[18px] px-4 pt-6 pb-8">
@@ -47,8 +51,56 @@ export function SettingsForm({
       </header>
       <SeasonSection trackers={trackers} season={season} defaultStart={defaultStart} save={actions.saveSeason} />
       <NewTrackerSection add={actions.addTracker} />
+      <CalendarSection path={calendarPath} />
       <ResetSection reset={actions.resetTestData} />
     </div>
+  );
+}
+
+// ---------------------------------------------------------------- Calendar feeds
+
+/**
+ * The 9 colour-coded calendar feeds. Tap a name to subscribe in Apple Calendar (webcal://),
+ * or copy its link. The dots are each calendar's own colour in Apple Calendar.
+ */
+function CalendarSection({ path }: { path: string | null }) {
+  const [copied, setCopied] = useState<string | null>(null);
+  const linkFor = (key: string) => `webcal://${window.location.host}${path}&cat=${key}`;
+
+  async function copy(key: string) {
+    try {
+      await navigator.clipboard.writeText(linkFor(key));
+      setCopied(key);
+    } catch {
+      window.prompt("Copy this link", linkFor(key));
+    }
+  }
+
+  return (
+    <Group id="calendar" title="Calendar">
+      {!path && <p className="m-0 py-3 text-[15px] text-sub">The feeds need SHARE_TOKEN in the site&apos;s settings.</p>}
+      {path &&
+        CALENDARS.map((c) => (
+          <div key={c.key} className="flex min-h-[52px] items-center gap-3 py-1.5">
+            {/* Apple Calendar's colour for this feed: data, not a theme colour. */}
+            <span aria-hidden="true" className="size-3 shrink-0 rounded-full" style={{ backgroundColor: c.color }} />
+            <a
+              href={`${path}&cat=${c.key}`}
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = linkFor(c.key);
+              }}
+              className="flex min-h-11 flex-1 items-center text-[17px] text-ink no-underline"
+            >
+              {c.name}
+            </a>
+            <Button onClick={() => copy(c.key)} aria-label={`Copy the ${c.name} calendar link`}>
+              {copied === c.key ? "Copied" : "Copy"}
+            </Button>
+          </div>
+        ))}
+      {path && <p className="m-0 py-3 text-[13px] text-sub">Tap a name to subscribe in Calendar, or copy its link.</p>}
+    </Group>
   );
 }
 

@@ -226,10 +226,11 @@ Build complete. From here: improvements only.
 
 ## Run 29 Oct 2026: layout, M11, M12, M10, M4, M5
 - [x] Layout: sidebar Overview · Winter Arc · Board · Check-in (opens /log; /demo/log on the demo); trackers tree and "+ New tracker" gone from the sidebar (New tracker lives in /settings); no "Log Today" in the page header; phone round button says Check-in; Overview has no pinned banner and no My Day. Their code, demo plan and types deleted; day_plans table and /api/day-plan kept for the calendar
-- [ ] M11 calendar: 9 coloured feeds
+- [x] M11 calendar: `&cat=` gives 9 coloured feeds (`X-WR-CALNAME` "Yasir OS · <Name>", `X-APPLE-CALENDAR-COLOR`); no `&cat` = old all-in-one feed. Phases take optional `cal`, with fallback rules checked against the live plan (31 phases). /settings → Calendar lists the 9 webcal links with copy buttons and colour dots; /progress "Subscribe in Calendar" goes there. Feed builder moved to `src/lib/calendar-feed.ts`
+- [x] M5 code: phases take `from`/`until`; on those dates a dated phase replaces the undated one at the same start time; the feeds split weeks into date ranges with `RRULE UNTIL` (checked on the real plan: no doubles, Breakfast shortens to 20 min on exam days). Plan change waits for the deploy
 - [ ] M12 gallery
 - [ ] M10 PWA
 - [ ] M4 check-in matches the day plan
-- [ ] M5 exam mode
+- [ ] M5 plan change (POST after deploy)
 - [ ] Finish: build, knip, hig-doctor, lint, /demo at 1440 + 375, docs, deploy, live checks
 

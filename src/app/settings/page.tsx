@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { SettingsForm } from "@/components/settings/SettingsForm";
 import { requireUser } from "@/lib/auth";
+import { shareToken } from "@/lib/share-store";
 import { weekStart } from "@/lib/dashboard/dates";
 import { loadTrackers } from "@/lib/tracker-store";
 import { addDays, todayISO } from "@/lib/trackers";
@@ -32,6 +33,13 @@ async function Settings() {
       season={season.data ? { start: season.data.start_date, targets: season.data.targets } : null}
       defaultStart={addDays(weekStart(todayISO()), 7)}
       actions={{ saveSeason, addTracker, resetTestData }}
+      calendarPath={calendarPath()}
     />
   );
+}
+
+/** The feeds' shared address; each one adds &cat=<key>. Null = SHARE_TOKEN isn't set. */
+function calendarPath(): string | null {
+  const token = shareToken();
+  return token ? `/api/calendar.ics?token=${encodeURIComponent(token)}` : null;
 }

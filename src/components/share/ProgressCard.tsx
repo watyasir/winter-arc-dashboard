@@ -14,15 +14,15 @@ import type { ShareCard } from "@/lib/share";
 export function ProgressCard({
   card,
   sharePath,
-  calendarPath = null,
+  calendarHref = null,
   backHref,
   demo = false,
 }: {
   card: ShareCard | null;
   /** Path the link points to (the origin is added in the browser). Null = sharing isn't set up. */
   sharePath: string | null;
-  /** Owner only: the calendar feed, opened as webcal:// so Apple Calendar subscribes to it. */
-  calendarPath?: string | null;
+  /** Owner only: where the calendar feeds are listed (/settings). */
+  calendarHref?: string | null;
   /** Owner and demo only: back to the dashboard. */
   backHref?: string;
   demo?: boolean;
@@ -30,7 +30,7 @@ export function ProgressCard({
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-[440px] flex-col justify-center gap-4 px-4 pt-[max(20px,env(safe-area-inset-top))] pb-[max(24px,env(safe-area-inset-bottom))]">
       {card ? <Card card={card} demo={demo} /> : <NoSeason />}
-      <ShareActions sharePath={card ? sharePath : null} calendarPath={calendarPath} backHref={backHref} />
+      <ShareActions sharePath={card ? sharePath : null} calendarHref={calendarHref} backHref={backHref} />
     </main>
   );
 }
@@ -154,7 +154,7 @@ function NoSeason() {
   );
 }
 
-function ShareActions({ sharePath, calendarPath, backHref }: { sharePath: string | null; calendarPath: string | null; backHref?: string }) {
+function ShareActions({ sharePath, calendarHref, backHref }: { sharePath: string | null; calendarHref: string | null; backHref?: string }) {
   const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
   const link = sharePath && typeof window !== "undefined" ? `${window.location.origin}${sharePath}` : null;
 
@@ -178,10 +178,13 @@ function ShareActions({ sharePath, calendarPath, backHref }: { sharePath: string
       ) : (
         <Note>Sharing is off. Add SHARE_TOKEN to the site&apos;s settings to get a link.</Note>
       )}
-      {calendarPath && (
-        <Button onClick={() => (window.location.href = `webcal://${window.location.host}${calendarPath}`)} className="w-full sm:min-h-11">
+      {calendarHref && (
+        <Link
+          href={calendarHref}
+          className="flex min-h-11 w-full items-center justify-center rounded-full border border-solid border-sep bg-base px-4 text-[13px] font-semibold text-ink no-underline hover:bg-fill-strong hover:text-ink"
+        >
           Subscribe in Calendar
-        </Button>
+        </Link>
       )}
       <p role="status" className="m-0 text-center text-[13px] text-sub">
         {status === "copied" && "Anyone with the link sees only this card."}
