@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { CheckBox } from "@/components/Checkbox";
 import { Icon, type IconName } from "@/components/Icon";
 import type { ViewId } from "@/modules/types";
 import { useDashboard } from "./DashboardContext";
@@ -19,7 +17,6 @@ const rowBase =
 
 export function Sidebar() {
   const { data, view, setView } = useDashboard();
-  const [treeOpen, setTreeOpen] = useState(true);
 
   return (
     <nav
@@ -60,40 +57,13 @@ export function Sidebar() {
         );
       })}
 
-      <button
-        type="button"
-        aria-expanded={treeOpen}
-        aria-controls="trackers-tree"
-        onClick={() => setTreeOpen((o) => !o)}
-        className={`${rowBase} bg-transparent font-medium`}
-      >
+      {/* The daily check-in is its own page; it opens only from here (and the phone's round button). */}
+      <Link href={data.logHref} prefetch className={`${rowBase} bg-transparent font-medium no-underline hover:text-ink`}>
         <span className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-sage">
           <Icon name="check" className="stroke-white" />
         </span>
-        <span className="flex-1">Trackers</span>
-        <span className={`transition-transform motion-reduce:transition-none ${treeOpen ? "" : "-rotate-90"}`}>
-          <Icon name="chevronDown" size={12} strokeWidth={2.6} className="stroke-pine" />
-        </span>
-      </button>
-      {treeOpen && (
-        <ul id="trackers-tree" aria-label="Trackers today" className="m-0 ml-[21px] list-none border-l-2 border-pine py-0 pr-0 pl-1.5">
-          {data.trackers.map((t) => (
-            <li key={t.label} className="flex min-h-[30px] items-center gap-2.5 px-2.5 text-[13px]">
-              <CheckBox checked={t.done} size={18} />
-              <span className="flex-1">
-                {t.label}
-                <span className="sr-only">{t.done ? ", done" : ", not done"}</span>
-              </span>
-              <span className="text-xs text-sub">{t.value}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-      {data.settingsHref && (
-        <Link href={`${data.settingsHref}#new-tracker`} className={`${rowBase} mt-1 bg-transparent font-medium text-brand-text no-underline hover:text-brand-text`}>
-          + New tracker
-        </Link>
-      )}
+        <span className="flex-1">Check-in</span>
+      </Link>
     </nav>
   );
 }

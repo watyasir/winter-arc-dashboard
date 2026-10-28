@@ -1,5 +1,4 @@
 import type { ClaudeJob } from "@/lib/claude-jobs";
-import type { DayPlan } from "@/lib/day-plan";
 import { addDays, formatAmount, formatValue, type Tracker } from "@/lib/trackers";
 import type { DashboardData, SeasonDay, TodayItem } from "@/modules/types";
 import type { BodyCheck, Workout } from "@/lib/body";
@@ -47,8 +46,6 @@ interface BuildInput {
   goalTracked: Map<string, number>;
   /** The latest money snapshot. Null/missing = none pushed yet. */
   money?: MoneySnapshot | null;
-  /** My Day on Overview. Null/missing = no plan sent yet. */
-  dayPlan?: DayPlan | null;
   claudeJobs?: ClaudeJob[];
 }
 
@@ -73,7 +70,6 @@ export function buildDashboardData({
   goals,
   goalTracked,
   money,
-  dayPlan,
   claudeJobs,
 }: BuildInput): DashboardData {
   const values = new Map<string, number>();
@@ -144,10 +140,6 @@ export function buildDashboardData({
       },
     },
     navBadges: open.length ? { board: String(open.length) } : {},
-    trackers: trackers.map((t) => {
-      const v = valueOn(t, today);
-      return { label: t.name, done: v !== undefined && hitOn(t, today), value: v === undefined ? "–" : formatValue(t, v) };
-    }),
     season: season ? buildSeason(season, today, dayStatus, counts, dailyGoals.length) : null,
     arc: season ? buildArc(season, today, trackers, dailyGoals, hitOn) : null,
     today: trackers.map((t) => todayItem(t, valueOn(t, today), hitOn(t, today))),
@@ -162,7 +154,6 @@ export function buildDashboardData({
       .filter((t) => t.type === "checkbox" || dailyTarget(t) != null)
       .map((t) => ({ name: t.name, days: lastDays(today, HABIT_DAYS).map((d) => hitOn(t, d)) })),
     tasks,
-    dayPlan: dayPlan ?? null,
     claudeJobs: claudeJobs ?? [],
     footnote: "Your data, updated every time you log. Money shows up here after the finance task sends its first snapshot.",
   };

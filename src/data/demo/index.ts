@@ -1,7 +1,7 @@
 import type { Owner, TaskStatus } from "@/lib/tasks";
 import type { DashboardData, SeasonDay, Task } from "@/modules/types";
 import { DEMO_TODAY, demoBody } from "./body";
-import { demoClaudeJobs, demoDayPlan } from "./day-plan";
+import { demoClaudeJobs } from "./claude-jobs";
 
 /*
   Fake data for /demo. Every name, amount and number here is made up.
@@ -60,13 +60,6 @@ export const demoData: DashboardData = {
     board: { title: "Board", subtitle: "11 open · 2 overdue · 2 waiting on others" },
   },
   navBadges: { board: "11" },
-  trackers: [
-    { label: "Workout", done: true, value: "Push" },
-    { label: "Study", done: true, value: "90 min" },
-    { label: "Sleep", done: true, value: "7.2 h" },
-    { label: "Water", done: false, value: "2 of 3 L" },
-    { label: "German", done: false, value: "0 of 20 min" },
-  ],
   season: {
     startsIn: 0,
     name: "Winter Arc",
@@ -207,7 +200,6 @@ export const demoData: DashboardData = {
     demoTask("t13", "Weekly review agent", "Claude", "Build", null, "done", { doneAt: "2026-10-16T10:00:00+05:30" }),
     demoTask("t14", "Finance logging + email bridge", "Claude", "Build", null, "done", { doneAt: "2026-10-15T10:00:00+05:30" }),
   ],
-  dayPlan: demoDayPlan,
   claudeJobs: demoClaudeJobs,
   footnote:
     "Sample data for the demo. The real app fills this from your check-ins, workouts, money snapshots and the Board.",

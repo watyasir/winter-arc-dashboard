@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { PillLink } from "@/components/PillLink";
 import { ArcChip } from "./ArcChip";
 import { useDashboard } from "./DashboardContext";
@@ -18,13 +17,6 @@ export function Header() {
       </div>
       <div className="flex flex-wrap items-center gap-2.5">
         {view === "arc" ? data.season && <PillLink href={data.shareHref}>Share card</PillLink> : <ArcChip onOpen={() => setView("arc")} />}
-        <Link
-          href={data.logHref}
-          prefetch
-          className="flex min-h-11 items-center rounded-full bg-brand px-4 text-[13px] font-semibold text-white no-underline hover:bg-brand-hover hover:text-white sm:min-h-9"
-        >
-          Log Today
-        </Link>
       </div>
     </header>
   );

@@ -223,3 +223,13 @@ Build complete. From here: improvements only.
 - [x] Plan (31 phases, 5 sections) and 4 Claude jobs loaded through the live API; tasks API returns the new fields
 - [x] Checked on `/demo` at 1440px and 375px: gate (Esc does nothing, keyboard works, all 3 answers), My Day, Board + jobs panel; no sideways scroll, phone targets 44px. knip, hig-doctor, lint and build clean
 - [x] `DELETE /api/claude-jobs?name=` added (27 Oct); "Bryan Johnson digest" and "Daily brain sweep" removed from the panel through it
+
+## Run 29 Oct 2026: layout, M11, M12, M10, M4, M5
+- [x] Layout: sidebar Overview · Winter Arc · Board · Check-in (opens /log; /demo/log on the demo); trackers tree and "+ New tracker" gone from the sidebar (New tracker lives in /settings); no "Log Today" in the page header; phone round button says Check-in; Overview has no pinned banner and no My Day. Their code, demo plan and types deleted; day_plans table and /api/day-plan kept for the calendar
+- [ ] M11 calendar: 9 coloured feeds
+- [ ] M12 gallery
+- [ ] M10 PWA
+- [ ] M4 check-in matches the day plan
+- [ ] M5 exam mode
+- [ ] Finish: build, knip, hig-doctor, lint, /demo at 1440 + 375, docs, deploy, live checks
+

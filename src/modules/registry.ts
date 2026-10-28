@@ -1,8 +1,6 @@
 import type { ComponentType } from "react";
 import { InProgressTile } from "./board/InProgressTile";
-import { PinnedTask } from "./board/PinnedTask";
 import { BodyTile } from "./body/BodyTile";
-import { MyDayTile } from "./day/MyDayTile";
 import { GoalsTile } from "./goals/GoalsTile";
 import { HabitsTile } from "./habits/HabitsTile";
 import { MoneyTile } from "./money/MoneyTile";
@@ -22,8 +20,6 @@ interface TileDef {
 }
 
 export const overviewTiles: TileDef[] = [
-  { id: "pinned-task", row: 0, Component: PinnedTask },
-  { id: "my-day", row: 1, Component: MyDayTile },
   { id: "today", row: 2, Component: TodayTile },
   { id: "tasks", row: 2, Component: TasksTile },
   { id: "money", row: 2, Component: MoneyTile },

@@ -71,12 +71,6 @@ export function boardOrder(a: Task, b: Task): number {
   return (a.due ?? "9999").localeCompare(b.due ?? "9999");
 }
 
-/** The pinned card on Overview: the open "Home" task with the highest order. */
-export function topHomeTask(tasks: Task[]): Task | undefined {
-  return tasks.filter((t) => t.status !== "done" && t.area.trim().toLowerCase() === "home").sort(boardOrder)[0];
-}
-
-/** "soon" = due within 3 days (yellow), "overdue" = past due (coral). Done tasks are never late. */
 export function dueState(task: Task, today: string): "soon" | "overdue" | undefined {
   if (!task.due || task.status === "done") return undefined;
   if (task.due < today) return "overdue";

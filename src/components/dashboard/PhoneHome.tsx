@@ -10,8 +10,6 @@ import { toneBg, type Tone } from "@/lib/tones";
 import { ArcStreaksTile, ArcTargetsTile, ArcWeeksTile } from "@/modules/arc/ArcTiles";
 import { BoardView } from "@/modules/board/BoardView";
 import { InProgressTile } from "@/modules/board/InProgressTile";
-import { PinnedTask } from "@/modules/board/PinnedTask";
-import { MyDayTile } from "@/modules/day/MyDayTile";
 import { HabitsTile } from "@/modules/habits/HabitsTile";
 import { MoneyTile } from "@/modules/money/MoneyTile";
 import { SeasonTile } from "@/modules/season/SeasonTile";
@@ -23,7 +21,7 @@ import { useDashboard } from "./DashboardContext";
 /*
   The phone home screen, shown under 640px (DESIGN.md v6.1 phone section).
   Today = the life Overview in one column; Arc = the Winter Arc page stacked; Board; Money.
-  Floating tab bar with the round "Log today" button next to it.
+  Floating tab bar with the round "Check-in" button (opens /log) next to it.
   The tab follows the dashboard's view, so "Open Board" or the Winter Arc chip switch tabs too.
 */
 
@@ -93,10 +91,10 @@ export function PhoneHome() {
         <Link
           href={data.logHref}
           prefetch
-          aria-label="Log today"
-          className="flex size-[62px] shrink-0 items-center justify-center rounded-full bg-brand text-white shadow-fab hover:bg-brand-hover hover:text-white"
+          className="flex size-[62px] shrink-0 flex-col items-center justify-center gap-0.5 rounded-full bg-brand text-[10px] font-semibold text-white no-underline shadow-fab hover:bg-brand-hover hover:text-white"
         >
-          <Icon name="plus" size={26} strokeWidth={2.6} className="stroke-white" />
+          <Icon name="check" size={22} strokeWidth={2.6} className="stroke-white" />
+          Check-in
         </Link>
       </nav>
     </div>
@@ -107,7 +105,7 @@ function LargeTitle({ children }: { children: ReactNode }) {
   return <h1 className="m-0 text-[34px] leading-[1.1] font-bold tracking-[-0.02em]">{children}</h1>;
 }
 
-/** The life Overview, one column: greeting + Winter Arc chip, pin, My Day, Today, Tasks, a 2x2 summary, Habits, In progress. */
+/** The life Overview, one column: greeting + Winter Arc chip, Today, Tasks, a 2x2 summary, Habits, In progress. */
 function TodayTab({ onMoney }: { onMoney: () => void }) {
   const { data, todayDone, setView } = useDashboard();
   const { weight, workouts, goals, money } = data;
@@ -135,9 +133,6 @@ function TodayTab({ onMoney }: { onMoney: () => void }) {
         </div>
       </header>
 
-      <PinnedTask />
-
-      <MyDayTile />
 
       <PhoneSection title={`Today · ${doneCount} of ${data.today.length} done`}>
         <PhoneCard className="px-4">

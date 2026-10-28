@@ -1,5 +1,5 @@
 /*
-  The day plan on Overview ("My Day") and in the calendar feed. It's data, sent by Claude
+  The day plan behind the calendar feeds. It's data, sent by Claude
   through POST /api/day-plan and kept in the day_plans table (never in this public repo).
 
   A plan is a list of phases. Each phase starts at a time and lasts until the next one
@@ -13,7 +13,7 @@ export const DAY_KEYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as con
 export type DayKey = (typeof DAY_KEYS)[number];
 
 const PHASE_KINDS = ["sleep", "care", "food", "move", "work", "mind"] as const;
-export type PhaseKind = (typeof PHASE_KINDS)[number];
+type PhaseKind = (typeof PHASE_KINDS)[number];
 
 interface PlanPhase {
   /** "07:30"; up to "29:59" for after midnight. */
@@ -55,13 +55,6 @@ export function clockLabel(minutes: number): string {
   return `${h % 12 || 12}:${String(m % 60).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
 }
 
-/** Monday = "mon" for a YYYY-MM-DD date. */
-function dayKeyOf(iso: string): DayKey {
-  const [y, m, d] = iso.split("-").map(Number);
-  return DAY_KEYS[(new Date(Date.UTC(y, m - 1, d)).getUTCDay() + 6) % 7];
-}
-
-const prevKey = (k: DayKey) => DAY_KEYS[(DAY_KEYS.indexOf(k) + 6) % 7];
 const nextKey = (k: DayKey) => DAY_KEYS[(DAY_KEYS.indexOf(k) + 1) % 7];
 
 /** The day's phases in order. The last one (lights out) runs until the next day's first phase. */
@@ -77,25 +70,6 @@ export function phasesFor(plan: DayPlan, day: DayKey): DayPhase[] {
     kind: p.kind,
     detail: p.byDay?.[day] ?? p.detail ?? "",
   }));
-}
-
-/**
- * Where the plan is right now. Before today's first phase (wake-up) it's still last
- * night's plan: 12:15 AM is 24:15 of yesterday.
- */
-export function planNow(plan: DayPlan, today: string, nowMinutes: number) {
-  let day = dayKeyOf(today);
-  let at = nowMinutes;
-  let phases = phasesFor(plan, day);
-  if (phases.length && at < phases[0].start) {
-    day = prevKey(day);
-    at += 1440;
-    phases = phasesFor(plan, day);
-  }
-  const now = phases.findLastIndex((p) => p.start <= at);
-  // After lights out, next is tomorrow's first phase.
-  const upcoming = phases[now + 1] ?? phasesFor(plan, nextKey(day))[0];
-  return { day, phases, now, current: phases[now] as DayPhase | undefined, upcoming: upcoming as DayPhase | undefined };
 }
 
 /** Minutes since midnight in India. */

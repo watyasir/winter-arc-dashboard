@@ -1,5 +1,4 @@
 import type { ClaudeJob } from "@/lib/claude-jobs";
-import type { DayPlan } from "@/lib/day-plan";
 import type { GateChoice } from "@/lib/gate";
 import type { Tone } from "@/lib/tones";
 import type { NewTask, Owner, Task, TaskStatus } from "@/lib/tasks";
@@ -66,7 +65,6 @@ export interface DashboardData {
   logHref: string;
   views: Record<ViewId, { title: string; subtitle: string }>;
   navBadges: Partial<Record<ViewId, string>>;
-  trackers: { label: string; done: boolean; value: string }[];
   season: {
     name: string;
     length: number;
@@ -152,8 +150,6 @@ export interface DashboardData {
   habits: { name: string; days: boolean[] }[];
   /** Open tasks plus the ones done in the last two weeks. */
   tasks: Task[];
-  /** My Day on Overview (src/lib/day-plan.ts). null = no plan sent yet. */
-  dayPlan: DayPlan | null;
   /** Claude's scheduled tasks, beside the Board. */
   claudeJobs: ClaudeJob[];
   footnote: string;

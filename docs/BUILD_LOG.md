@@ -267,3 +267,10 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **What Yasir had to do himself:** nothing. Claude found the plan in his "Winter Arc Day" artifact, ran the migration and loaded the plan through the live API.
 **Screenshot to take:** `/demo` with the gate card over the blurred dashboard, and the My Day card on the phone.
 **Next:** improvements only.
+
+## Session 13 — 29 Oct 2026 — Layout trim + M11, M12, M10, M4, M5
+**Goal:** Simplify the layout, then calendar colours, a gallery, install as an app, a fuller check-in and exam mode, in one run.
+**What I asked Claude Code to do:** "Sidebar Check-in instead of Trackers, no Log Today button, no banner or My Day. Then 9 coloured calendar feeds, a gallery with an upload API, a PWA, a check-in that matches the day plan, and exam mode in the plan."
+**What got built:**
+- Layout: the sidebar is Overview, Winter Arc, Board and Check-in. The header has no Log Today button; the phone's round button is now "Check-in". The pinned banner and My Day are gone from Overview, with their code and demo data.
+
