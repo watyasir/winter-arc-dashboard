@@ -229,9 +229,9 @@ Build complete. From here: improvements only.
 - [x] M11 calendar: `&cat=` gives 9 coloured feeds (`X-WR-CALNAME` "Yasir OS · <Name>", `X-APPLE-CALENDAR-COLOR`); no `&cat` = old all-in-one feed. Phases take optional `cal`, with fallback rules checked against the live plan (31 phases). /settings → Calendar lists the 9 webcal links with copy buttons and colour dots; /progress "Subscribe in Calendar" goes there. Feed builder moved to `src/lib/calendar-feed.ts`
 - [x] M5 code: phases take `from`/`until`; on those dates a dated phase replaces the undated one at the same start time; the feeds split weeks into date ranges with `RRULE UNTIL` (checked on the real plan: no doubles, Breakfast shortens to 20 min on exam days). Plan change waits for the deploy
 - [x] M12 gallery code: private bucket `gallery` (25 MB, PNG/JPG/SVG/PDF/WebP) + `gallery_items` with row-level security (migration `…_gallery.sql`, run in Supabase by Claude: success). `POST /api/gallery` with an upload-only key (GALLERY_TOKEN, else HMAC of API_TOKEN): multipart for small files, signed upload link + confirm up to 25 MB; type checked from the file's own bytes; originals stored byte-for-byte. Key saved to `~/Claude/yasiros-gallery-key.txt`. Gallery in the sidebar and phone tabs: category tabs, thumbnail grid, full-size viewer (Fit / Actual size, pinch zoom), Download original, Share (file), Delete with confirm. Demo on 5 made-up images
-- [ ] M12 live test: 3000 px+ PNG up and back, bytes compared
+- [ ] NEXT (usage limit hit here): M12 live test: 3000 px+ PNG up and back, bytes compared
 - [ ] M10 PWA
 - [ ] M4 check-in matches the day plan
-- [ ] M5 plan change (POST after deploy)
+- [x] M5 plan change posted (29 Oct): +Exam revision 10:00 Mon–Fri from 2 Nov; +Walk 07:50 and +Leave for exam 09:40 on 17–21 Nov; 31 → 34 phases, nothing else changed
 - [ ] Finish: build, knip, hig-doctor, lint, /demo at 1440 + 375, docs, deploy, live checks
 
