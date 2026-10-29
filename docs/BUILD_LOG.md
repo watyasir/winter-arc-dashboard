@@ -318,3 +318,15 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **Screenshot to take:** `/demo` at 1280 and 390, `/demo/health`.
 **Next:** the Local steps from the Mac.
 
+## Session 14 — 30 Oct 2026 — Local finish (Mac)
+**Goal:** Run the two new migrations, set the gallery key on Vercel, and check everything live.
+**What I asked Claude Code to do:** "Pull, do the Local steps in PROGRESS.md: migrations, GALLERY_TOKEN, live checks of the APIs, the 9 feeds, a 3000 px gallery upload, every page signed in, and a test check-in."
+**What got built:** Nothing new: the cloud build went live. Check-in trackers (lights out, wake, 7 meals, BP, reading, weight) are in the database; the gallery accepts uploads.
+**What broke and how we fixed it:**
+- The Supabase SQL editor reopened an old saved query and ran it instead of the new SQL; it failed on its first line, so nothing changed. Re-ran with the right SQL.
+- The feeds answered 404 to the token in `.env.local`: the live one is a phrase Yasir chose. Tested the feeds from the signed-in /settings page instead.
+- Gallery round trip: a 272 KB and a 9 MB PNG came back byte-for-byte identical.
+**What Yasir had to do himself:** paste the gallery key into Vercel (Claude can't type secrets) and click Save.
+**Screenshot to take:** /settings → Calendar with the 9 coloured feeds.
+**Next:** Add to Home Screen on the iPhone; subscribe to the 9 feeds.
+

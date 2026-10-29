@@ -255,19 +255,16 @@ Baseline: `npm ci`, build, lint, `tsc --noEmit` all clean (30 Oct). M4 + M10 + a
 - [x] 12. Restyled Board, check-in, workout, body, goals, settings (checked on a throwaway page), login, share card, offline. Blocking action gate replaced by reminder toasts (Yasir, 30 Oct): tap to answer, Esc / ✕ closes, one at a time on the phone
 - [x] 13. Every demo route + /, /login, /offline, /progress at 390 and 1280: no sideways scroll, no phone targets under 44px, no console errors. APIs: no key → 503, wrong key → 401. build, lint, tsc, knip clean
 
-## Local steps (for the Mac session)
-Migrations not yet applied (this cloud session can't reach Supabase). Run in order in the Supabase SQL editor:
-1. `supabase/migrations/20261030000001_day_plan_log.sql` (lights out, wake, 7 meals, BP, reading page; adds `group_name`)
-2. `supabase/migrations/20261030000002_weight_tracker.sql` (weight in the check-in)
-
-Vercel env vars:
-3. Add `GALLERY_TOKEN` (Production) = the key in `~/Claude/yasiros-gallery-key.txt` (the one Claude's gallery uploads already use), then redeploy. Until then `POST /api/gallery` answers 503.
-
-Live checks (signed in):
-4. `/`, `/winter-arc`, `/board`, `/money`, `/health`, `/gallery`, `/log`, `/settings` load at laptop and phone size, no console errors
-5. `/log`: no "Update pending" note after step 1–2; save a check-in with weight and meals; Overview Diet + Weight update
-6. Today tile shows the weekday shift from the day plan and "Weekend off" on Sat/Sun; M5: from 2 Nov the morning shows Exam revision, 17–21 Nov Walk + Leave 9:40
-7. Reminder toasts on Overview: answer one, it's gone until tomorrow (and in `gate_log`)
-8. iPhone: Add to Home Screen (Y icon, cream bar), sign in with a code from /settings, airplane mode → offline card
-9. Rename meal slots if needed (they're placeholders: Pre-gym, Breakfast, Lunch, Snack 1, Dinner, Snack 2, Night)
-10. M12: upload a 3000 px+ PNG through the API and compare the bytes; Vercel deployment green
+## Local steps (for the Mac session) — done 30 Oct 2026, 4 AM IST
+- [x] 1. `…_day_plan_log.sql` run in the Supabase SQL editor by Claude: success (types now include time_of_day ×2, choice ×7; BP, reading page added)
+- [x] 2. `…_weight_tracker.sql` run: success (weight is a check-in tracker)
+- [x] 3. `GALLERY_TOKEN` in Vercel Production (Secret) = the key in `~/Claude/yasiros-gallery-key.txt` (form filled by Claude, value pasted by Yasir from the clipboard, clipboard cleared after); same value in `.env.local`; redeployed, green
+- [x] 4. Signed in at 1280: `/`, `/winter-arc`, `/board`, `/money`, `/health`, `/gallery`, `/log`, `/settings` load, no console errors, no sideways scroll. Phone size (375): every `/demo` route, no sideways scroll, no target under 44px (Chrome can't emulate 375, so the signed-in phone pass is on the iPhone)
+- [x] 5. `/log`: no "Update pending"; lights out, wake, 7 meals, BP, weight, reading all show. Test check-in (weight 61.4, Breakfast swapped) saved → Overview Diet showed 6/7 with Breakfast swapped; Weight needs 2 days for a trend (as designed). Test check-in deleted afterwards (16 rows, all written by the test; nothing else was logged that day)
+- [x] 6. Today tile shows the weekday shift (12:40–11:00 PM) and "Now: Lights out" at night; M5 exam phases show in the feeds (Exam revision in Build & study, Walk in Gym & walk, Leave for exam in Commute)
+- [ ] 7. Reminder toasts: left to Yasir (answering one is a real decision about a real task)
+- [ ] 8. iPhone: Add to Home Screen + sign in with a code from /settings, airplane mode → offline card (Yasir)
+- [ ] 9. Rename meal slots if needed (Yasir's call)
+- [x] 10. M12: 3200×2400 PNG (multipart) and 3000×1000 PNG (9 MB, upload link) uploaded; downloads byte-identical (same SHA-256); both test uploads deleted. Wrong key → 401
+- [x] APIs live: /api/tasks 200 (73), /api/claude-jobs 200 (8), /api/day-plan 200, /api/summary 200, no key → 401; /api/money is POST-only (405 on GET, expected). All 9 calendar feeds 200 with the right names and colours, all-in-one feed 200, wrong token 404. Manifest, /sw.js, icons, /offline 200. build, lint, tsc, knip clean
+- Note: `.env.local` `SHARE_TOKEN` isn't the live one (Yasir set his own phrase in Vercel on 26 Oct); feed checks run from the signed-in /settings page
