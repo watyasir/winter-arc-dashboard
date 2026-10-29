@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { demoTrackers } from "@/data/demo/checkin";
 import { demoGoals } from "@/data/demo/goals";
-import { formatAmount } from "@/lib/trackers";
+import { canSum, formatAmount } from "@/lib/trackers";
 import type { Goal } from "@/lib/tasks";
 import { GoalsForm, type GoalRow } from "./GoalsForm";
 
 /* /demo version of the goals page: same screen, changes stay on the page. */
 
-const linkable = demoTrackers.filter((t) => t.type !== "scale_1_5").map(({ id, name, type, unit }) => ({ id, name, type, unit }));
+const linkable = demoTrackers.filter(canSum).map(({ id, name, type, unit }) => ({ id, name, type, unit }));
 
 const toRow = (goal: Goal): GoalRow => {
   const tracker = linkable.find((t) => t.id === goal.trackerId);

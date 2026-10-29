@@ -112,7 +112,7 @@ export function buildDashboardData({
     weekTarget: workoutTracker?.target_period === "weekly" && workoutTracker.target != null ? Number(workoutTracker.target) : null,
   });
 
-  const loggedToday = trackers.filter((t) => valueOn(t, today) !== undefined).length;
+  const todayItems = todayRows(trackers, (t) => valueOn(t, today), (t) => hitOn(t, today));
   const open = tasks.filter((t) => t.status !== "done");
   const overdue = open.filter((t) => dueState(t, today) === "overdue").length;
   const dueToday = open.filter((t) => t.due === today).length;
@@ -126,7 +126,7 @@ export function buildDashboardData({
     views: {
       overview: {
         title: headerDate(today),
-        subtitle: overviewSubtitle(loggedToday, trackers.length, dueToday, overdue),
+        subtitle: overviewSubtitle(todayItems.logged, todayItems.rows.length, dueToday, overdue),
       },
       arc: {
         title: season?.name ?? "Winter Arc",
@@ -143,7 +143,7 @@ export function buildDashboardData({
     navBadges: open.length ? { board: String(open.length) } : {},
     season: season ? buildSeason(season, today, dayStatus, counts, dailyGoals.length) : null,
     arc: season ? buildArc(season, today, trackers, dailyGoals, hitOn) : null,
-    today: trackers.map((t) => todayItem(t, valueOn(t, today), hitOn(t, today))),
+    today: todayItems.rows,
     money: money ? toMoneyTile(money) : null,
     workoutHref: "/log/workout",
     bodyHref: "/log/body",
@@ -292,6 +292,39 @@ function buildArc(
       return Math.round((hits / (days.length * dailyGoals.length)) * 100);
     }),
   };
+}
+
+/** One Today row per tracker, except a group (Meals, Blood pressure), which gets one row for all of it. Plus how many rows have a value. */
+function todayRows(
+  trackers: Tracker[],
+  valueOf: (t: Tracker) => number | undefined,
+  hit: (t: Tracker) => boolean,
+): { rows: TodayItem[]; logged: number } {
+  const rows: TodayItem[] = [];
+  let loggedRows = 0;
+  const seen = new Set<string>();
+  for (const t of trackers) {
+    if (!t.group_name) {
+      rows.push(todayItem(t, valueOf(t), hit(t)));
+      if (valueOf(t) !== undefined) loggedRows++;
+      continue;
+    }
+    if (seen.has(t.group_name)) continue;
+    seen.add(t.group_name);
+    const members = trackers.filter((m) => m.group_name === t.group_name);
+    const logged = members.filter((m) => valueOf(m) !== undefined);
+    // Choices count their first option ("6 of 7 planned"); anything else counts what's logged.
+    const first = members.every((m) => m.type === "choice") ? members[0].scale_labels?.[0] : undefined;
+    const note =
+      logged.length === 0
+        ? "Not logged"
+        : first
+          ? `${logged.filter((m) => valueOf(m) === 1).length} of ${members.length} ${first.toLowerCase()}`
+          : `${logged.length} of ${members.length} logged`;
+    rows.push({ label: t.group_name, area: note, done: logged.length === members.length, href: "/log" });
+    if (logged.length > 0) loggedRows++;
+  }
+  return { rows, logged: loggedRows };
 }
 
 function todayItem(t: Tracker, value: number | undefined, hit: boolean): TodayItem {

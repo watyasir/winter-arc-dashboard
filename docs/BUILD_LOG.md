@@ -277,3 +277,17 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 - Exam mode support: a phase can run only between two dates and then replaces the usual phase at that time. The feed splits the weeks so nothing shows twice.
 - Gallery: a private store for images and PDFs Claude sends from chats, kept as the exact original file. Claude uploads with a key that can only add files. The Gallery page has category tabs, a thumbnail grid, and a full-size viewer with Download original, Share and Delete.
 
+## Session 17 — 29 Oct 2026 — M4: check-in matches the day plan
+**Goal:** Log what the day plan asks for in the same under-a-minute check-in.
+**What I asked Claude Code to do:** "Add lights-out and wake time, 7 meal slots (planned / swapped / skipped), reading page and BP twice a day. Build it as trackers, not one-off code."
+**What got built:**
+- Two new tracker types: a clock time (uses the phone's time wheel) and a choice (a row of options, first one picked by default).
+- Groups: trackers with the same group share one card. Meals is 7 compact rows; Blood pressure is a 2×2 grid of number boxes (morning and evening, top and bottom number).
+- Reading page as a typed number. A box left blank isn't saved, so yesterday's BP never turns into today's.
+- Today tile shows "Meals: 6 of 7 planned" and "Blood pressure: 2 of 4 logged" as one row each, instead of 11 rows.
+- One migration adds the 14 new trackers to the existing account; new accounts get them from the default list. The API takes them by slug (docs/API.md).
+**What broke and how we fixed it:** "As planned" wrapped onto two lines in every meal row on a 375px phone, so the option is now "Planned". The time box cut off "AM"; it's wider now.
+**What Yasir had to do himself:** Run the migration in Supabase before the deploy (this session had no Supabase access).
+**Screenshot to take:** `/demo/log` on the phone: Meals card and the BP grid.
+**Next:** M10 install as an app.
+

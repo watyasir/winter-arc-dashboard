@@ -106,6 +106,9 @@ function CalendarSection({ path }: { path: string | null }) {
 
 // ---------------------------------------------------------------- Winter Arc
 
+/** Clock times, choices and grouped readings (meals, blood pressure) are logged, not targets. */
+const countable = (t: Tracker) => !t.group_name && t.type !== "time_of_day" && t.type !== "choice";
+
 function SeasonSection({
   trackers,
   season,
@@ -139,7 +142,7 @@ function SeasonSection({
 
   const submit = () => {
     const targets: Record<string, number> = {};
-    for (const t of trackers) {
+    for (const t of trackers.filter(countable)) {
       const row = rows[t.slug];
       if (!row?.on) continue;
       const n = t.type === "checkbox" ? 1 : parseNumber(row.text);
@@ -167,7 +170,7 @@ function SeasonSection({
       </p>
 
       <Group title="Daily targets that count">
-        {trackers.map((t) => {
+        {trackers.filter(countable).map((t) => {
           // A tracker added further down this page starts switched off.
           const row = rows[t.slug] ?? { on: false, text: "" };
           return (

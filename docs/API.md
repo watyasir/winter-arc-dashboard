@@ -43,7 +43,10 @@ Logs tracker values for one day, the same as the check-in. A value already logge
 
 - `date`: optional, `YYYY-MM-DD`, India time. Default today. Up to 7 days back, never the future.
 - `entries`: 1 to 50. `tracker` is the tracker's slug or its name (any case). `GET /api/summary` lists the slugs.
-- Values: yes/no trackers take `1`/`0` or `true`/`false`; 1–5 scales take whole numbers 1–5; time trackers take minutes (0–1440); number trackers take the amount in their unit.
+- Values: yes/no trackers take `1`/`0` or `true`/`false`; 1–5 scales take whole numbers 1–5; minute trackers take minutes (0–1440); number trackers take the amount in their unit.
+- Clock times (`lights-out`, `wake`) take minutes after midnight: `30` = 12:30 AM, `450` = 7:30 AM. Lights out is last night's, saved on the day you wake up.
+- Meal slots (`meal-1` … `meal-7`) take `1` planned (as in the day plan), `2` swapped, `3` skipped.
+- Blood pressure: `bp-am-sys`, `bp-am-dia`, `bp-pm-sys`, `bp-pm-dia` (mmHg). Reading: `reading-page` (the page you reached).
 
 Reply `200` when at least one value saved (entries that don't fit are listed in `skipped`). When nothing saved: `400` with `"ok": false`, `"error": "Nothing saved: check the skipped entries."` and the same `skipped` list.
 

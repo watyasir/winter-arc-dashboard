@@ -5,7 +5,7 @@ import { requireUser } from "@/lib/auth";
 import { buildGoals } from "@/lib/dashboard/goals";
 import { loadGoals } from "@/lib/task-store";
 import { loadTrackers } from "@/lib/tracker-store";
-import { todayISO } from "@/lib/trackers";
+import { canSum, todayISO } from "@/lib/trackers";
 import { addGoal, deleteGoal, updateGoalProgress } from "./actions";
 
 export const metadata: Metadata = { title: "Goals · Yasir OS" };
@@ -32,7 +32,7 @@ async function Goals() {
         progress: shown[i].progress,
         trackerName: trackers.find((t) => t.id === goal.trackerId)?.name ?? null,
       }))}
-      trackers={trackers.filter((t) => t.type !== "scale_1_5").map(({ id, name, type, unit }) => ({ id, name, type, unit }))}
+      trackers={trackers.filter(canSum).map(({ id, name, type, unit }) => ({ id, name, type, unit }))}
       backHref="/"
       actions={{ add: addGoal, update: updateGoalProgress, remove: deleteGoal }}
     />

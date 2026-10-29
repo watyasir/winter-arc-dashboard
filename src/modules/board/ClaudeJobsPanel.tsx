@@ -4,8 +4,8 @@ import { Chip, type ChipTone } from "@/components/Chip";
 import { EmptyNote } from "@/components/EmptyNote";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 import type { JobStatus } from "@/lib/claude-jobs";
-import { clockLabel, istMinutes } from "@/lib/day-plan";
-import { shortDate, todayISO } from "@/lib/trackers";
+import { istMinutes } from "@/lib/day-plan";
+import { clockLabel, shortDate, todayISO } from "@/lib/trackers";
 
 const statusChip: Record<JobStatus, { tone: ChipTone; label: string }> = {
   ok: { tone: "sage", label: "OK" },

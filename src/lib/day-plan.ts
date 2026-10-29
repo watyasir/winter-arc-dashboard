@@ -59,13 +59,6 @@ export interface DayPhase {
 const TIME = /^([01]\d|2[0-9]):([0-5]\d)$/;
 const minutesOf = (time: string) => Number(time.slice(0, 2)) * 60 + Number(time.slice(3));
 
-/** "07:30" -> "7:30 AM", "24:30" -> "12:30 AM". */
-export function clockLabel(minutes: number): string {
-  const m = ((minutes % 1440) + 1440) % 1440;
-  const h = Math.floor(m / 60);
-  return `${h % 12 || 12}:${String(m % 60).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
-}
-
 /** Monday = "mon" for a YYYY-MM-DD date. */
 export function dayKeyOf(iso: string): DayKey {
   const [y, m, d] = iso.split("-").map(Number);

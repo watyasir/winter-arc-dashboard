@@ -45,7 +45,7 @@ Keep dependencies few. Ask before adding any new library.
 
 Everything is built from a few generic pieces, so new things are added as data, not new code:
 
-- **Tracker**: anything measured over time. Has a name, area (Health, Body, Mind, Skills, Money, Custom), type (`checkbox`, `number`, `scale_1_5`, `duration_minutes`), optional unit, optional daily/weekly target.
+- **Tracker**: anything measured over time. Has a name, area (Health, Body, Mind, Skills, Money, Custom), type (`checkbox`, `number`, `scale_1_5`, `duration_minutes`, `time_of_day`, `choice`), optional unit, optional daily/weekly target, optional group (trackers in one group share a card on the check-in, like Meals or Blood pressure).
 - **Entry**: one value for one tracker on one date.
 - **Season**: a time-boxed challenge (Winter Arc = 90 days). Has a start date, length and targets. Only one active at a time.
 - **Dashboard tiles**: registered in one file (`src/modules/registry.ts`). Adding a module means adding one entry there.

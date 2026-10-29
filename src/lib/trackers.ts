@@ -4,7 +4,7 @@
 */
 
 export type TrackerArea = "Health" | "Body" | "Mind" | "Skills" | "Money" | "Custom";
-export type TrackerType = "checkbox" | "number" | "scale_1_5" | "duration_minutes";
+export type TrackerType = "checkbox" | "number" | "scale_1_5" | "duration_minutes" | "time_of_day" | "choice";
 
 export interface Tracker {
   id: string;
@@ -14,17 +14,20 @@ export interface Tracker {
   type: TrackerType;
   unit: string | null;
   step: number | null;
+  /** Words for a 1-5 scale, or the options of a choice tracker (2 to 5, the first is the default). */
   scale_labels: string[] | null;
   target: number | null;
   target_period: "daily" | "weekly" | null;
   sort_order: number;
+  /** Trackers with the same group share one card on the check-in and one row on Today (Meals, Blood pressure). */
+  group_name: string | null;
 }
 
-export type NewTracker = Omit<Tracker, "id" | "unit" | "step" | "scale_labels" | "target" | "target_period"> &
-  Partial<Pick<Tracker, "unit" | "step" | "scale_labels" | "target" | "target_period">>;
+export type NewTracker = Omit<Tracker, "id" | "unit" | "step" | "scale_labels" | "target" | "target_period" | "group_name"> &
+  Partial<Pick<Tracker, "unit" | "step" | "scale_labels" | "target" | "target_period" | "group_name">>;
 
-/** Tracker id -> value for one day. */
-export type CheckInValues = Record<string, number>;
+/** Tracker id -> value for one day. No value = not logged, so it isn't saved. */
+export type CheckInValues = Record<string, number | undefined>;
 
 export const AREA_ORDER: TrackerArea[] = ["Health", "Body", "Mind", "Skills", "Money", "Custom"];
 
@@ -66,10 +69,21 @@ export function formatAmount(value: number): string {
   return value.toLocaleString("en-IN", { maximumFractionDigits: 2 });
 }
 
-export function formatValue(t: Tracker, value: number): string {
+/** Minutes after midnight -> "12:30 AM". */
+export function clockLabel(minutes: number): string {
+  const m = ((minutes % 1440) + 1440) % 1440;
+  const h = Math.floor(m / 60);
+  return `${h % 12 || 12}:${String(m % 60).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
+}
+
+export function formatValue(t: Pick<Tracker, "type" | "unit" | "scale_labels">, value: number): string {
   switch (t.type) {
     case "checkbox":
       return value ? "Done" : "Not done";
+    case "time_of_day":
+      return clockLabel(value);
+    case "choice":
+      return t.scale_labels?.[value - 1] ?? `Option ${value}`;
     case "scale_1_5":
       return t.scale_labels?.[value - 1] ?? `${value} of 5`;
     case "duration_minutes":
@@ -79,12 +93,24 @@ export function formatValue(t: Tracker, value: number): string {
   }
 }
 
-/** The value the check-in starts on when nothing is logged today: the last value, else the target. */
-export function startingValue(t: Tracker, lastValue: number | undefined): number {
+/** Yes/no, number and minute trackers add up over days, so goals can count them. */
+export function canSum(t: Pick<Tracker, "type">): boolean {
+  return t.type === "checkbox" || t.type === "number" || t.type === "duration_minutes";
+}
+
+/**
+ * The value the check-in starts on when nothing is logged today: the last value, else the target.
+ * A choice starts on its first option (meals: "Planned"). A typed-in number without a daily
+ * target (blood pressure, reading page) starts blank, so an old reading is never saved as today's.
+ */
+export function startingValue(t: Tracker, lastValue: number | undefined): number | undefined {
   if (t.type === "checkbox") return 0;
+  if (t.type === "choice") return 1;
+  if (t.type === "number" && !t.step && !(t.target_period === "daily" && t.target != null)) return undefined;
   if (lastValue !== undefined) return lastValue;
   if (t.type === "scale_1_5") return 3;
   if (t.type === "duration_minutes") return 0;
+  if (t.type === "time_of_day") return undefined;
   return t.target_period === "daily" && t.target != null ? t.target : 0;
 }
 
@@ -94,8 +120,10 @@ export function assertValidValue(t: Pick<Tracker, "type" | "name">, value: numbe
     Number.isFinite(value) &&
     (t.type === "checkbox"
       ? value === 0 || value === 1
-      : t.type === "scale_1_5"
+      : t.type === "scale_1_5" || t.type === "choice"
         ? Number.isInteger(value) && value >= 1 && value <= 5
+        : t.type === "time_of_day"
+        ? Number.isInteger(value) && value >= 0 && value < 24 * 60
         : t.type === "duration_minutes"
           ? value >= 0 && value <= 24 * 60
           : value >= 0 && value < 10_000_000);
