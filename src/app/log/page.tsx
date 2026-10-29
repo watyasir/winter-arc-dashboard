@@ -26,7 +26,7 @@ async function TodayCheckIn() {
     return null;
   }
   if ("error" in data) {
-    return <p className="p-6 text-center text-[15px] text-coral-text">Couldn&apos;t load your trackers. Refresh to try again.</p>;
+    return <p className="p-6 text-center text-[15px] text-danger">Couldn&apos;t load your trackers. Refresh to try again.</p>;
   }
   const { trackers, initial, dayLabel, pending } = data;
 

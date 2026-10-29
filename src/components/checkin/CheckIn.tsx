@@ -60,9 +60,9 @@ export function CheckIn({
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col gap-[18px] px-4 pt-2 pb-8">
-      <div aria-hidden="true" className="h-[5px] w-9 self-center rounded-full bg-rule" />
+      <div aria-hidden="true" className="h-[5px] w-9 self-center rounded-full bg-line-strong" />
       <header className="grid grid-cols-[1fr_auto_1fr] items-center">
-        <Link href={cancelHref} prefetch className="flex min-h-11 items-center text-[17px] text-brand-text no-underline hover:text-brand-hover">
+        <Link href={cancelHref} prefetch className="flex min-h-11 items-center text-[17px] text-blue-text no-underline hover:text-blue-hover">
           Cancel
         </Link>
         <div className="flex flex-col items-center">
@@ -73,8 +73,8 @@ export function CheckIn({
           type="button"
           onClick={save}
           disabled={saving}
-          className={`min-h-11 cursor-pointer justify-self-end rounded-full border-0 px-4 text-[17px] font-semibold text-white transition-colors motion-reduce:transition-none ${
-            saved ? "bg-sage-text" : "bg-brand hover:bg-brand-hover"
+          className={`min-h-11 cursor-pointer justify-self-end rounded-full border-0 px-4 text-[17px] font-semibold transition-colors motion-reduce:transition-none ${
+            saved ? "bg-ok text-white" : "bg-peach text-ink hover:bg-peach-strong"
           }`}
         >
           {saving ? "Saving…" : saved ? "Saved ✓" : "Done"}
@@ -85,7 +85,7 @@ export function CheckIn({
         {saved ? "Check-in saved." : ""}
       </p>
       {typeof status === "object" && (
-        <p role="alert" className="m-0 rounded-2xl bg-coral/12 px-4 py-3 text-[15px] text-coral-text">
+        <p role="alert" className="m-0 rounded-2xl bg-danger-soft px-4 py-3 text-[15px] text-danger">
           {status.error}
         </p>
       )}
@@ -104,11 +104,11 @@ export function CheckIn({
         const groups = [...new Set(inArea.map((t) => t.group_name).filter((g) => g != null))];
         return (
           <section key={area} aria-labelledby={`area-${area}`} className="flex flex-col gap-1.5">
-            <h2 id={`area-${area}`} className="m-0 ml-4 text-[13px] font-normal text-sub">
+            <h2 id={`area-${area}`} className="m-0 ml-4 text-[13px] font-medium text-sub">
               {area}
             </h2>
             {listRows.length > 0 && (
-              <div className="rounded-[14px] border border-sep bg-card px-4 [&>*:first-child]:border-t-0">
+              <div className="rounded-[14px] border border-line bg-card px-4 [&>*:first-child]:border-t-0">
                 {listRows.map((t) =>
                   t.type === "checkbox" ? (
                     <SwitchRow key={t.id} large label={t.name} on={values[t.id] === 1} onToggle={() => set(t.id, values[t.id] === 1 ? 0 : 1)} />
@@ -150,7 +150,7 @@ function NumberRow({
   onChange: (v: number | undefined) => void;
 }) {
   return (
-    <div className="flex min-h-[52px] items-center justify-between gap-3 border-t border-sep py-1.5">
+    <div className="flex min-h-[52px] items-center justify-between gap-3 border-t border-line py-1.5">
       <div className="min-w-0">
         <div className="text-[17px]">
           {t.step ? t.name : <label htmlFor={`n-${t.id}`}>{t.name}</label>}
@@ -183,18 +183,22 @@ function NumberInput({
   className: string;
   "aria-label"?: string;
 }) {
+  // The box keeps what's typed ("58." on the way to 58.4); the number goes up as it changes.
+  const [text, setText] = useState(value === undefined ? "" : formatAmount(value));
   return (
     <input
       id={id}
       type="text"
-      inputMode="numeric"
+      inputMode="decimal"
       autoComplete="off"
-      value={value === undefined ? "" : formatAmount(value)}
+      value={text}
       placeholder="–"
       onChange={(e) => {
-        const text = e.target.value.replace(/[^\d.]/g, "");
-        const n = Number(text);
-        if (Number.isFinite(n)) onChange(text === "" ? undefined : n);
+        const next = e.target.value.replace(/[^\d.]/g, "");
+        const n = Number(next);
+        if (!Number.isFinite(n)) return;
+        setText(next);
+        onChange(next === "" ? undefined : n);
       }}
       className={`h-11 shrink-0 rounded-full border-0 bg-fill-strong px-4 text-right text-[17px] text-ink ${className}`}
       {...rest}
@@ -215,7 +219,7 @@ function TimeRow({
   onChange: (v: number | undefined) => void;
 }) {
   return (
-    <div className="flex min-h-[52px] items-center justify-between gap-3 border-t border-sep py-1.5">
+    <div className="flex min-h-[52px] items-center justify-between gap-3 border-t border-line py-1.5">
       <div className="min-w-0">
         <label htmlFor={`t-${t.id}`} className="text-[17px]">
           {t.name}
@@ -259,12 +263,12 @@ function GroupCard({
     <div role="group" aria-labelledby={`g-${name}`} className="flex flex-col gap-1.5">
       <span id={`g-${name}`} className="ml-4 text-[15px] font-semibold">
         {name}
-        {unit && <span className="font-normal text-sub"> · {unit}</span>}
+        {unit && <span className="font-medium text-sub"> · {unit}</span>}
       </span>
-      <div className="rounded-[14px] border border-sep bg-card px-4 [&>*:first-child]:border-t-0">
+      <div className="rounded-[14px] border border-line bg-card px-4 [&>*:first-child]:border-t-0">
         {rest.map((t) =>
           t.type === "choice" ? (
-            <div key={t.id} className="flex min-h-[52px] items-center justify-between gap-2 border-t border-sep py-1">
+            <div key={t.id} className="flex min-h-[52px] items-center justify-between gap-2 border-t border-line py-1">
               <span className="min-w-0 flex-1 truncate text-[15px]">{t.name}</span>
               <div className="w-[228px] shrink-0">
                 <Segmented
@@ -284,7 +288,7 @@ function GroupCard({
           ),
         )}
         {typed.length > 0 && (
-          <div className={`grid grid-cols-2 gap-x-3 gap-y-2 py-3 ${rest.length ? "border-t border-sep" : ""}`}>
+          <div className={`grid grid-cols-2 gap-x-3 gap-y-2 py-3 ${rest.length ? "border-t border-line" : ""}`}>
             {typed.map((t) => (
               <label key={t.id} className="flex flex-col gap-1">
                 <span className="ml-1 text-[13px] text-sub">{t.name}</span>

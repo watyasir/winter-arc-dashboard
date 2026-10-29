@@ -1,4 +1,4 @@
-/** Small stroke icons used by the sidebar, tree and status marks. */
+/** Small stroke icons used by the tab bar and status marks. */
 const paths = {
   grid: "M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",
   board: "M4 5h4v14H4zM10 5h4v9h-4zM16 5h4v6h-4z",
@@ -11,6 +11,7 @@ const paths = {
   plus: "M12 5v14M5 12h14",
   x: "M6 6l12 12M18 6 6 18",
   image: "M4 5h16v14H4zM4 16l5-5 4 4 3-3 4 4M15.5 8.5h.01",
+  heart: "M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z",
 };
 
 export type IconName = keyof typeof paths;

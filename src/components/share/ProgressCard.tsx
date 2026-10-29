@@ -8,7 +8,7 @@ import type { ShareCard } from "@/lib/share";
 
 /*
   The shareable Winter Arc card: portrait, sized to fill a phone screenshot.
-  One dark teal hero card with the numbers, then "Copy link" underneath (outside the card,
+  One peach hero card with the numbers, then "Copy link" underneath (outside the card,
   so a cropped screenshot stays clean).
 */
 export function ProgressCard({
@@ -41,24 +41,24 @@ function Card({ card, demo }: { card: ShareCard; demo: boolean }) {
   const { targets, workouts, weight } = card;
 
   return (
-    <section aria-label={`${card.name} progress`} className="flex flex-col gap-6 rounded-[28px] bg-hero p-6 text-white">
+    <section aria-label={`${card.name} progress`} className="flex flex-col gap-6 rounded-tile bg-peach p-6 text-ink">
       <header className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <span className="flex size-[34px] items-center justify-center rounded-[11px] bg-on-dark">
-            <Icon name="snowflake" size={18} strokeWidth={2.2} className="stroke-white" />
+          <span className="flex size-[34px] items-center justify-center rounded-[11px] bg-card/60">
+            <Icon name="snowflake" size={18} strokeWidth={2.2} className="stroke-ink" />
           </span>
-          <span className="text-[15px] font-semibold text-hero-label">
+          <span className="text-[15px] font-semibold text-ink">
             {card.name} · {card.length} days
           </span>
         </div>
-        {demo && <span className="rounded-full bg-on-dark px-2.5 py-1 text-xs font-semibold">Sample data</span>}
+        {demo && <span className="rounded-full bg-card/60 px-2.5 py-1 text-xs font-semibold">Sample data</span>}
       </header>
 
       <div className="flex flex-col gap-3">
         <div className="flex items-baseline gap-2">
-          {!waiting && <span className="text-[22px] font-semibold text-hero-sub">Day</span>}
-          <span className="font-rounded text-[88px] leading-[0.9] font-bold tracking-[-0.04em]">{waiting ? card.startsIn : card.day}</span>
-          <span className="text-[22px] font-semibold text-hero-sub">
+          {!waiting && <span className="text-[22px] font-semibold text-ink">Day</span>}
+          <span className="font-mono text-[88px] leading-[0.9] font-extrabold tracking-[-0.04em]">{waiting ? card.startsIn : card.day}</span>
+          <span className="text-[22px] font-semibold text-ink">
             {waiting ? (card.startsIn === 1 ? "day to go" : "days to go") : `of ${card.length}`}
           </span>
         </div>
@@ -69,11 +69,11 @@ function Card({ card, demo }: { card: ShareCard; demo: boolean }) {
           aria-valuemax={card.length}
           aria-valuenow={waiting ? 0 : card.day}
           aria-valuetext={waiting ? `Starts on ${card.startLabel}` : `Day ${card.day} of ${card.length}`}
-          className="h-2.5 overflow-hidden rounded-full bg-hero-upcoming"
+          className="h-2.5 overflow-hidden rounded-full bg-ink/10"
         >
-          <div className="h-full rounded-full bg-hero-sage" style={{ width: `${pct}%` }} />
+          <div className="h-full rounded-full bg-ink" style={{ width: `${pct}%` }} />
         </div>
-        <div className="flex justify-between text-[13px] text-hero-sub">
+        <div className="flex justify-between text-[13px] text-ink">
           <span>{waiting ? `Starts ${card.startLabel}` : card.startLabel}</span>
           <span>{card.endLabel}</span>
         </div>
@@ -86,7 +86,7 @@ function Card({ card, demo }: { card: ShareCard; demo: boolean }) {
           label="Targets hit"
           value={targets.pct == null ? "–" : `${targets.pct}%`}
           note={targets.pct == null ? "Counts after day 1" : targets.label}
-          valueClass={targets.pct == null ? "" : "text-hero-sage"}
+          valueClass={targets.pct == null ? "" : "text-ok"}
         />
         <Stat
           label="Workouts"
@@ -103,8 +103,8 @@ function Card({ card, demo }: { card: ShareCard; demo: boolean }) {
         />
       </dl>
 
-      <footer className="flex items-center justify-between border-t border-on-dark pt-4 text-[13px] text-hero-sub">
-        <span className="font-semibold text-white">Yasir OS</span>
+      <footer className="flex items-center justify-between border-t border-ink/15 pt-4 text-[13px] text-ink">
+        <span className="font-semibold text-ink">Yasir OS</span>
         <span>As of {card.asOf}</span>
       </footer>
     </section>
@@ -133,12 +133,12 @@ function Stat({
   valueClass?: string;
 }) {
   return (
-    <div className={`flex min-w-0 flex-col gap-1 rounded-[18px] bg-on-dark px-4 py-3.5 ${wide ? "col-span-2" : ""}`}>
-      <dt className="text-[13px] font-semibold text-hero-label">{label}</dt>
+    <div className={`flex min-w-0 flex-col gap-1 rounded-[18px] bg-card/60 px-4 py-3.5 ${wide ? "col-span-2" : ""}`}>
+      <dt className="text-[13px] font-semibold text-ink">{label}</dt>
       <dd className="m-0 flex flex-wrap items-baseline gap-1">
-        <span className={`font-rounded text-[30px] leading-tight font-bold ${valueClass}`}>{value}</span>
-        {unit && <span className="text-[15px] font-semibold text-hero-sub">{unit}</span>}
-        {note && <span className="w-full text-xs text-hero-sub">{note}</span>}
+        <span className={`font-mono text-[30px] leading-tight font-extrabold ${valueClass}`}>{value}</span>
+        {unit && <span className="text-[15px] font-semibold text-ink">{unit}</span>}
+        {note && <span className="w-full text-xs text-ink">{note}</span>}
       </dd>
     </div>
   );
@@ -146,10 +146,10 @@ function Stat({
 
 function NoSeason() {
   return (
-    <section aria-label="Winter Arc progress" className="flex flex-col gap-1.5 rounded-[28px] bg-hero p-6 text-white">
-      <span className="text-[13px] font-semibold text-hero-label">Winter Arc · 90 days</span>
-      <span className="text-[22px] font-bold">No season running yet</span>
-      <span className="text-[15px] text-hero-sub">The progress card fills in once Winter Arc has a start date.</span>
+    <section aria-label="Winter Arc progress" className="flex flex-col gap-1.5 rounded-tile bg-peach p-6 text-ink">
+      <span className="text-[13px] font-semibold text-ink">Winter Arc · 90 days</span>
+      <span className="text-[22px] font-extrabold">No season running yet</span>
+      <span className="text-[15px] text-ink">The progress card fills in once Winter Arc has a start date.</span>
     </section>
   );
 }
@@ -181,7 +181,7 @@ function ShareActions({ sharePath, calendarHref, backHref }: { sharePath: string
       {calendarHref && (
         <Link
           href={calendarHref}
-          className="flex min-h-11 w-full items-center justify-center rounded-full border border-solid border-sep bg-base px-4 text-[13px] font-semibold text-ink no-underline hover:bg-fill-strong hover:text-ink"
+          className="flex min-h-11 w-full items-center justify-center rounded-full border border-solid border-line bg-card px-4 text-[13px] font-semibold text-ink no-underline hover:bg-fill-strong hover:text-ink"
         >
           Subscribe in Calendar
         </Link>
@@ -195,7 +195,7 @@ function ShareActions({ sharePath, calendarHref, backHref }: { sharePath: string
         )}
       </p>
       {backHref && (
-        <Link href={backHref} className="flex min-h-11 items-center text-[15px] font-semibold text-brand-text hover:text-brand-hover">
+        <Link href={backHref} className="flex min-h-11 items-center text-[15px] font-semibold text-blue-text hover:text-blue-hover">
           Back to dashboard
         </Link>
       )}

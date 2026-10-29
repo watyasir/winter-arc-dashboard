@@ -75,8 +75,8 @@ export function GoalsForm({
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col gap-[18px] px-4 pt-6 pb-8">
       <header className="flex items-center justify-between">
-        <h1 className="m-0 text-[34px] leading-[1.1] font-bold tracking-[-0.02em]">Goals</h1>
-        <Link href={backHref} prefetch className="flex min-h-11 items-center text-[17px] text-brand-text no-underline hover:text-brand-hover">
+        <h1 className="m-0 text-[34px] leading-[1.1] font-extrabold tracking-[-0.02em]">Goals</h1>
+        <Link href={backHref} prefetch className="flex min-h-11 items-center text-[17px] text-blue-text no-underline hover:text-blue-hover">
           Done
         </Link>
       </header>
@@ -185,13 +185,13 @@ function GoalItem({ row, actions }: { row: GoalRow; actions: GoalActions }) {
           aria-label={`Delete ${goal.title}`}
           onClick={() => window.confirm(`Delete the goal "${goal.title}"?`) && run(() => actions.remove(goal.id), "Deleted")}
           disabled={busy}
-          className="min-h-11 cursor-pointer rounded-full border-0 bg-transparent px-2 text-[13px] font-semibold text-coral-text hover:bg-coral/12"
+          className="min-h-11 cursor-pointer rounded-full border-0 bg-transparent px-2 text-[13px] font-semibold text-danger hover:bg-danger-soft"
         >
           Delete
         </button>
       </div>
       {msg && (
-        <p role={msg.ok ? "status" : "alert"} className={`m-0 text-[13px] ${msg.ok ? "text-sage-text" : "text-coral-text"}`}>
+        <p role={msg.ok ? "status" : "alert"} className={`m-0 text-[13px] ${msg.ok ? "text-ok" : "text-danger"}`}>
           {msg.text}
         </p>
       )}

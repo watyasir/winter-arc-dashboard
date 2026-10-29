@@ -118,7 +118,7 @@ export function WorkoutForm({
       <StatusMessages status={status} savedText="Workout saved. It's on your dashboard." />
 
       {last && (
-        <section aria-label="Last workout" className="flex items-center justify-between gap-3 rounded-[14px] border border-sep bg-card px-4 py-3">
+        <section aria-label="Last workout" className="flex items-center justify-between gap-3 rounded-[14px] border border-line bg-card px-4 py-3">
           <div className="min-w-0">
             <div className="text-[13px] text-sub">Last workout · {formatDayLabel(last.date)}</div>
             <div className="truncate text-[17px] font-semibold">{last.name}</div>
@@ -130,7 +130,7 @@ export function WorkoutForm({
         </section>
       )}
 
-      <section aria-label="Workout details" className="flex flex-col gap-3 rounded-[14px] border border-sep bg-card p-4">
+      <section aria-label="Workout details" className="flex flex-col gap-3 rounded-[14px] border border-line bg-card p-4">
         <label className="flex flex-col gap-1.5">
           <span className="text-[15px] font-semibold">Name</span>
           <input
@@ -153,7 +153,7 @@ export function WorkoutForm({
       </section>
 
       {exercises.map((ex, i) => (
-        <section key={ex.key} aria-label={ex.name || `Exercise ${i + 1}`} className="flex flex-col gap-2 rounded-[14px] border border-sep bg-card p-4">
+        <section key={ex.key} aria-label={ex.name || `Exercise ${i + 1}`} className="flex flex-col gap-2 rounded-[14px] border border-line bg-card p-4">
           <div className="flex items-end gap-2">
             <label className="flex min-w-0 flex-1 flex-col gap-1.5">
               <span className="text-[15px] font-semibold">Exercise {i + 1}</span>
@@ -171,7 +171,7 @@ export function WorkoutForm({
               <button
                 type="button"
                 onClick={() => edit((list) => list.filter((x) => x.key !== ex.key))}
-                className="min-h-11 shrink-0 cursor-pointer rounded-full border-0 bg-transparent px-3 text-[15px] text-coral-text hover:bg-fill"
+                className="min-h-11 shrink-0 cursor-pointer rounded-full border-0 bg-transparent px-3 text-[15px] text-danger hover:bg-fill"
               >
                 Remove
               </button>
@@ -215,7 +215,7 @@ export function WorkoutForm({
                 aria-label={`Remove set ${si + 1}`}
                 disabled={ex.sets.length === 1}
                 onClick={() => editExercise(ex.key, (x) => ({ ...x, sets: x.sets.filter((y) => y.key !== s.key) }))}
-                className="flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-xl text-sub hover:bg-fill disabled:cursor-default disabled:text-overlay disabled:hover:bg-transparent"
+                className="flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-xl text-sub hover:bg-fill disabled:cursor-default disabled:text-disabled disabled:hover:bg-transparent"
               >
                 −
               </button>
@@ -231,7 +231,7 @@ export function WorkoutForm({
                 return { ...x, sets: [...x.sets, newSet(prev?.reps, prev?.weight)] };
               })
             }
-            className="min-h-11 cursor-pointer self-start rounded-full border-0 bg-transparent px-3 text-[15px] font-semibold text-brand-text hover:bg-fill"
+            className="min-h-11 cursor-pointer self-start rounded-full border-0 bg-transparent px-3 text-[15px] font-semibold text-blue-text hover:bg-fill"
           >
             + Add set
           </button>
@@ -255,12 +255,12 @@ export function WorkoutForm({
 
       {recent.length > 0 && (
         <section aria-labelledby={`${ids}-recent`} className="flex flex-col gap-1.5">
-          <h2 id={`${ids}-recent`} className="m-0 ml-4 text-[13px] font-normal text-sub">
+          <h2 id={`${ids}-recent`} className="m-0 ml-4 text-[13px] font-medium text-sub">
             Recent workouts
           </h2>
-          <ul className="m-0 list-none rounded-[14px] border border-sep bg-card px-4 py-0 [&>li:first-child]:border-t-0">
+          <ul className="m-0 list-none rounded-[14px] border border-line bg-card px-4 py-0 [&>li:first-child]:border-t-0">
             {recent.map((w) => (
-              <li key={w.id} className="flex items-center justify-between gap-3 border-t border-sep py-2.5">
+              <li key={w.id} className="flex items-center justify-between gap-3 border-t border-line py-2.5">
                 <details className="min-w-0 flex-1">
                   <summary className="cursor-pointer list-none">
                     <span className="block truncate text-[15px] font-semibold">{w.name}</span>
@@ -282,7 +282,7 @@ export function WorkoutForm({
                     disabled={deleting}
                     onClick={() => remove(w)}
                     aria-label={`Delete ${w.name} from ${formatDayLabel(w.date)}`}
-                    className="min-h-11 shrink-0 cursor-pointer self-start rounded-full border-0 bg-transparent px-3 text-[15px] text-coral-text hover:bg-fill"
+                    className="min-h-11 shrink-0 cursor-pointer self-start rounded-full border-0 bg-transparent px-3 text-[15px] text-danger hover:bg-fill"
                   >
                     Delete
                   </button>

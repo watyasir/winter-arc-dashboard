@@ -25,7 +25,7 @@ async function Settings() {
     supabase.from("seasons").select("start_date, targets").eq("is_active", true).maybeSingle<{ start_date: string; targets: Record<string, number> }>(),
   ]);
   if (!trackers || season.error) {
-    return <p className="p-6 text-center text-[15px] text-coral-text">Couldn&apos;t load your settings. Refresh to try again.</p>;
+    return <p className="p-6 text-center text-[15px] text-danger">Couldn&apos;t load your settings. Refresh to try again.</p>;
   }
   return (
     <SettingsForm

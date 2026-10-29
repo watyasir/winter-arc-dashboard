@@ -20,7 +20,7 @@ async function BodyCheck() {
   const { supabase } = await requireUser();
   const [checks, goal] = await Promise.all([loadBodyChecks(supabase, 2), loadWeightGoal(supabase)]);
   if (!checks || goal === undefined) {
-    return <p className="p-6 text-center text-[15px] text-coral-text">Couldn&apos;t load your body checks. Refresh to try again.</p>;
+    return <p className="p-6 text-center text-[15px] text-danger">Couldn&apos;t load your body checks. Refresh to try again.</p>;
   }
 
   const today = todayISO();

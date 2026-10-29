@@ -45,8 +45,8 @@ export function SettingsForm({
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col gap-[18px] px-4 pt-6 pb-8">
       <header className="flex items-center justify-between">
-        <h1 className="m-0 text-[34px] leading-[1.1] font-bold tracking-[-0.02em]">Settings</h1>
-        <Link href="/" prefetch className="flex min-h-11 items-center text-[17px] text-brand-text no-underline hover:text-brand-hover">
+        <h1 className="m-0 text-[34px] leading-[1.1] font-extrabold tracking-[-0.02em]">Settings</h1>
+        <Link href="/" prefetch className="flex min-h-11 items-center text-[17px] text-blue-text no-underline hover:text-blue-hover">
           Done
         </Link>
       </header>
@@ -248,7 +248,7 @@ function SeasonSection({
                 <span
                   aria-hidden="true"
                   className={`flex h-7 w-[46px] items-center rounded-full p-0.5 transition-colors motion-reduce:transition-none ${
-                    row.on ? "justify-end bg-sage" : "justify-start bg-fill-strong"
+                    row.on ? "justify-end bg-blue" : "justify-start bg-fill-strong"
                   }`}
                 >
                   <span className="size-6 rounded-full bg-white" />
@@ -378,19 +378,19 @@ function ResetSection({ reset }: { reset: SettingsActions["resetTestData"] }) {
             <button
               type="button"
               onClick={() => (setConfirming(true), setStatus("editing"))}
-              className="min-h-11 cursor-pointer self-start rounded-full border-0 bg-transparent px-2 text-[15px] font-semibold text-coral-text hover:bg-coral/12"
+              className="min-h-11 cursor-pointer self-start rounded-full border-0 bg-transparent px-2 text-[15px] font-semibold text-danger hover:bg-danger-soft"
             >
               Reset test data
             </button>
           ) : (
-            <div role="alertdialog" aria-label="Confirm reset" className="flex flex-col gap-2 rounded-2xl bg-coral/12 p-3">
-              <span className="text-[15px] font-semibold text-coral-text">Delete all test data? This can&apos;t be undone.</span>
+            <div role="alertdialog" aria-label="Confirm reset" className="flex flex-col gap-2 rounded-2xl bg-danger-soft p-3">
+              <span className="text-[15px] font-semibold text-danger">Delete all test data? This can&apos;t be undone.</span>
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={run}
                   disabled={busy}
-                  className="min-h-11 cursor-pointer rounded-full border-0 bg-coral-text px-4 text-[15px] font-semibold text-white"
+                  className="min-h-11 cursor-pointer rounded-full border-0 bg-danger px-4 text-[15px] font-semibold text-white"
                 >
                   {busy ? "Deleting…" : "Delete test data"}
                 </button>

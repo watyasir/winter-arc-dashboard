@@ -124,8 +124,8 @@ export function BodyCheckForm({
 function Group({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section aria-label={title} className="flex flex-col gap-1.5">
-      <h2 className="m-0 ml-4 text-[13px] font-normal text-sub">{title}</h2>
-      <div className="rounded-[14px] border border-sep bg-card px-4 [&>*+*]:border-t [&>*+*]:border-solid [&>*+*]:border-sep [&>*:first-child]:border-t-0">{children}</div>
+      <h2 className="m-0 ml-4 text-[13px] font-medium text-sub">{title}</h2>
+      <div className="rounded-[14px] border border-line bg-card px-4 [&>*+*]:border-t [&>*+*]:border-solid [&>*+*]:border-line [&>*:first-child]:border-t-0">{children}</div>
     </section>
   );
 }

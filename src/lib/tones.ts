@@ -1,29 +1,14 @@
 /*
-  Data never carries a hex value. It names a tone, and these maps turn the tone into
-  Tailwind classes (written out in full so Tailwind can find them).
-  v6 "Teal and grey" (docs/DESIGN.md §2b).
+  Data never carries a hex value. It names a tone, and this map turns the tone into a
+  fill class (written out in full so Tailwind can find it). Soft bento (docs/DESIGN.md).
 */
-export type Tone =
-  | "brand"
-  | "sage"
-  | "yellow"
-  | "coral"
-  | "arc"
-  | "pine"
-  | "mist"
-  | "seafoam"
-  | "lagoon"
-  | "neutral";
+export type Tone = "peach" | "blue" | "ok" | "warn" | "danger" | "neutral";
 
 export const toneBg: Record<Tone, string> = {
-  brand: "bg-brand",
-  sage: "bg-sage",
-  yellow: "bg-yellow",
-  coral: "bg-coral",
-  arc: "bg-arc",
-  pine: "bg-pine",
-  mist: "bg-mist",
-  seafoam: "bg-seafoam",
-  lagoon: "bg-lagoon",
-  neutral: "bg-overlay",
+  peach: "bg-peach",
+  blue: "bg-blue",
+  ok: "bg-ok",
+  warn: "bg-warn",
+  danger: "bg-danger",
+  neutral: "bg-line-strong",
 };

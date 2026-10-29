@@ -34,10 +34,10 @@ export function LoginForm({ notice }: { notice?: string }) {
         autoComplete="email"
         inputMode="email"
         required
-        className="min-h-11 rounded-full border border-sep bg-base px-4 text-[17px] text-ink"
+        className="min-h-11 rounded-full border border-line bg-card px-4 text-[17px] text-ink"
       />
       {(state.status === "error" || notice) && (
-        <p role="alert" className="m-0 text-[13px] text-coral-text">
+        <p role="alert" className="m-0 text-[13px] text-danger">
           {state.status === "error" ? state.message : notice}
         </p>
       )}
@@ -71,10 +71,10 @@ function CodeForm({ onBack }: { onBack: () => void }) {
         required
         maxLength={12}
         placeholder="ABCD-EFGH"
-        className="min-h-11 rounded-full border border-sep bg-base px-4 font-mono text-[20px] tracking-[0.12em] text-ink uppercase"
+        className="min-h-11 rounded-full border border-line bg-card px-4 font-mono text-[20px] tracking-[0.12em] text-ink uppercase"
       />
       {state.status === "error" && (
-        <p role="alert" className="m-0 text-[13px] text-coral-text">
+        <p role="alert" className="m-0 text-[13px] text-danger">
           {state.message}
         </p>
       )}

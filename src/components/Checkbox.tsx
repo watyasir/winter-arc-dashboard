@@ -7,10 +7,10 @@ export function CheckBox({ checked, size = 22 }: { checked: boolean; size?: 18 |
     <span
       aria-hidden="true"
       className={`flex shrink-0 items-center justify-center transition-colors motion-reduce:transition-none ${box} ${
-        checked ? "bg-sage" : "border-[1.5px] border-overlay bg-transparent"
+        checked ? "bg-blue" : "border-[1.5px] border-line-strong bg-transparent"
       }`}
     >
-      {checked && <Icon name="check" size={size === 18 ? 10 : 12} strokeWidth={3.6} className="stroke-white" />}
+      {checked && <Icon name="check" size={size === 18 ? 10 : 12} strokeWidth={3.6} className="stroke-ink" />}
     </span>
   );
 }

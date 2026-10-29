@@ -8,7 +8,7 @@ export function ProgressBar({ pct, tone, label }: { pct: number; tone: Tone; lab
       aria-valuenow={pct}
       aria-valuemin={0}
       aria-valuemax={100}
-      className="h-1.5 overflow-hidden rounded-full bg-fill"
+      className="h-1.5 shrink-0 overflow-hidden rounded-full bg-fill-strong"
     >
       <div className={`h-full rounded-full ${toneBg[tone]}`} style={{ width: `${pct}%` }} />
     </div>

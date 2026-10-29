@@ -1,76 +1,57 @@
 @import "tailwindcss";
 
 /*
-  Design tokens. Light theme only. v6 "Teal and grey", see docs/DESIGN.md §2b.
-  Every colour and font lives here. Components use the Tailwind classes these create
-  (bg-card, text-sub, stroke-brand, ...) and never a raw hex value.
+  Design tokens: "Soft bento" (v8), see docs/DESIGN.md. Light theme only, no dark mode.
+  Every colour, font, radius and shadow lives here. Components use the classes these create
+  (bg-card, text-sub, border-line, bg-peach, ...) and never a raw hex value.
 */
 @theme {
   --color-*: initial;
   --color-white: #ffffff;
   --color-transparent: transparent;
 
-  /* App background: cool grey Yasir picked, never violet or pink */
-  --color-frame-start: #f6f8fa;
-  --color-frame-end: #e9eced;
+  /* Surfaces */
+  --color-surface: #fff5e6; /* the page */
+  --color-card: #ffffff;
+  --color-fill: #fff5e6; /* inputs and inner items on a card */
+  --color-fill-strong: #f8e7cc; /* pressed / selected-off segments, empty cells */
+  --color-line: #f1e3cc; /* 1px card borders and separators */
+  --color-line-strong: #e2cba6; /* handles, input borders */
 
-  /* Neutrals: pure greys, no colour cast */
-  --color-base: #ffffff;
-  --color-column: #f3f3f3;
-  --color-crust: #ededed;
-  --color-sep: #e5e5e5;
-  --color-rule: #c8c8c8;
-  --color-overlay: #848f99;
-  --color-sub: #666c70;
-  --color-ink: #16191b;
-  --color-fill: rgba(22, 25, 27, 0.05);
-  --color-fill-strong: rgba(22, 25, 27, 0.1);
+  /* Text (all ≥ 4.5:1 on card and surface) */
+  --color-ink: #111827;
+  --color-sub: #5b6474;
+  --color-disabled: #8a93a3; /* disabled controls only, never content */
 
-  /* Colours with one meaning each. "-text" = text-safe variant for small text on white. */
-  --color-brand: #0f4c4a; /* interactive */
-  --color-brand-text: #0f4c4a;
-  --color-brand-hover: #0a3533;
-  --color-sage: #6e9c93; /* done / on target / saved */
-  --color-sage-text: #3d6e64;
-  --color-yellow: #f2c230; /* due soon / warning */
-  --color-yellow-text: #8a6200;
-  --color-coral: #e0684b; /* overdue / errors / money out */
-  --color-coral-text: #b4432a;
-  --color-arc: #155a63; /* Winter Arc identity */
-  /* Owner tags: Claude orange, Yasir soft teal, Both neutral grey */
+  /* Brand fills: dark text on both */
+  --color-peach: #fad4c0;
+  --color-peach-strong: #f6c1a6; /* hover / pressed peach */
+  --color-blue: #80a1c1;
+  --color-blue-soft: #e3ebf3;
+  /* Blue as text, links and the focus ring */
+  --color-blue-text: #3e5f7f;
+  --color-blue-hover: #2c4660;
+
+  /* States: text colour + soft fill */
+  --color-ok: #15803d;
+  --color-ok-soft: #dcfce7;
+  --color-warn: #b45309;
+  --color-warn-soft: #fef3c7;
+  --color-danger: #b91c1c;
+  --color-danger-soft: #fee2e2;
+
+  /* Owner tags: Claude (dark text on it), Yasir (white text on it) */
   --color-claude: #d97757;
-  --color-claude-text: #9c4a2b;
-  --color-yasir: #5e9c96;
+  --color-yasir: #3e5f7f;
 
-  /* Teal ramp: nav icon tiles, section bars, extra series. Not for text. */
-  --color-ramp3: #4f8780;
-  --color-pine: #3d8a80;
-  --color-mist: #6fa8b6;
-  --color-seafoam: #8fb3aa;
-  --color-lagoon: #4f8f9a;
+  /* Shape */
+  --radius-tile: 20px;
+  --radius-item: 12px;
+  --shadow-tile: 0 1px 2px rgb(17 24 39 / 0.06), 0 8px 24px -12px rgb(17 24 39 / 0.12);
 
-  /* Hero card (the one dark card per view) */
-  --color-hero-sub: rgba(255, 255, 255, 0.74);
-  --color-hero-sage: #a8d5cc;
-  --color-hero-yellow: #f5d96b;
-  --color-hero-label: #bfe3e0;
-  --color-hero-all: #7fb0a6;
-  --color-hero-most: #9cc3bb;
-  --color-hero-missed: #f2d54e;
-  --color-hero-upcoming: rgba(255, 255, 255, 0.13);
-  --color-on-dark: rgba(255, 255, 255, 0.16);
-
-  /* Phone floating tab bar (frosted glass over the page) */
-  --color-glass: rgba(255, 255, 255, 0.72);
-  --color-glass-edge: rgba(255, 255, 255, 0.8);
-
-  /* The only shadows: things that float over the page on the phone */
-  --shadow-float: 0 8px 30px rgba(0, 0, 0, 0.12);
-  --shadow-fab: 0 6px 20px rgba(15, 76, 74, 0.35);
-
-  /* Type */
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
-  --font-rounded: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Type: Inter for words, JetBrains Mono for numbers (loaded in src/app/layout.tsx) */
+  --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", Menlo, monospace;
 
   --animate-indeterminate: indeterminate 1.4s ease-in-out infinite;
 
@@ -84,45 +65,99 @@
   }
 }
 
-/* Gradients can't be colour tokens, so they live here as named utilities. */
-@utility bg-frame {
-  background: linear-gradient(160deg, var(--color-frame-start) 0%, var(--color-frame-end) 100%) fixed;
-}
-@utility bg-card {
-  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
-}
-@utility bg-hero {
-  background: linear-gradient(135deg, #0b2c33 0%, #11414a 45%, #2b6f84 100%);
-}
 /* The wallet front card's semicircle notch at top centre. */
 @utility notch-top {
   -webkit-mask: radial-gradient(circle 26px at 50% 0, transparent 25px, #000 26px);
   mask: radial-gradient(circle 26px at 50% 0, transparent 25px, #000 26px);
 }
 
+/* Press feedback for tappable tiles and buttons: CSS only, off with reduced motion. */
+@utility press {
+  transition: transform 120ms ease;
+  &:active {
+    transform: scale(0.99);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    &:active {
+      transform: none;
+    }
+  }
+}
+
 html {
-  background: var(--color-frame-end);
+  background: var(--color-surface);
 }
 
 body {
   margin: 0;
-  background: linear-gradient(160deg, var(--color-frame-start) 0%, var(--color-frame-end) 100%) fixed;
+  background: var(--color-surface);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  font-variant-numeric: tabular-nums;
+  font-weight: 500;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Visible focus on every button, link and input (DESIGN.md §5). */
-:where(button, a, input, [role="switch"]):focus-visible {
-  outline: 2px solid var(--color-brand);
+/* Visible focus on every control: 3px blue ring. */
+:where(button, a, input, select, textarea, [role="switch"], [tabindex]):focus-visible {
+  outline: 3px solid var(--color-blue-text);
   outline-offset: 2px;
 }
 
-/* Plain links are teal. Styled links (buttons, rows) set their own colour, e.g. white text on a teal button. */
+/* Plain links are blue. Styled links (buttons, tiles) set their own colour. */
 a:not([class]) {
-  color: var(--color-brand-text);
+  color: var(--color-blue-text);
 }
 a:not([class]):hover {
-  color: var(--color-brand-hover);
+  color: var(--color-blue-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/*
+  The Overview bento (the only bento page). Tiles are written in priority order and placed by
+  area name. Desktop 4 columns × 150px rows; 960px and under 2 columns; 560px and under a
+  2-column widget grid with the big tiles full width.
+*/
+@utility bento {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: 150px;
+  grid-template-areas:
+    "hero  hero  tasks  money"
+    "hero  hero  tasks  money"
+    "check today weight weight"
+    "fund  diet  study  claude";
+  @media (max-width: 960px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "hero   hero"
+      "hero   hero"
+      "check  today"
+      "tasks  money"
+      "tasks  money"
+      "weight weight"
+      "fund   diet"
+      "study  claude";
+  }
+  @media (max-width: 560px) {
+    gap: 12px;
+    grid-auto-rows: minmax(132px, auto);
+    grid-template-areas:
+      "hero   hero"
+      "check  today"
+      "tasks  tasks"
+      "money  money"
+      "weight weight"
+      "fund   diet"
+      "study  claude";
+  }
 }

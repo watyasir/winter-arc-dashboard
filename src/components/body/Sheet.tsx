@@ -25,9 +25,9 @@ export function SheetHeader({
 }) {
   return (
     <>
-      <div aria-hidden="true" className="h-[5px] w-9 self-center rounded-full bg-rule" />
+      <div aria-hidden="true" className="h-[5px] w-9 self-center rounded-full bg-line-strong" />
       <header className="grid grid-cols-[1fr_auto_1fr] items-center">
-        <Link href={cancelHref} prefetch className="flex min-h-11 items-center text-[17px] text-brand-text no-underline hover:text-brand-hover">
+        <Link href={cancelHref} prefetch className="flex min-h-11 items-center text-[17px] text-blue-text no-underline hover:text-blue-hover">
           Cancel
         </Link>
         <div className="flex flex-col items-center">
@@ -38,8 +38,8 @@ export function SheetHeader({
           type="button"
           onClick={onSave}
           disabled={saving}
-          className={`min-h-11 cursor-pointer justify-self-end rounded-full border-0 px-4 text-[17px] font-semibold text-white transition-colors motion-reduce:transition-none ${
-            saved ? "bg-sage-text" : "bg-brand hover:bg-brand-hover"
+          className={`min-h-11 cursor-pointer justify-self-end rounded-full border-0 px-4 text-[17px] font-semibold transition-colors motion-reduce:transition-none ${
+            saved ? "bg-ok text-white" : "bg-peach text-ink hover:bg-peach-strong"
           }`}
         >
           {saving ? "Saving…" : saved ? "Saved ✓" : "Save"}
@@ -53,14 +53,14 @@ export function StatusMessages({ status, savedText }: { status: Status; savedTex
   return (
     <>
       {status === "saved" ? (
-        <p role="status" className="m-0 rounded-2xl bg-sage/14 px-4 py-3 text-[15px] text-sage-text">
+        <p role="status" className="m-0 rounded-2xl bg-ok-soft px-4 py-3 text-[15px] text-ok">
           {savedText}
         </p>
       ) : (
         <p role="status" className="sr-only" />
       )}
       {typeof status === "object" && (
-        <p role="alert" className="m-0 rounded-2xl bg-coral/12 px-4 py-3 text-[15px] text-coral-text">
+        <p role="alert" className="m-0 rounded-2xl bg-danger-soft px-4 py-3 text-[15px] text-danger">
           {status.error}
         </p>
       )}

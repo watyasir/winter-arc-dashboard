@@ -1,8 +1,8 @@
 import type { ComponentPropsWithoutRef } from "react";
 
 const variants = {
-  primary: "bg-brand text-white hover:bg-brand-hover",
-  plain: "border border-solid border-sep bg-base text-ink hover:bg-fill-strong",
+  primary: "bg-peach text-ink hover:bg-peach-strong",
+  plain: "border border-solid border-line bg-card text-ink hover:bg-fill-strong",
 };
 
 /** Primary (one per view) or plain button. 44px tall on phone, 36px from 640px up. */

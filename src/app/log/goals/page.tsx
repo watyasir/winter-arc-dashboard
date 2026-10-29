@@ -22,7 +22,7 @@ async function Goals() {
   const { supabase } = await requireUser();
   const [trackers, loaded] = await Promise.all([loadTrackers(supabase), loadGoals(supabase)]);
   if (!trackers || !loaded) {
-    return <p className="p-6 text-center text-[15px] text-coral-text">Couldn&apos;t load your goals. Refresh to try again.</p>;
+    return <p className="p-6 text-center text-[15px] text-danger">Couldn&apos;t load your goals. Refresh to try again.</p>;
   }
   const shown = buildGoals(loaded.goals, loaded.tracked, trackers, todayISO());
   return (
