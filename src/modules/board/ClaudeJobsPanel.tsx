@@ -1,64 +1,70 @@
 "use client";
 
-import { Chip, type ChipTone } from "@/components/Chip";
+import { useSyncExternalStore } from "react";
 import { EmptyNote } from "@/components/EmptyNote";
+import { Tile } from "@/components/Tile";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 import type { JobStatus } from "@/lib/claude-jobs";
-import { istMinutes } from "@/lib/day-plan";
-import { clockLabel, shortDate, todayISO } from "@/lib/trackers";
 
-const statusChip: Record<JobStatus, { tone: ChipTone; label: string }> = {
-  ok: { tone: "sage", label: "OK" },
-  failed: { tone: "coral", label: "Failed" },
-  running: { tone: "brand", label: "Running" },
-  scheduled: { tone: "neutral", label: "Scheduled" },
-  paused: { tone: "neutral", label: "Paused" },
+/** Status dot + word (never colour alone). */
+const STATUS: Record<JobStatus, { dot: string; label: string }> = {
+  ok: { dot: "bg-ok", label: "OK" },
+  failed: { dot: "bg-danger", label: "Failed" },
+  running: { dot: "bg-blue-text", label: "Running" },
+  scheduled: { dot: "bg-line-strong", label: "Scheduled" },
+  paused: { dot: "bg-line-strong", label: "Paused" },
 };
 
-/** "27 Oct, 8:45 AM" in India time. */
-function when(iso: string | null): string {
-  if (!iso) return "–";
-  const d = new Date(iso);
-  return `${shortDate(todayISO(d))}, ${clockLabel(istMinutes(d))}`;
+/*
+  The current minute, read in the browser only: pages are pre-rendered without a clock,
+  so relative times fill in once the page is open (and stay the same within a minute).
+*/
+const minuteNow = () => Math.floor(Date.now() / 60_000) * 60_000;
+const noSubscribe = () => () => {};
+const useNow = () => useSyncExternalStore(noSubscribe, minuteNow, () => null);
+
+/** "just now", "12 min ago", "2h ago", "3 days ago"; "in 2h" for the future. */
+function timeAgo(iso: string | null, now: number): string {
+  if (!iso) return "never";
+  const mins = Math.round((now - Date.parse(iso)) / 60_000);
+  const future = mins < 0;
+  const m = Math.abs(mins);
+  const text = m < 1 ? "just now" : m < 60 ? `${m} min` : m < 48 * 60 ? `${Math.round(m / 60)}h` : `${Math.round(m / 1440)} days`;
+  if (text === "just now") return text;
+  return future ? `in ${text}` : `${text} ago`;
 }
 
 /**
- * Claude's scheduled tasks, beside the Board and kept apart from Yasir's tasks: a different
- * panel, Claude-orange marker, no drag or edit. Claude reports them through /api/claude-jobs.
+ * Claude's scheduled tasks, beside the Board and kept apart from Yasir's tasks: own tile,
+ * Claude-orange marker, no drag or edit. Claude reports them through /api/claude-jobs.
  */
 export function ClaudeJobsPanel() {
-  const { data } = useDashboard();
-  const jobs = data.claudeJobs;
+  const jobs = useDashboard().data.claudeJobs;
+  const now = useNow();
   return (
-    <aside aria-label="Claude's scheduled tasks" className="flex min-w-0 flex-col gap-2 self-start rounded-[20px] border border-dashed border-claude/50 bg-base p-3">
-      <div className="flex items-center justify-between gap-2 px-1.5 py-1">
-        <h2 className="m-0 flex items-center gap-2 text-sm font-bold">
-          <span aria-hidden="true" className="size-[9px] rounded-full bg-claude" />
-          Claude&apos;s scheduled tasks
-        </h2>
-        <Chip>{jobs.length}</Chip>
-      </div>
-      <p className="m-0 px-1.5 text-xs text-sub">Run by Claude on a timer. Not on your Board.</p>
-      {jobs.length === 0 && (
-        <div className="px-1.5 py-1">
-          <EmptyNote>None reported yet. Claude adds them through the API (POST /api/claude-jobs).</EmptyNote>
-        </div>
-      )}
+    <Tile title="Claude's scheduled tasks" aside={<span aria-hidden="true" className="size-2.5 rounded-full bg-claude" />} className="self-start">
+      <p className="m-0 -mt-1 text-xs text-sub">Run by Claude on a timer. Not on your Board.</p>
+      {jobs.length === 0 && <EmptyNote>None reported yet. Claude adds them through the API (POST /api/claude-jobs).</EmptyNote>}
       <ul className="m-0 flex list-none flex-col gap-2 p-0">
         {jobs.map((j) => (
-          <li key={j.name} className="flex flex-col gap-1 rounded-[10px] border border-sep bg-column px-3 py-2.5">
+          <li key={j.name} className="flex flex-col gap-1 rounded-item border border-line bg-fill px-3 py-2.5">
             <span className="flex items-start justify-between gap-2">
-              <span className="min-w-0 text-[13px] leading-[1.35] font-medium">{j.name}</span>
-              <Chip tone={statusChip[j.status].tone}>{statusChip[j.status].label}</Chip>
+              <span className="min-w-0 text-sm leading-snug font-semibold">{j.name}</span>
+              <span className="flex shrink-0 items-center gap-1.5 text-xs font-semibold">
+                <span aria-hidden="true" className={`size-2 rounded-full ${STATUS[j.status].dot}`} />
+                {STATUS[j.status].label}
+              </span>
             </span>
             {j.schedule && <span className="text-xs text-sub">{j.schedule}</span>}
-            <span className="flex flex-wrap gap-x-3 text-[11px] text-sub tabular-nums">
-              <span>Last: {when(j.lastRun)}</span>
-              <span>Next: {when(j.nextRun)}</span>
-            </span>
+            {now != null && (
+              <span className="flex flex-wrap gap-x-3 font-mono text-xs text-sub">
+                <span>Last run {timeAgo(j.lastRun, now)}</span>
+                {j.nextRun && <span>Next {timeAgo(j.nextRun, now)}</span>}
+              </span>
+            )}
           </li>
         ))}
       </ul>
-    </aside>
+    </Tile>
   );
 }

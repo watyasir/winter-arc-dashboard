@@ -67,7 +67,8 @@ export async function loadOwnerDashboard(supabase: ServiceClient, ownerId: strin
     tasks: [],
     goals: [],
     goalTracked: new Map(),
-    ownerInitial: "",
+    nowMinutes: 0,
+    dayPlan: null,
   });
   return { data, trackers, entries, today };
 }

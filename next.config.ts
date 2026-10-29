@@ -12,13 +12,6 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/sw.js", headers: [{ key: "Cache-Control", value: "no-cache, no-store, must-revalidate" }] }];
   },
-  // The Winter Arc page is a view of the dashboard.
-  async redirects() {
-    return [
-      { source: "/winter-arc", destination: "/#winter-arc", permanent: false },
-      { source: "/demo/winter-arc", destination: "/demo#winter-arc", permanent: false },
-    ];
-  },
   turbopack: {
     rules: {
       "*.css": {

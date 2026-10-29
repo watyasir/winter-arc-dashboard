@@ -8,6 +8,9 @@ import { supabaseKey, supabaseUrl } from "@/lib/supabase/config";
   browser stays signed in), signs you out 7 days after you signed in (src/lib/session.ts),
   and sends signed-out visitors to /login. The allowed-email check happens in requireUser().
 */
+/** Pages that need sign-in ("/" shows a welcome, "/progress" a share card, so they stay open). */
+const PRIVATE = ["/log", "/settings", "/winter-arc", "/board", "/money", "/health", "/gallery"];
+
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
   const supabase = createServerClient(supabaseUrl, supabaseKey, {
@@ -37,7 +40,7 @@ export async function proxy(request: NextRequest) {
   }
   const signedIn = !!data?.claims;
 
-  if (!signedIn && (path === "/log" || path.startsWith("/log/") || path.startsWith("/settings"))) {
+  if (!signedIn && PRIVATE.some((p) => path === p || path.startsWith(`${p}/`))) {
     const to = request.nextUrl.clone();
     to.pathname = "/login";
     to.search = "";
@@ -54,6 +57,6 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // "/" and "/progress" are here so the login cookie stays fresh there too (both stay open to visitors).
-  matcher: ["/", "/log/:path*", "/login", "/settings/:path*", "/progress"],
+  // The pages, so the login cookie stays fresh on each ("/" and "/progress" stay open to visitors).
+  matcher: ["/", "/winter-arc", "/board", "/money", "/health", "/gallery", "/log/:path*", "/login", "/settings/:path*", "/progress"],
 };

@@ -7,7 +7,7 @@ import { OWNERS, TASK_COLUMNS, taskProblem, type NewTask, type Owner, type Task,
 /** Editing a task, or adding one to a column. */
 export type SheetTarget = { task?: Task; status: TaskStatus };
 
-const fieldClass = "min-h-11 w-full rounded-xl border border-sep bg-base px-3 text-[15px] text-ink placeholder:text-sub sm:min-h-9 sm:text-[13px]";
+const fieldClass = "min-h-11 w-full rounded-xl border border-line bg-card px-3 text-[15px] text-ink placeholder:text-sub sm:min-h-9 sm:text-[13px]";
 const labelClass = "flex flex-col gap-1 text-xs font-semibold text-sub";
 
 /**
@@ -48,10 +48,10 @@ export function TaskSheet({ target, onClose }: { target: SheetTarget; onClose: (
       aria-label={task ? `Edit ${task.title}` : "Add a task"}
       onClose={onClose}
       onClick={(e) => e.target === ref.current && onClose()}
-      className="m-0 mt-auto w-full max-w-none rounded-t-[20px] border-0 bg-base p-0 text-ink backdrop:bg-ink/30 sm:m-auto sm:max-w-[440px] sm:rounded-[20px]"
+      className="m-0 mt-auto w-full max-w-none rounded-t-[20px] border-0 bg-card p-0 text-ink backdrop:bg-ink/30 sm:m-auto sm:max-w-[440px] sm:rounded-[20px]"
     >
       <form onSubmit={submit} className="flex flex-col gap-3 p-5 pb-[max(20px,env(safe-area-inset-bottom))]">
-        <h2 className="m-0 text-[17px] font-bold">{task ? "Edit task" : "Add task"}</h2>
+        <h2 className="m-0 text-[17px] font-extrabold">{task ? "Edit task" : "Add task"}</h2>
         <label className={labelClass}>
           Title
           <input value={form.title} onChange={(e) => set("title", e.target.value)} maxLength={120} placeholder="What needs doing?" className={fieldClass} />
@@ -83,7 +83,7 @@ export function TaskSheet({ target, onClose }: { target: SheetTarget; onClose: (
             {OWNERS.map((o: Owner) => (
               <label
                 key={o}
-                className={`flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-full text-[13px] font-semibold has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-brand sm:min-h-8 ${form.owner === o ? "bg-base text-ink" : "text-sub"}`}
+                className={`flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-full text-[13px] font-semibold has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-blue-text sm:min-h-8 ${form.owner === o ? "bg-card text-ink" : "text-sub"}`}
               >
                 <input type="radio" name="owner" value={o} checked={form.owner === o} onChange={() => set("owner", o)} className="sr-only" />
                 {o}
@@ -102,7 +102,7 @@ export function TaskSheet({ target, onClose }: { target: SheetTarget; onClose: (
           </select>
         </label>
         {problem && (
-          <p role="alert" className="m-0 text-xs text-coral-text">
+          <p role="alert" className="m-0 text-xs text-danger">
             {problem}
           </p>
         )}
@@ -115,15 +115,15 @@ export function TaskSheet({ target, onClose }: { target: SheetTarget; onClose: (
                 deleteTask(task.id);
                 onClose();
               }}
-              className="min-h-11 cursor-pointer rounded-full border-0 bg-transparent px-3 text-[13px] font-semibold text-coral-text hover:bg-fill sm:min-h-9"
+              className="min-h-11 cursor-pointer rounded-full border-0 bg-transparent px-3 text-[13px] font-semibold text-danger hover:bg-fill sm:min-h-9"
             >
               Delete
             </button>
           )}
-          <button type="button" onClick={onClose} className="ml-auto min-h-11 cursor-pointer rounded-full border-0 bg-transparent px-3 text-[13px] font-semibold text-brand-text hover:bg-fill sm:min-h-9">
+          <button type="button" onClick={onClose} className="ml-auto min-h-11 cursor-pointer rounded-full border-0 bg-transparent px-3 text-[13px] font-semibold text-blue-text hover:bg-fill sm:min-h-9">
             Cancel
           </button>
-          <button type="submit" className="min-h-11 cursor-pointer rounded-full border-0 bg-brand px-5 text-[13px] font-semibold text-white hover:bg-brand-hover sm:min-h-9">
+          <button type="submit" className="min-h-11 cursor-pointer rounded-full border-0 bg-peach px-5 text-[13px] font-semibold text-ink hover:bg-peach-strong sm:min-h-9">
             {task ? "Save" : "Add"}
           </button>
         </div>

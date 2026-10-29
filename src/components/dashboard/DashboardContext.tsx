@@ -1,14 +1,14 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 import { nextMidnightIST, type GateChoice } from "@/lib/gate";
 import type { NewTask, Task, TaskStatus } from "@/lib/tasks";
 import type { DashboardData, GalleryActions, TaskActions, ToggleTodayAction, ViewId } from "@/modules/types";
 
 interface DashboardState {
   data: DashboardData;
+  /** The page on screen (from its address). */
   view: ViewId;
-  setView: (view: ViewId) => void;
   /** Today checklist: which rows are ticked. */
   todayDone: boolean[];
   toggleToday: (index: number) => void;
@@ -44,12 +44,14 @@ export function useDashboard() {
 
 export function DashboardProvider({
   data,
+  view,
   onToggleToday,
   taskActions,
   galleryActions,
   children,
 }: {
   data: DashboardData;
+  view: ViewId;
   /** Real dashboard only: saves a tapped Today row. The server then sends fresh data. */
   onToggleToday?: ToggleTodayAction;
   /** Real dashboard only: saves task changes. */
@@ -57,19 +59,6 @@ export function DashboardProvider({
   galleryActions?: GalleryActions;
   children: ReactNode;
 }) {
-  const [view, setViewState] = useState<ViewId>("overview");
-  // View switches are instant and start at the top of the page (DESIGN.md §5).
-  // The Winter Arc page has its own address (/winter-arc redirects to /#winter-arc), kept on refresh.
-  const setView = useCallback((next: ViewId) => {
-    setViewState(next);
-    window.scrollTo({ top: 0 });
-    history.replaceState(history.state, "", next === "arc" ? "#winter-arc" : location.pathname + location.search);
-  }, []);
-  useEffect(() => {
-    // The hash only exists in the browser, so it's read after the first render.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (location.hash === "#winter-arc") setViewState("arc");
-  }, []);
   const [todayDone, setTodayDone] = useState(() => data.today.map((t) => t.done));
   const [todayError, setTodayError] = useState<string | null>(null);
   // Fresh data from the server (after a save) replaces the local ticks.
@@ -147,7 +136,6 @@ export function DashboardProvider({
   const value: DashboardState = {
     data,
     view,
-    setView,
     todayDone,
     toggleToday,
     todayError,

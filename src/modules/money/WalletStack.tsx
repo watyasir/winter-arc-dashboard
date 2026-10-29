@@ -7,10 +7,10 @@ import type { Account } from "@/modules/types";
 
 // Tab colour by account type (DESIGN.md §2b, wallet stack).
 const tabStyle: Record<Account["kind"], string> = {
-  savings: "bg-brand text-white",
-  current: "bg-sage text-ink",
-  card: "bg-yellow text-ink",
-  other: "bg-seafoam text-ink",
+  savings: "bg-peach text-ink",
+  current: "bg-blue text-ink",
+  card: "bg-warn-soft text-ink",
+  other: "bg-fill-strong text-ink",
 };
 
 function tabLabel(a: Account) {
@@ -54,35 +54,35 @@ export function WalletStack({
   if (open) {
     return (
       <div
-        className="flex flex-col gap-2.5 rounded-2xl border border-sep bg-base px-4 pt-3.5 pb-4"
+        className="flex flex-col gap-2.5 rounded-2xl border border-line bg-card px-4 pt-3.5 pb-4"
         onKeyDown={(e) => e.key === "Escape" && setOpenId(null)}
       >
         <button
           type="button"
           onClick={() => setOpenId(null)}
-          className="-mx-2 min-h-11 self-start cursor-pointer rounded-full border-0 bg-transparent px-2 text-[13px] font-semibold text-brand-text hover:text-brand-hover sm:min-h-8"
+          className="-mx-2 min-h-11 self-start cursor-pointer rounded-full border-0 bg-transparent px-2 text-[13px] font-semibold text-blue-text hover:text-blue-hover sm:min-h-8"
         >
           ‹ All accounts
         </button>
         <div className="flex items-baseline justify-between gap-2">
-          <h3 ref={detailRef} tabIndex={-1} className="m-0 text-[15px] font-bold">
+          <h3 ref={detailRef} tabIndex={-1} className="m-0 text-[15px] font-extrabold">
             {open.name}
           </h3>
           {open.due && <Chip tone="neutral">Due {open.due}</Chip>}
         </div>
         <div>
           <div className="text-xs text-sub">{open.kind === "card" ? "Amount owed" : "Balance"}</div>
-          <div className="font-rounded text-[28px] font-bold">
+          <div className="font-mono text-[28px] font-extrabold">
             {formatRupees(open.kind === "card" ? -open.balance : open.balance)}
           </div>
         </div>
         {open.transactions && open.transactions.length > 0 && (
           <ul className="m-0 list-none p-0" aria-label="Last 5 transactions">
             {open.transactions.slice(0, 5).map((t, i) => (
-              <li key={i} className="flex items-center gap-2.5 border-t border-sep py-2 text-[13px]">
+              <li key={i} className="flex items-center gap-2.5 border-t border-line py-2 text-[13px]">
                 <span className="flex-1">{t.label}</span>
                 <span className="text-xs text-sub">{t.date}</span>
-                <span className={`w-[84px] text-right font-semibold ${t.amount > 0 ? "text-sage-text" : "text-ink"}`}>
+                <span className={`w-[84px] text-right font-semibold ${t.amount > 0 ? "text-ok" : "text-ink"}`}>
                   {formatSignedRupees(t.amount)}
                 </span>
               </li>
@@ -111,25 +111,25 @@ export function WalletStack({
             {a.name}
             {a.due && ` · due ${a.due}`}
           </span>
-          <span className="shrink-0 font-rounded text-sm font-bold whitespace-nowrap">{formatRupees(a.balance)}</span>
+          <span className="shrink-0 font-mono text-sm font-extrabold whitespace-nowrap">{formatRupees(a.balance)}</span>
         </button>
       ))}
       <div
         style={{ zIndex: accounts.length + 1 }}
-        className="notch-top relative flex flex-col rounded-2xl border border-sep bg-base px-4 pt-3.5 pb-4"
+        className="notch-top relative flex flex-col rounded-2xl border border-line bg-card px-4 pt-3.5 pb-4"
       >
-        <span className="self-start rounded-full border border-sep bg-base px-2.5 py-[3px] text-[11px] font-semibold">
+        <span className="self-start rounded-full border border-line bg-card px-2.5 py-[3px] text-[11px] font-semibold">
           {accounts.length} {accounts.length === 1 ? "account" : "accounts"}
         </span>
         <div className="flex flex-wrap items-baseline gap-x-2 pt-3">
           <span className="text-xs text-sub">Available to spend</span>
           {savedThisMonth >= 0 ? (
-            <span className="text-xs font-semibold text-sage-text">+ {formatRupees(savedThisMonth)} saved this month</span>
+            <span className="text-xs font-semibold text-ok">+ {formatRupees(savedThisMonth)} saved this month</span>
           ) : (
-            <span className="text-xs font-semibold text-coral-text">{formatRupees(-savedThisMonth)} more spent than earned</span>
+            <span className="text-xs font-semibold text-danger">{formatRupees(-savedThisMonth)} more spent than earned</span>
           )}
         </div>
-        <div className="font-rounded text-[32px] font-bold">{formatRupees(spendable)}</div>
+        <div className="font-mono text-[32px] font-extrabold">{formatRupees(spendable)}</div>
       </div>
     </div>
   );

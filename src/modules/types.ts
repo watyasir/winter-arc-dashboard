@@ -11,7 +11,14 @@ export type { Owner, Task };
   (src/data/demo); from Phase 3 the real dashboard fills it from Supabase.
 */
 
-export type ViewId = "overview" | "arc" | "board" | "gallery";
+/** Each view has its own address: / (overview), /winter-arc, /board, /money, /health, /gallery (and the same under /demo). */
+export type ViewId = "overview" | "arc" | "board" | "money" | "health" | "gallery";
+
+/** One day's value on a line chart. */
+export interface Point {
+  date: string;
+  value: number;
+}
 
 export type SeasonDay = "all" | "most" | "missed" | "today" | "upcoming";
 
@@ -66,8 +73,8 @@ export interface DashboardData {
   ownerLine: string;
   /** YYYY-MM-DD the dashboard counts as today (fixed on the demo). */
   todayISO: string;
-  /** Letter in the phone avatar. */
-  ownerInitial: string;
+  /** "" for the real app, "/demo" for the demo: every view's address starts with it. */
+  basePath: "" | "/demo";
   /** Where "Log Today" goes: /demo/log on the demo, /log for real. */
   logHref: string;
   views: Record<ViewId, { title: string; subtitle: string }>;
@@ -86,6 +93,40 @@ export interface DashboardData {
     endLabel: string;
     days: SeasonDay[];
   } | null;
+  /** The Overview hero. null = no season set up. */
+  hero: {
+    /** 1..length once started; 0 before day 1. */
+    day: number;
+    length: number;
+    /** Before day 1: days until it starts. */
+    startsIn: number;
+    daysLeft: number;
+    /** Season days so far with anything logged. */
+    checkIns: number;
+    finishLabel: string;
+    /** One per season day: anything logged that day. */
+    logged: boolean[];
+    /** -1 outside the season. */
+    todayIndex: number;
+  } | null;
+  /** Anything logged today. */
+  checkedIn: boolean;
+  /** From the day plan. null = no plan sent yet. */
+  plan: { shift: string; now: string | null } | null;
+  /** Last 90 days (Health toggles 14 / 30 / 90). */
+  steps: Point[];
+  /** Hours: wake time minus lights out, else the Sleep tracker. */
+  sleep: Point[];
+  /** Today's meal slots. status = the logged option ("Planned", "Swapped", "Skipped"), null = not logged. */
+  meals: { name: string; status: string | null }[];
+  /** Today's readings, "118/76". */
+  bp: { label: string; value: string | null }[];
+  /** The goal whose name has "1RK" in it. null = no such goal yet. */
+  fund: { name: string; progress: string; pct: number; by: string } | null;
+  /** null = no Study tracker. */
+  study: { todayMin: number | null; weekMin: number; dailyTarget: number | null; page: number | null } | null;
+  /** Winter Arc: 0-100 per season day so far. */
+  consistency: Point[];
   /** The Winter Arc page (DESIGN.md v6.1). null = no season set up. */
   arc: {
     /** "26 Oct 2026 → 23 Jan 2027" */
@@ -127,18 +168,8 @@ export interface DashboardData {
     /** The latest session, for "Repeat last workout". null = none logged yet. */
     last: { name: string; when: string; summary: string } | null;
   };
-  weight: {
-    unit: string;
-    /** null = no goal weight set. */
-    goal: number | null;
-    rangeLabel: string;
-    startLabel: string;
-    endLabel: string;
-    /** One reading per weekly check, oldest first. */
-    values: number[];
-    /** Y axis bottom and top. */
-    axis: [number, number];
-  } | null;
+  /** Check-in and weekly body check readings, last 90 days. */
+  weight: { unit: "kg"; goal: number | null; points: Point[] };
   bodyCheck: {
     /** "Today", "3 days ago", "11 Oct". null = never done. */
     lastLabel: string | null;
@@ -154,12 +185,10 @@ export interface DashboardData {
   /** Season, trackers and reset. null on the demo (no settings to change). */
   settingsHref: string | null;
   goals: { name: string; progress: string; pct: number; by: string; tone: Tone }[];
-  habits: { name: string; days: boolean[] }[];
   /** Open tasks plus the ones done in the last two weeks. */
   tasks: Task[];
   /** The demo's gallery. null on the real dashboard: the gallery loads when it's opened. */
   gallery: GalleryItem[] | null;
   /** Claude's scheduled tasks, beside the Board. */
   claudeJobs: ClaudeJob[];
-  footnote: string;
 }

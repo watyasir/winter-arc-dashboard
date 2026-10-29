@@ -35,6 +35,7 @@ const sample: Record<string, number> = {
   "bp-am-dia": 76,
   // Evening reading not taken yet: blank, so it isn't saved.
   "reading-page": 142,
+  weight: 58.4,
 };
 
 export const demoCheckInValues: CheckInValues = Object.fromEntries(demoTrackers.map((t) => [t.id, sample[t.slug]]));

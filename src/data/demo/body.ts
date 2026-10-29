@@ -42,6 +42,8 @@ export const demoWorkouts: Workout[] = Array.from({ length: 8 }, (_, week) =>
   .flat()
   .reverse(); // latest first
 
+export const DEMO_WEIGHT_GOAL = 76;
+
 const weights = [70.3, 70.6, 70.9, 71.2, 71.4, 71.9, 72.1, 72.4];
 export const demoBodyChecks: BodyCheck[] = weights
   .map((weight, i) => ({
@@ -54,12 +56,9 @@ export const demoBodyChecks: BodyCheck[] = weights
   }))
   .reverse();
 
-export const DEMO_WEIGHT_GOAL = 76;
-
 export const demoBody = buildBody({
   workouts: demoWorkouts,
   bodyChecks: demoBodyChecks,
-  weightGoal: DEMO_WEIGHT_GOAL,
   today: DEMO_TODAY,
   weekTarget: 5,
 });

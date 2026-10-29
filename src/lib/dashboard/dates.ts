@@ -38,8 +38,3 @@ export function relativeDay(iso: string, today: string): string {
   if (days < 7) return `${days} days ago`;
   return shortDate(iso);
 }
-
-/** The n days ending today, oldest first. */
-export function lastDays(today: string, n: number): string[] {
-  return Array.from({ length: n }, (_, i) => addDays(today, i - n + 1));
-}

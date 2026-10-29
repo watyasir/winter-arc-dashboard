@@ -1,5 +1,4 @@
 import "server-only";
-import { createHmac } from "node:crypto";
 import { NextResponse } from "next/server";
 import { ownerClient, secretMatches, type ServiceClient } from "@/lib/owner";
 
@@ -29,22 +28,10 @@ export async function authorizeApi(request: Request): Promise<{ supabase: Servic
   return owner;
 }
 
-/**
- * The gallery's upload-only key: GALLERY_TOKEN if set, otherwise derived from API_TOKEN
- * (HMAC-SHA256 of "yasiros-gallery-upload-v1", hex), so no new setting is needed. It can add
- * files and nothing else. Null = neither token is set.
- */
-function galleryKey(): string | null {
-  const own = process.env.GALLERY_TOKEN?.trim();
-  if (own) return own;
-  const api = process.env.API_TOKEN?.trim();
-  return api ? createHmac("sha256", api).update("yasiros-gallery-upload-v1").digest("hex") : null;
-}
-
-/** Like authorizeApi, for the gallery upload key. */
+/** Like authorizeApi, for the gallery's upload-only key (GALLERY_TOKEN): it can add files and nothing else. */
 export async function authorizeGallery(request: Request): Promise<{ supabase: ServiceClient; ownerId: string } | NextResponse> {
-  const key = galleryKey();
-  if (!key) return apiError(503, "Gallery uploads are off: API_TOKEN isn't set.");
+  const key = process.env.GALLERY_TOKEN?.trim();
+  if (!key) return apiError(503, "Gallery key not set: add GALLERY_TOKEN to the site's settings.");
   const header = request.headers.get("authorization") ?? "";
   const candidate = header.startsWith("Bearer ") ? header.slice(7).trim() : null;
   if (!secretMatches(candidate, key)) return apiError(401, "Wrong or missing gallery key.");

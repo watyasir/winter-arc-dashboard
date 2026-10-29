@@ -1,7 +1,7 @@
 import { dueState, type Task } from "@/lib/tasks";
 import { shortDate } from "@/lib/trackers";
 
-const dueColor = { soon: "text-yellow-text", overdue: "text-coral-text" };
+const dueColor = { soon: "text-warn", overdue: "text-danger" };
 
 /** "Due 26 Oct", yellow within 3 days, "Overdue · 16 Oct" in coral. Words, never colour alone. */
 export function DueLabel({ task, today, className = "" }: { task: Task; today: string; className?: string }) {

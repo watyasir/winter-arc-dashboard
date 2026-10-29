@@ -19,7 +19,7 @@ export interface ShareCard {
   /** Share of finished days with every target hit. null = no finished day yet. */
   targets: { pct: number | null; label: "This week" | "Last week" };
   workouts: { count: number; target: number | null };
-  /** kg, latest minus first weekly weigh-in. null = fewer than two weigh-ins. */
+  /** kg, latest minus first reading in the last 90 days. null = fewer than two readings. */
   weight: { change: number; sinceLabel: string } | null;
   /** "26 Oct 2026" */
   asOf: string;
@@ -29,7 +29,7 @@ export interface ShareCard {
 export function toShareCard(data: DashboardData): ShareCard | null {
   const { season, workouts, weight, todayISO: today } = data;
   if (!season) return null;
-  const values = weight?.values ?? [];
+  const points = weight.points;
 
   return {
     name: season.name,
@@ -42,7 +42,10 @@ export function toShareCard(data: DashboardData): ShareCard | null {
     bestStreak: season.bestStreak,
     targets: weekTargets(season.days, season.day, today),
     workouts: { count: workouts.weekCount, target: workouts.weekTarget },
-    weight: weight && values.length >= 2 ? { change: Math.round((values.at(-1)! - values[0]) * 10) / 10, sinceLabel: weight.startLabel } : null,
+    weight:
+      points.length >= 2
+        ? { change: Math.round((points.at(-1)!.value - points[0].value) * 10) / 10, sinceLabel: shortDate(points[0].date) }
+        : null,
     asOf: `${shortDate(today)} ${today.slice(0, 4)}`,
   };
 }

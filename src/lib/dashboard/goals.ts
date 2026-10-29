@@ -3,7 +3,7 @@ import { formatAmount, shortDate, type Tracker } from "@/lib/trackers";
 import type { Goal } from "@/lib/tasks";
 import type { DashboardData } from "@/modules/types";
 
-const GOAL_TONES: Tone[] = ["brand", "sage", "pine", "mist"];
+const GOAL_TONES: Tone[] = ["blue", "peach"];
 
 /** How far each goal is, as the Goals tile shows it. `tracked` = linked tracker totals by goal id. */
 export function buildGoals(goals: Goal[], tracked: Map<string, number>, trackers: Tracker[], today: string): DashboardData["goals"] {
@@ -19,7 +19,7 @@ export function buildGoals(goals: Goal[], tracked: Map<string, number>, trackers
       progress: `${formatAmount(round1(now))} of ${formatAmount(g.target)}${u}`,
       pct,
       by,
-      tone: pct >= 100 ? "sage" : GOAL_TONES[i % GOAL_TONES.length],
+      tone: pct >= 100 ? "ok" : GOAL_TONES[i % GOAL_TONES.length],
     };
   });
 }

@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function DemoPage() {
-  return <Dashboard data={demoData} />;
+  return <Dashboard data={demoData} view="overview" />;
 }

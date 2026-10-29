@@ -51,6 +51,8 @@ const dayPlan: NewTracker[] = [
     ([slug, name], i): NewTracker => ({ slug, name, area: "Health", type: "number", unit: "mmHg", group_name: "Blood pressure", sort_order: 31 + i }),
   ),
   { slug: "reading-page", name: "Reading page", area: "Mind", type: "number", unit: "page", sort_order: 75 },
+  // Final build: daily weight (migration 20261030000002_weight_tracker.sql).
+  { slug: "weight", name: "Weight", area: "Body", type: "number", unit: "kg", sort_order: 45 },
 ];
 
 export const defaultTrackers: NewTracker[] = [...base.map((t, i) => ({ ...t, sort_order: (i + 1) * 10 }) as NewTracker), ...dayPlan].sort(

@@ -5,18 +5,16 @@ import { CheckBox } from "@/components/Checkbox";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 
 /*
-  The Today rows, shared by the desktop Today tile and the phone Focus list.
+  Today's trackers on the Health page.
   Yes/no rows tick when tapped (and save on the real dashboard); number rows open the check-in.
 */
-export function TodayRows({ size = "desktop" }: { size?: "desktop" | "phone" }) {
+export function TodayRows() {
   const { data, todayDone, toggleToday, todayError } = useDashboard();
-  const phone = size === "phone";
-  const row = `flex w-full items-center gap-3 border-0 border-solid border-sep bg-transparent p-0 text-left text-ink no-underline ${
-    phone ? "min-h-[46px] text-[17px] [&:not(:first-child)]:border-t" : "min-h-11 border-t text-sm"
-  }`;
+  const row =
+    "flex min-h-11 w-full items-center gap-3 border-0 border-solid border-line bg-transparent p-0 text-left text-sm text-ink no-underline [&:not(:first-child)]:border-t";
 
   if (data.today.length === 0) {
-    return <p className="m-0 py-3 text-[13px] text-sub">No trackers yet. Open Log Today to start.</p>;
+    return <p className="m-0 py-3 text-sm text-sub">No trackers yet. Open the check-in to start.</p>;
   }
 
   return (
@@ -27,7 +25,7 @@ export function TodayRows({ size = "desktop" }: { size?: "desktop" | "phone" }) 
           <>
             <CheckBox checked={done} />
             <span className={`flex-1 ${done ? "text-sub" : ""}`}>{item.label}</span>
-            <span className={`text-sub ${phone ? "text-[13px]" : "text-xs"}`}>{item.area}</span>
+            <span className="text-xs text-sub">{item.area}</span>
           </>
         );
         if (item.href) {
@@ -45,7 +43,7 @@ export function TodayRows({ size = "desktop" }: { size?: "desktop" | "phone" }) 
         );
       })}
       {todayError && (
-        <p role="alert" className="m-0 py-2 text-[13px] text-coral-text">
+        <p role="alert" className="m-0 py-2 text-sm text-danger">
           {todayError}
         </p>
       )}

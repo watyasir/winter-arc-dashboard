@@ -1,58 +1,26 @@
 import Link from "next/link";
-import { Suspense } from "react";
-import { Dashboard } from "@/components/dashboard/Dashboard";
-import { currentOwner } from "@/lib/auth";
-import { loadDashboardData } from "@/lib/dashboard/load";
-import { addTask, answerGate, deleteGalleryItem, deleteTask, listGallery, moveTask, toggleTodayTracker, updateTask } from "./actions";
+import { OwnerDashboard } from "./OwnerDashboard";
 
-/** Signed in as the owner: the real dashboard. Anyone else: a short welcome with the demo link. */
+/** Signed in as the owner: the Overview. Anyone else: a short welcome with the demo link. */
 export default function Home() {
-  return (
-    <Suspense
-      fallback={
-        <p role="status" className="m-0 p-6 text-center text-[15px] text-sub">
-          Loading your dashboard…
-        </p>
-      }
-    >
-      <HomeContent />
-    </Suspense>
-  );
-}
-
-async function HomeContent() {
-  const owner = await currentOwner();
-  if (!owner) return <Welcome />;
-
-  const dashboard = await loadDashboardData(owner.supabase, owner.email);
-  if (!dashboard) {
-    return <p className="m-0 p-6 text-center text-[15px] text-coral-text">Couldn&apos;t load your dashboard. Refresh to try again.</p>;
-  }
-  return (
-    <Dashboard
-      data={dashboard}
-      onToggleToday={toggleTodayTracker}
-      taskActions={{ add: addTask, update: updateTask, move: moveTask, remove: deleteTask, gate: answerGate }}
-      galleryActions={{ list: listGallery, remove: deleteGalleryItem }}
-    />
-  );
+  return <OwnerDashboard view="overview" signedOut={<Welcome />} />;
 }
 
 function Welcome() {
   return (
     <main className="flex min-h-screen items-center justify-center p-4">
-      <div className="w-full max-w-md rounded-[20px] border border-sep bg-card p-8 text-center">
-        <h1 className="m-0 text-3xl font-bold tracking-tight">Yasir OS</h1>
-        <p className="mt-2 text-sub">A personal life dashboard with a 90-day Winter Arc season.</p>
-        <Link
-          href="/demo"
-          className="mt-6 inline-flex min-h-11 items-center rounded-full bg-brand px-4 text-[13px] font-semibold text-white no-underline hover:bg-brand-hover hover:text-white"
-        >
+      <div className="flex w-full max-w-md flex-col items-center gap-3 rounded-tile border border-line bg-card p-8 text-center shadow-tile">
+        <span aria-hidden="true" className="grid size-12 place-items-center rounded-item bg-peach font-mono text-xl font-bold">
+          Y
+        </span>
+        <h1 className="m-0 text-[32px] font-extrabold tracking-[-0.02em]">Yasir OS</h1>
+        <p className="m-0 text-sub">A personal life dashboard with a 90-day Winter Arc season.</p>
+        <Link href="/demo" className="press mt-3 inline-flex min-h-11 items-center rounded-full bg-peach px-5 text-sm font-semibold text-ink no-underline hover:bg-peach-strong">
           View the demo
         </Link>
-        <p className="mt-4 mb-0 text-[13px] text-sub">
+        <p className="m-0 text-sm text-sub">
           It&apos;s you?{" "}
-          <Link href="/login" className="font-semibold text-brand-text hover:text-brand-hover">
+          <Link href="/login" className="inline-flex min-h-11 items-center font-semibold text-blue-text hover:text-blue-hover">
             Sign in
           </Link>
         </p>

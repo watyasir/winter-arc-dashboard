@@ -37,7 +37,7 @@ async function ProgressContent({ searchParams }: Pick<PageProps<"/progress">, "s
 
   const owner = await currentOwner();
   if (owner) {
-    const data = await loadDashboardData(owner.supabase, owner.email);
+    const data = await loadDashboardData(owner.supabase);
     if (!data) return <LoadError />;
     // Owner only: the 9 calendar feeds are listed in /settings.
     return <ProgressCard card={toShareCard(data)} sharePath={sharePath} calendarHref="/settings#calendar" backHref="/" />;
@@ -50,5 +50,5 @@ async function ProgressContent({ searchParams }: Pick<PageProps<"/progress">, "s
 }
 
 function LoadError() {
-  return <p className="m-0 p-6 text-center text-[15px] text-coral-text">Couldn&apos;t load the progress card. Refresh to try again.</p>;
+  return <p className="m-0 p-6 text-center text-[15px] text-danger">Couldn&apos;t load the progress card. Refresh to try again.</p>;
 }

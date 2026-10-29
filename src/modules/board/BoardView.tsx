@@ -10,7 +10,7 @@ import { DueLabel } from "./DueLabel";
 import { OwnerChip } from "./OwnerChip";
 import { TaskSheet, type SheetTarget } from "./TaskSheet";
 
-const columnTone: Record<TaskStatus, Tone> = { todo: "neutral", doing: "brand", waiting: "yellow", done: "sage" };
+const columnTone: Record<TaskStatus, Tone> = { todo: "neutral", doing: "blue", waiting: "warn", done: "ok" };
 
 /** How many done tasks show before "Show all". */
 const DONE_SHOWN = 20;
@@ -38,11 +38,11 @@ export function BoardView() {
   return (
     <div className="flex flex-col gap-3">
       {taskError && (
-        <p role="alert" className="m-0 rounded-2xl bg-coral/12 px-4 py-3 text-[13px] text-coral-text">
+        <p role="alert" className="m-0 rounded-2xl bg-danger-soft px-4 py-3 text-[13px] text-danger">
           {taskError}
         </p>
       )}
-      <div className="grid gap-3.5 min-[1200px]:grid-cols-[minmax(0,1fr)_260px]">
+      <div className="grid gap-3.5 min-[1200px]:grid-cols-[minmax(0,1fr)_300px]">
         <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3.5">
           {TASK_COLUMNS.map((col) => {
             const all = tasks.filter((t) => t.status === col.status).sort(boardOrder);
@@ -60,10 +60,10 @@ export function BoardView() {
                   if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOver(null);
                 }}
                 onDrop={(e) => drop(e, col.status)}
-                className={`flex min-w-0 flex-col gap-2 rounded-[20px] border bg-column p-3 ${over === col.status ? "border-brand" : "border-sep"}`}
+                className={`flex min-w-0 flex-col gap-2 rounded-[20px] border bg-fill p-3 ${over === col.status ? "border-blue-text" : "border-line"}`}
               >
                 <div className="flex items-center justify-between px-1.5 py-1">
-                  <h2 className="m-0 flex items-center gap-2 text-sm font-bold">
+                  <h2 className="m-0 flex items-center gap-2 text-sm font-extrabold">
                     <span aria-hidden="true" className={`size-[9px] rounded-full ${toneBg[columnTone[col.status]]}`} />
                     {col.name}
                   </h2>
@@ -86,7 +86,7 @@ export function BoardView() {
                   <button
                     type="button"
                     onClick={() => setAllDone((a) => !a)}
-                    className="min-h-11 cursor-pointer rounded-xl border-0 bg-transparent text-xs font-semibold text-brand-text hover:bg-fill sm:min-h-[38px]"
+                    className="min-h-11 cursor-pointer rounded-xl border-0 bg-transparent text-xs font-semibold text-blue-text hover:bg-fill sm:min-h-[38px]"
                   >
                     {allDone ? `Show the latest ${DONE_SHOWN}` : `Show all ${all.length}`}
                   </button>
@@ -95,7 +95,7 @@ export function BoardView() {
                   <button
                     type="button"
                     onClick={() => setSheet({ status: col.status })}
-                    className="min-h-11 cursor-pointer rounded-xl border border-dashed border-overlay bg-transparent text-xs font-semibold text-sub hover:bg-fill sm:min-h-[38px]"
+                    className="min-h-11 cursor-pointer rounded-xl border border-dashed border-line-strong bg-transparent text-xs font-semibold text-sub hover:bg-fill sm:min-h-[38px]"
                   >
                     Add task
                   </button>
@@ -138,7 +138,7 @@ function TaskCard({
       }}
       onDragEnd={onDragEnd}
       aria-label={`${done ? "Done: " : ""}${task.title}. Edit`}
-      className={`flex w-full cursor-pointer flex-col gap-1.5 rounded-[10px] border border-sep bg-base px-3 py-[11px] text-left text-ink hover:border-overlay ${dragging ? "opacity-50" : ""}`}
+      className={`flex w-full cursor-pointer flex-col gap-1.5 rounded-[10px] border border-line bg-card px-3 py-[11px] text-left text-ink hover:border-line-strong ${dragging ? "opacity-50" : ""}`}
     >
       <span className={`text-[13px] leading-[1.35] font-medium ${done ? "text-sub line-through" : ""}`}>{task.title}</span>
       {task.note && <span className="line-clamp-2 text-xs leading-[1.4] text-sub">{task.note}</span>}

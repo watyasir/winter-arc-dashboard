@@ -1,5 +1,6 @@
 import type { Owner, TaskStatus } from "@/lib/tasks";
 import type { DashboardData, SeasonDay, Task } from "@/modules/types";
+import { demoBento } from "./bento";
 import { DEMO_TODAY, demoBody } from "./body";
 import { demoClaudeJobs } from "./claude-jobs";
 import { demoGallery } from "./gallery";
@@ -17,23 +18,6 @@ const seasonDays: SeasonDay[] = Array.from({ length: 90 }, (_, i) => {
   return ((i * 47 + 13) % 100) / 100 < 0.3 ? "most" : "all";
 });
 
-const habitSeeds: [string, number][] = [
-  ["Workout", 0.82],
-  ["Study 90 min", 0.9],
-  ["Sleep 7h+", 0.7],
-  ["Skincare", 0.86],
-  ["Water 3 L", 0.64],
-];
-
-const habits = habitSeeds.map(([name, rate], hi) => ({
-  name,
-  days: Array.from({ length: 28 }, (_, d) => {
-    const r = ((d * 37 + hi * 17) % 100) / 100;
-    // Workouts get two rest days a week.
-    return name === "Workout" ? d % 7 !== 3 && d % 7 !== 6 && r < 0.95 : r < rate;
-  }),
-}));
-
 function demoTask(
   id: string,
   title: string,
@@ -48,18 +32,20 @@ function demoTask(
 
 export const demoData: DashboardData = {
   ownerLine: "Life, tracked",
-  ownerInitial: "Y",
+  basePath: "/demo",
   todayISO: DEMO_TODAY,
   logHref: "/demo/log",
   shareHref: "/demo/progress",
   views: {
     overview: {
       title: "Sunday, 18 October",
-      subtitle: "3 tasks due today · 2 overdue · 4 of 6 done today",
+      subtitle: "Sample data · 3 tasks due today · 2 overdue",
     },
     arc: { title: "Winter Arc", subtitle: "26 Sep 2026 → 24 Dec 2026 · 90 days" },
     board: { title: "Board", subtitle: "11 open · 2 overdue · 2 waiting on others" },
     gallery: { title: "Gallery", subtitle: "Images and files Claude saved from chats" },
+    money: { title: "Money", subtitle: "October · sample accounts" },
+    health: { title: "Health", subtitle: "Weight, steps, sleep, blood pressure and workouts" },
   },
   navBadges: { board: "11" },
   season: {
@@ -173,13 +159,14 @@ export const demoData: DashboardData = {
   goalsHref: "/demo/log/goals",
   settingsHref: null,
   ...demoBody,
+  ...demoBento,
   goals: [
-    { name: "Gain 5 kg", progress: "2.1 of 5 kg", pct: 42, by: "by 24 Dec", tone: "brand" },
-    { name: "Bench press 70 kg", progress: "55 of 70", pct: 79, by: "by 31 Dec", tone: "sage" },
-    { name: "German A1", progress: "35%", pct: 35, by: "by 31 Mar 2027", tone: "mist" },
-    { name: "Travel fund", progress: "52%", pct: 52, by: "by 30 Apr 2027", tone: "pine" },
+    { name: "1RK fund", progress: "₹42,000 of ₹1,00,000", pct: 42, by: "by 31 Jan 2027", tone: "blue" },
+    { name: "Gain 5 kg", progress: "2.1 of 5 kg", pct: 42, by: "by 24 Dec", tone: "blue" },
+    { name: "Bench press 70 kg", progress: "55 of 70", pct: 79, by: "by 31 Dec", tone: "ok" },
+    { name: "German A1", progress: "35%", pct: 35, by: "by 31 Mar 2027", tone: "blue" },
+    { name: "Travel fund", progress: "52%", pct: 52, by: "by 30 Apr 2027", tone: "blue" },
   ],
-  habits,
   tasks: [
     demoTask("t0", "Move to the new flat", "Both", "Home", "2026-10-20", "todo", { order: 10, note: "Book the movers, then pack the kitchen" }),
     demoTask("t1", "Winter Arc kickoff", "Both", "Winter Arc", "2026-10-18", "todo"),
@@ -204,6 +191,4 @@ export const demoData: DashboardData = {
   ],
   gallery: demoGallery,
   claudeJobs: demoClaudeJobs,
-  footnote:
-    "Sample data for the demo. The real app fills this from your check-ins, workouts, money snapshots and the Board.",
 };

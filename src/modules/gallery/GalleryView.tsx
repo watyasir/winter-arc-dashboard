@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/Button";
-import { Card } from "@/components/Card";
+import { Tile } from "@/components/Tile";
 import { EmptyNote } from "@/components/EmptyNote";
 import { Icon } from "@/components/Icon";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
@@ -65,11 +65,11 @@ export function GalleryView() {
                 aria-pressed={current}
                 onClick={() => setFilter(c)}
                 className={`min-h-11 cursor-pointer rounded-full border border-solid px-4 text-[13px] font-semibold sm:min-h-9 ${
-                  current ? "border-brand bg-brand text-white" : "border-sep bg-base text-ink hover:bg-fill"
+                  current ? "border-peach-strong bg-peach text-ink" : "border-line bg-card text-ink hover:bg-fill"
                 }`}
               >
                 {c}
-                <span className={`ml-1.5 font-normal ${current ? "text-white/80" : "text-sub"}`}>{counts.get(c) ?? 0}</span>
+                <span className={`ml-1.5 font-medium ${current ? "text-ink" : "text-sub"}`}>{counts.get(c) ?? 0}</span>
               </button>
             );
           })}
@@ -81,15 +81,15 @@ export function GalleryView() {
           Loading the gallery…
         </p>
       )}
-      {failed && <p className="m-0 text-[15px] text-coral-text">Couldn&apos;t load the gallery. Refresh to try again.</p>}
+      {failed && <p className="m-0 text-[15px] text-danger">Couldn&apos;t load the gallery. Refresh to try again.</p>}
       {items && shown.length === 0 && (
-        <Card>
+        <Tile title={filter === "All" ? "Gallery" : filter}>
           <EmptyNote>
             {items.length === 0
               ? "Nothing here yet. Images and PDFs Claude saves from chats show up here."
               : `Nothing in ${filter} yet.`}
           </EmptyNote>
-        </Card>
+        </Tile>
       )}
 
       {shown.length > 0 && (
@@ -99,7 +99,7 @@ export function GalleryView() {
               <button
                 type="button"
                 onClick={() => setOpen(it)}
-                className="flex w-full cursor-pointer flex-col gap-2 rounded-[20px] border border-solid border-sep bg-card p-2 text-left text-ink"
+                className="flex w-full cursor-pointer flex-col gap-2 rounded-[20px] border border-solid border-line bg-card p-2 text-left text-ink"
               >
                 <Thumb item={it} />
                 <span className="flex flex-col gap-0.5 px-1.5 pb-1">
@@ -181,8 +181,8 @@ function Viewer({ item, onClose, onDelete }: { item: GalleryItem; onClose: () =>
   const size = [item.width && item.height ? `${item.width} × ${item.height}` : null, formatBytes(item.bytes)].filter(Boolean).join(" · ");
 
   return (
-    <div role="dialog" aria-modal="true" aria-label={item.title} className="fixed inset-0 z-30 flex flex-col bg-crust">
-      <header className="flex items-center gap-3 border-b border-sep bg-base px-4 pt-[max(12px,env(safe-area-inset-top))] pb-3">
+    <div role="dialog" aria-modal="true" aria-label={item.title} className="fixed inset-0 z-30 flex flex-col bg-fill">
+      <header className="flex items-center gap-3 border-b border-line bg-card px-4 pt-[max(12px,env(safe-area-inset-top))] pb-3">
         <button
           ref={closeRef}
           type="button"
@@ -216,10 +216,10 @@ function Viewer({ item, onClose, onDelete }: { item: GalleryItem; onClose: () =>
         )}
       </div>
 
-      <footer className="flex flex-col gap-2 border-t border-sep bg-base px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))]">
+      <footer className="flex flex-col gap-2 border-t border-line bg-card px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))]">
         {item.description && <p className="m-0 text-[13px] text-sub">{item.description}</p>}
         {note && (
-          <p role="status" className="m-0 text-[13px] text-coral-text">
+          <p role="status" className="m-0 text-[13px] text-danger">
             {note}
           </p>
         )}
@@ -227,14 +227,14 @@ function Viewer({ item, onClose, onDelete }: { item: GalleryItem; onClose: () =>
           <a
             href={item.downloadUrl}
             download={item.fileName}
-            className="flex min-h-11 flex-1 items-center justify-center rounded-full bg-brand px-4 text-[13px] font-semibold text-white no-underline hover:bg-brand-hover hover:text-white sm:min-h-9"
+            className="flex min-h-11 flex-1 items-center justify-center rounded-full bg-peach px-4 text-[13px] font-semibold text-ink no-underline hover:bg-peach-strong hover:text-ink sm:min-h-9"
           >
             Download original
           </a>
           <Button onClick={share} className="flex-1">
             Share
           </Button>
-          <Button onClick={remove} disabled={busy} className="flex-1 text-coral-text">
+          <Button onClick={remove} disabled={busy} className="flex-1 text-danger">
             {busy ? "Deleting…" : "Delete"}
           </Button>
         </div>

@@ -237,3 +237,20 @@ Build complete. From here: improvements only.
 - [x] M5 plan change posted (29 Oct): +Exam revision 10:00 Mon–Fri from 2 Nov; +Walk 07:50 and +Leave for exam 09:40 on 17–21 Nov; 31 → 34 phases, nothing else changed
 - [ ] Finish: build, knip, hig-doctor, lint, /demo at 1440 + 375, docs, deploy, live checks
 
+
+## Final build checklist (30 Oct 2026, cloud session): Soft bento + close every queued item
+Baseline: `npm ci`, build, lint, `tsc --noEmit` all clean (30 Oct). M4 + M10 + a hotfix (check-in works before the M4 migration) pushed and live on Vercel.
+
+- [ ] 1. Remove Apple HIG skills (`.claude/skills/hig-*`, `skills-lock.json`, `.higauditignore`), hig-doctor rule, v6 tokens and dead code
+- [ ] 2. Soft bento tokens + Inter / JetBrains Mono via next/font
+- [ ] 3. Overview bento (hero, next up, money, check-in, today, weight, 1RK fund, diet, study, Claude's jobs)
+- [ ] 4. One SVG `LineChart`: weight, steps, sleep (Health), Winter Arc consistency
+- [ ] 5. Own pages: /board, /money, /health, /winter-arc, /gallery (+ /demo twins)
+- [ ] 6. Layout cleanup (29 Oct): verify Check-in nav item, no Log Today button, no banner / My Day
+- [ ] 7. M4 /log: + weight in the check-in (migration), verify the rest
+- [ ] 8. M5 exam mode: verify plan code (data already posted 29 Oct)
+- [ ] 9. M10 PWA: theme `#FFF5E6`, "Y" mark icons, shell-only cache, installable
+- [ ] 10. M11 calendar feeds + M12 Gallery: verify, restyle; gallery API 503 "Gallery key not set"
+- [ ] 11. Claude's jobs: last run "2h ago" + status dot
+- [ ] 12. Restyle Board, gate, /log, /settings, /login, /progress, forms
+- [ ] 13. Every route at 390 + 1280, API with and without auth, docs, push, Vercel green

@@ -8,7 +8,9 @@ import { loadTrackers } from "@/lib/tracker-store";
 import { addDays, todayISO } from "@/lib/trackers";
 import type { DashboardData } from "@/modules/types";
 import { BODY_WEEKS } from "./body";
-import { buildDashboardData, HISTORY_DAYS, type EntryRow, type SeasonRow } from "./build";
+import { istMinutes, type DayPlan } from "@/lib/day-plan";
+import { buildDashboardData, type EntryRow, type SeasonRow } from "./build";
+import { CHART_DAYS } from "./extras";
 
 type Supabase = Awaited<ReturnType<typeof createClient>>;
 
@@ -37,10 +39,10 @@ export async function loadEntries(supabase: Supabase, from: string, to: string, 
 }
 
 /** Everything the real dashboard shows, read fresh on every visit. Null = couldn't reach the database. */
-export async function loadDashboardData(supabase: Supabase, email: string): Promise<DashboardData | null> {
+export async function loadDashboardData(supabase: Supabase): Promise<DashboardData | null> {
   const today = todayISO();
-  const historyStart = addDays(today, -HISTORY_DAYS);
-  const [trackers, seasonResult, workouts, bodyChecks, weightGoal, tasks, goals, recent, moneyResult, jobsResult] = await Promise.all([
+  const historyStart = addDays(today, -CHART_DAYS);
+  const [trackers, seasonResult, workouts, bodyChecks, weightGoal, tasks, goals, recent, moneyResult, jobsResult, planResult] = await Promise.all([
     loadTrackers(supabase),
     supabase.from("seasons").select("name, start_date, length_days, targets").eq("is_active", true).maybeSingle<SeasonRow>(),
     loadWorkouts(supabase, { since: addDays(today, -BODY_WEEKS * 7) }),
@@ -54,6 +56,8 @@ export async function loadDashboardData(supabase: Supabase, email: string): Prom
     supabase.from("money_snapshots").select(MONEY_COLUMNS).order("updated_at", { ascending: false }).limit(1).maybeSingle<MoneySnapshot>(),
     // Not fatal either: no jobs yet = the panel's empty state.
     supabase.from("claude_jobs").select(JOB_COLUMNS).order("next_run", { ascending: true, nullsFirst: false }).order("name"),
+    // Not fatal: no plan sent yet = the Today tile says so.
+    supabase.from("day_plans").select("plan").maybeSingle<{ plan: DayPlan }>(),
   ]);
   if (!trackers || seasonResult.error || !workouts || !bodyChecks || weightGoal === undefined || !tasks || !goals || !recent) return null;
   const season = seasonResult.data;
@@ -71,6 +75,8 @@ export async function loadDashboardData(supabase: Supabase, email: string): Prom
     entries,
     season,
     today,
+    nowMinutes: istMinutes(),
+    dayPlan: planResult.data?.plan ?? null,
     workouts,
     bodyChecks,
     weightGoal,
@@ -79,6 +85,5 @@ export async function loadDashboardData(supabase: Supabase, email: string): Prom
     goalTracked: goals.tracked,
     money: moneyResult.error ? null : moneyResult.data,
     claudeJobs: (jobsResult.data ?? []).map((j) => ({ name: j.name, schedule: j.schedule, status: j.status, lastRun: j.last_run, nextRun: j.next_run })),
-    ownerInitial: email.trim().charAt(0).toUpperCase() || "Me",
   });
 }
