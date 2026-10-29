@@ -2,8 +2,10 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { isAllowedEmail } from "@/lib/auth";
-import { supabaseEnv } from "@/lib/supabase/server";
+import { redeemSignInCode } from "@/lib/signin-code";
+import { createClient as createServerClient, supabaseEnv } from "@/lib/supabase/server";
 
 export type LoginState = { status: "idle" } | { status: "sent"; email: string } | { status: "error"; message: string };
 
@@ -40,4 +42,27 @@ export async function sendMagicLink(_prev: LoginState, form: FormData): Promise<
     };
   }
   return { status: "sent", email };
+}
+
+export type CodeState = { status: "idle" } | { status: "error"; message: string };
+
+/**
+ * "Have a code?": signs this device in with the one-time code from /settings on a signed-in device.
+ * The server checks the code, makes a magic-link token with the admin API and verifies it here,
+ * which sets this device's login cookies.
+ */
+export async function signInWithCode(_prev: CodeState, form: FormData): Promise<CodeState> {
+  const wrong: CodeState = { status: "error", message: "That code is wrong, used or older than 10 minutes. Make a new one in Settings." };
+  const allowed = process.env.ALLOWED_EMAIL?.trim();
+  if (!allowed) return wrong;
+  const tokenHash = await redeemSignInCode(allowed, String(form.get("code") ?? ""));
+  if (!tokenHash) return wrong;
+
+  const supabase = await createServerClient();
+  const { data, error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type: "magiclink" });
+  if (error || !isAllowedEmail(data.user?.email)) {
+    await supabase.auth.signOut({ scope: "local" });
+    return { status: "error", message: "Couldn't finish signing in. Make a new code and try again." };
+  }
+  redirect("/");
 }

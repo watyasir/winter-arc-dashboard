@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/auth";
+import { createSignInCode } from "@/lib/signin-code";
 import type { SaveResult } from "@/lib/body";
 import { SEASON_DAYS, SEASON_NAME, seasonProblem, slugify, trackerProblem, type SeasonInput, type TrackerInput } from "@/lib/settings";
 
@@ -70,4 +71,11 @@ export async function resetTestData(): Promise<SaveResult> {
     if (error) return { ok: false, message: `Stopped while clearing ${table.replace("_", " ")}. Run it again to finish clearing.` };
   }
   return done();
+}
+
+/** A one-time code for signing in on another device (the iPhone home-screen app). */
+export async function makeSignInCode(): Promise<{ ok: true; code: string; expiresAt: number } | { ok: false; message: string }> {
+  const { user } = await requireUser();
+  const made = await createSignInCode(user.id);
+  return made ? { ok: true, ...made } : { ok: false, message: "Couldn't make a code. The site needs SUPABASE_SERVICE_ROLE_KEY." };
 }

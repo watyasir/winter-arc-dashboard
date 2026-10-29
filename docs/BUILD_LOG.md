@@ -291,3 +291,15 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **Screenshot to take:** `/demo/log` on the phone: Meals card and the BP grid.
 **Next:** M10 install as an app.
 
+## Session 18 — 29 Oct 2026 — M10: install as a home-screen app + sign-in code
+**Goal:** Yasir OS as an app icon on the iPhone, and a way to sign in inside that app.
+**What I asked Claude Code to do:** "Make it an installable PWA (manifest, icons, service worker, offline page). Add a sign-in code, because the home-screen app doesn't share Safari's sign-in. No new libraries."
+**What got built:**
+- App manifest, icons (the teal snowflake tile in 4 sizes) and Apple's home-screen tags, so "Add to Home Screen" gives a proper app with its own name and icon.
+- A small service worker: app files load from the phone, pages always try the network first, and with no signal you get the last copy of the page or a tidy "You're offline" card. Signing out wipes the saved pages.
+- Sign-in code: Settings shows an 8-character code that works once, for 10 minutes. On the home-screen app's sign-in page, "Have a code?" takes it and signs that device in. The code is made on the server with the secret key; only the time it was made is stored, so only the newest code works, and 5 wrong guesses kill it.
+**What broke and how we fixed it:** The lint rule wanted an in-app link on the offline page, but an in-app jump needs the network to start, so "Try again" is a plain form that reloads the page.
+**What Yasir had to do himself:** Add to Home Screen and try the code on the iPhone (needs the live site).
+**Screenshot to take:** The home-screen icon, and the "Have a code?" sign-in in the app.
+**Next:** live checks for M4 and M10.
+

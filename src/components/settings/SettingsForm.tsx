@@ -12,13 +12,14 @@ import { AREA_ORDER, formatDayLabel, type Tracker, type TrackerArea, type Tracke
 
 /*
   /settings: Winter Arc (start date + a daily target per tracker), a new tracker, the calendar
-  feeds, and Reset test data. The one primary button is the season's.
+  feeds, a sign-in code for another device, and Reset test data. The one primary button is the season's.
 */
 
 interface SettingsActions {
   saveSeason: (s: SeasonInput) => Promise<SaveResult>;
   addTracker: (t: TrackerInput) => Promise<SaveResult>;
   resetTestData: () => Promise<SaveResult>;
+  makeSignInCode: () => Promise<{ ok: true; code: string; expiresAt: number } | { ok: false; message: string }>;
 }
 
 /** What a daily target means for each type, shown next to the box. */
@@ -52,8 +53,55 @@ export function SettingsForm({
       <SeasonSection trackers={trackers} season={season} defaultStart={defaultStart} save={actions.saveSeason} />
       <NewTrackerSection add={actions.addTracker} />
       <CalendarSection path={calendarPath} />
+      <SignInCodeSection make={actions.makeSignInCode} />
       <ResetSection reset={actions.resetTestData} />
     </div>
+  );
+}
+
+// ---------------------------------------------------------------- Sign-in code
+
+/**
+ * On iPhone the home-screen app doesn't share Safari's sign-in, and the email link opens in Safari.
+ * This shows a one-time code to type into "Have a code?" on the other device's /login.
+ */
+function SignInCodeSection({ make }: { make: SettingsActions["makeSignInCode"] }) {
+  const [code, setCode] = useState<{ code: string; expiresAt: number } | null>(null);
+  const [status, setStatus] = useState<Status>("editing");
+  const [busy, startBusy] = useTransition();
+
+  const run = () =>
+    startBusy(async () => {
+      const r = await make();
+      if (r.ok) setCode(r);
+      setStatus(r.ok ? "editing" : { error: r.message });
+    });
+  const until = code
+    ? new Intl.DateTimeFormat("en-IN", { hour: "numeric", minute: "2-digit", timeZone: "Asia/Kolkata" }).format(code.expiresAt)
+    : "";
+
+  return (
+    <>
+      <Group id="signin-code" title="Sign in on another device">
+        <div className="flex flex-col gap-2 py-3">
+          <span className="text-[15px] text-sub">
+            For the home-screen app on your iPhone: on its sign-in page, tap &ldquo;Have a code?&rdquo; and type this code.
+          </span>
+          {code && (
+            <div role="status" className="flex flex-col gap-1 rounded-2xl bg-fill-strong p-3">
+              <span className="font-mono text-[28px] font-semibold tracking-[0.12em]" aria-label={`Code ${code.code.split("").join(" ")}`}>
+                {code.code.slice(0, 4)}-{code.code.slice(4)}
+              </span>
+              <span className="text-[13px] text-sub">Works once, until {until}. Making a new one ends this one.</span>
+            </div>
+          )}
+          <Button onClick={run} disabled={busy} className="self-start">
+            {busy ? "Making…" : code ? "Make a new code" : "Show sign-in code"}
+          </Button>
+        </div>
+      </Group>
+      <StatusMessages status={status} savedText="" />
+    </>
   );
 }
 

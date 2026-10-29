@@ -6,7 +6,7 @@ import { shareToken } from "@/lib/share-store";
 import { weekStart } from "@/lib/dashboard/dates";
 import { loadTrackers } from "@/lib/tracker-store";
 import { addDays, todayISO } from "@/lib/trackers";
-import { addTracker, resetTestData, saveSeason } from "./actions";
+import { addTracker, makeSignInCode, resetTestData, saveSeason } from "./actions";
 
 export const metadata: Metadata = { title: "Settings · Yasir OS" };
 
@@ -32,7 +32,7 @@ async function Settings() {
       trackers={trackers}
       season={season.data ? { start: season.data.start_date, targets: season.data.targets } : null}
       defaultStart={addDays(weekStart(todayISO()), 7)}
-      actions={{ saveSeason, addTracker, resetTestData }}
+      actions={{ saveSeason, addTracker, resetTestData, makeSignInCode }}
       calendarPath={calendarPath()}
     />
   );
