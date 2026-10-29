@@ -22,7 +22,7 @@ It is also a **public portfolio project**. Yasir is a vibe coder: he directs, pr
 |---|---|---|
 | App | Next.js (App Router) + TypeScript | Web app that also works well on a phone |
 | Styling | Tailwind CSS | Fast, consistent design tokens |
-| Charts | Recharts | Simple, good-looking trend charts |
+| Charts | One small SVG `LineChart` (no library) | Light, themed, accessible |
 | Database + login | Supabase (Postgres + Auth) | Free tier, real database, email login |
 | Hosting | Vercel | Free tier, live link, auto-deploy from GitHub |
 | Money data | Snapshots pushed to `POST /api/money` by Claude's finance task (no Google service account, 26 Oct 2026) | Money already lives in his Personal Finance sheet |
@@ -48,35 +48,30 @@ Everything is built from a few generic pieces, so new things are added as data, 
 - **Tracker**: anything measured over time. Has a name, area (Health, Body, Mind, Skills, Money, Custom), type (`checkbox`, `number`, `scale_1_5`, `duration_minutes`, `time_of_day`, `choice`), optional unit, optional daily/weekly target, optional group (trackers in one group share a card on the check-in, like Meals or Blood pressure).
 - **Entry**: one value for one tracker on one date.
 - **Season**: a time-boxed challenge (Winter Arc = 90 days). Has a start date, length and targets. Only one active at a time.
-- **Dashboard tiles**: registered in one file (`src/modules/registry.ts`). Adding a module means adding one entry there.
+- **Tiles**: every tile is the shared `Tile`; the Overview places them by grid area (`bento` in globals.css), the other pages stack them in a simple grid.
 
-Workouts, tasks, goals and money get their own tables because their shape is different, but they still plug into the same tile registry.
+Workouts, tasks, goals and money get their own tables because their shape is different.
 
-## Design rule (21 Oct 2026)
+## Design rule: Soft bento (v8, 30 Oct 2026)
 
-Stay on the current v6 look ("Teal and grey") and never go back to older designs. This is not a hard freeze: where a feature needs a design or layout change, make it, built from the v6 tokens and components.
-
-## Design direction: AnuPpuccin (Catppuccin Latte) card layout + Apple HIG behaviour
-
-**Read `docs/DESIGN.md` before any UI work.** It is the full spec (tokens, layout, components, states, copy) and has a changelog: if the code doesn't match the latest changelog entry, update the code to match, without waiting to be asked. The exact mockup markup is in `docs/design-reference/` (Main = dashboard, Phone, CheckIn). Rebuild it as React + Tailwind; don't paste the mockup code.
+**Read `docs/DESIGN.md` before any UI work.** It is the full spec and has a changelog; if the code doesn't match the latest entry, update the code. Apple HIG and the v6 "Teal and grey" look are retired: don't bring them back.
 
 Short version:
-- **Light theme only, "Teal and grey" (v6).** Grey frame, white cards, deep teal `#0F4C4A` brand colour, one dark teal gradient hero card, pill controls, wallet-stack Money tile. No dark mode. All values in DESIGN.md §2b (they override §2 and the older notes below).
-- **Look:** Yasir's Obsidian theme AnuPpuccin, light card layout. Flat `base #EFF1F5` cards with 16px corners on a `crust #DCE0E8` frame, no shadows, rainbow-folder colours in the sidebar, dashed rule under the page header, rounded-square checkboxes. Never copy AnuPpuccin's CSS (GPL-3.0); use only the Catppuccin Latte palette (MIT) and rebuild the look.
-- **One fluid layout** for laptop and 24" monitor; sidebar stacks on top under 980px.
-- **Colour has one meaning each:** blue interactive, green done, peach due soon, red overdue, mauve Winter Arc, Claude orange `#D97757` for Claude (v6.4). Small coloured text uses the text-safe variants in DESIGN.md. Never colour alone.
-- **Apple HIG still governs behaviour:** one primary button per view, 44px phone targets, visible focus, reduced motion respected, charts with a summary line and right-side axis labels. Run `npx hig-doctor .` before finishing each phase.
-- Views: Overview · Winter Arc · Board (details in DESIGN.md §3–4). Overview has My Day (the day plan, stored in Supabase, never in the repo); the Board has Claude's scheduled tasks beside it; the action gate opens before everything (v6.4). Mail nudges and the Instinct link were dropped for good (27 Oct 2026); don't bring them back.
-
-Define all colours and fonts as tokens in one place (`tailwind.config` + CSS variables). Never hard-code a colour in a component.
+- **Light only, no dark mode.** Page `#FFF5E6`, white cards with a 1px `#F1E3CC` border, 20px tile corners, 12px inner items, 999px pills, one soft shadow. No hard shadows.
+- **Fills, not text:** primary peach `#FAD4C0` and secondary blue `#80A1C1`, always with dark text (`#111827`). Blue as text/links/focus is `#3E5F7F`. States: success `#15803D`/`#DCFCE7`, warning `#B45309`/`#FEF3C7`, danger `#B91C1C`/`#FEE2E2`. Owner tags: Claude `#D97757` (dark text), Yasir `#3E5F7F` (white text). Never colour alone: every state also has a word or symbol.
+- **Type:** Inter (500 body, 600 labels, 800 headings), JetBrains Mono for numbers, via `next/font`. Scale 12/14/16/20/24/32.
+- **Every token lives in the one `@theme` block in `src/app/globals.css`.** No hex values in components.
+- **Accessibility:** all text ≥ 4.5:1, 3px `#3E5F7F` focus ring, tap targets ≥ 44px, `prefers-reduced-motion` respected, hover/press in CSS only (`press` = scale .99), no animation library.
+- **Components:** one `Tile` for every tile (`src/components/Tile.tsx`), one SVG `LineChart` (no chart library). Keep files under ~250 lines.
+- **Pages:** Overview (the only bento), Winter Arc, Board (full kanban + Claude's jobs), Money, Health, Gallery, each at its own address and again under `/demo`. Tasks due soon show as reminder toasts (never a blocking pop-up).
 
 ## Folder layout (target)
 
 ```
 src/
-  app/            routes: / (dashboard), /log (daily check-in), /demo, /login, /settings
-  components/     shared UI (Card, StatTile, ProgressRing, Sparkline...)
-  modules/        one folder per dashboard module + registry.ts
+  app/            routes: / and /winter-arc, /board, /money, /health, /gallery (+ /demo/...), /log, /login, /settings, /progress, /api
+  components/     shared UI (Tile, LineChart, Chip, Segmented, ...) and the app shell (dashboard/)
+  modules/        one folder per page or tile group (overview, arc, board, money, health, gallery, reminders)
   lib/            supabase client, sheets client, date + rupee helpers
   data/demo/      fake data for /demo
 docs/

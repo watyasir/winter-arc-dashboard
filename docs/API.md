@@ -47,6 +47,7 @@ Logs tracker values for one day, the same as the check-in. A value already logge
 - Clock times (`lights-out`, `wake`) take minutes after midnight: `30` = 12:30 AM, `450` = 7:30 AM. Lights out is last night's, saved on the day you wake up.
 - Meal slots (`meal-1` … `meal-7`) take `1` planned (as in the day plan), `2` swapped, `3` skipped.
 - Blood pressure: `bp-am-sys`, `bp-am-dia`, `bp-pm-sys`, `bp-pm-dia` (mmHg). Reading: `reading-page` (the page you reached).
+- Weight: `weight` (kg, decimals fine). Health's weight chart uses it and the weekly body check; on the same day the check-in wins.
 
 Reply `200` when at least one value saved (entries that don't fit are listed in `skipped`). When nothing saved: `400` with `"ok": false`, `"error": "Nothing saved: check the skipped entries."` and the same `skipped` list.
 
@@ -316,3 +317,27 @@ Each feed sets `X-WR-CALNAME` and `X-APPLE-CALENDAR-COLOR`. Subscribe from **/se
 - `tasks`: every task with a due date as an all-day event (done ones start with ✓).
 - Without `&cat`, the original all-in-one "Yasir OS" feed (everything above in one calendar) keeps working.
 - A wrong token or an unknown `cat` gets `404`. The token is the same one as the /progress share link, so anyone with that link could also read these feeds. The calendar app fetches them again about every hour.
+
+---
+
+## Gallery: POST /api/gallery
+
+Saves an image or PDF Claude made in a chat to the private gallery, byte-for-byte (PNG, JPG, SVG, PDF, WebP, up to 25 MB). It uses its own upload-only key, not `API_TOKEN`:
+
+```
+Authorization: Bearer <GALLERY_TOKEN>
+```
+
+| Situation | Answer |
+|---|---|
+| `GALLERY_TOKEN` not set on the server | `503` `{ "ok": false, "error": "Gallery key not set: add GALLERY_TOKEN to the site's settings." }` |
+| Wrong or missing key | `401` |
+
+Three ways to call it:
+
+1. **Small files (about 4 MB or less):** `multipart/form-data` with `file` and `meta` (JSON: `title`, `category`, optional `note`).
+2. **Bigger files, step 1:** JSON `{ "mime": "image/png", "bytes": 3145728 }` → a signed `upload_url` and a `path`. PUT the file there with that `Content-Type`.
+3. **Bigger files, step 2:** JSON `{ "path": "<from step 1>", "title": "...", "category": "..." }` files it in the gallery.
+
+The file type is checked from the file's own bytes, not its name.
+

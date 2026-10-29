@@ -241,16 +241,33 @@ Build complete. From here: improvements only.
 ## Final build checklist (30 Oct 2026, cloud session): Soft bento + close every queued item
 Baseline: `npm ci`, build, lint, `tsc --noEmit` all clean (30 Oct). M4 + M10 + a hotfix (check-in works before the M4 migration) pushed and live on Vercel.
 
-- [ ] 1. Remove Apple HIG skills (`.claude/skills/hig-*`, `skills-lock.json`, `.higauditignore`), hig-doctor rule, v6 tokens and dead code
-- [ ] 2. Soft bento tokens + Inter / JetBrains Mono via next/font
-- [ ] 3. Overview bento (hero, next up, money, check-in, today, weight, 1RK fund, diet, study, Claude's jobs)
-- [ ] 4. One SVG `LineChart`: weight, steps, sleep (Health), Winter Arc consistency
-- [ ] 5. Own pages: /board, /money, /health, /winter-arc, /gallery (+ /demo twins)
-- [ ] 6. Layout cleanup (29 Oct): verify Check-in nav item, no Log Today button, no banner / My Day
-- [ ] 7. M4 /log: + weight in the check-in (migration), verify the rest
-- [ ] 8. M5 exam mode: verify plan code (data already posted 29 Oct)
-- [ ] 9. M10 PWA: theme `#FFF5E6`, "Y" mark icons, shell-only cache, installable
-- [ ] 10. M11 calendar feeds + M12 Gallery: verify, restyle; gallery API 503 "Gallery key not set"
-- [ ] 11. Claude's jobs: last run "2h ago" + status dot
-- [ ] 12. Restyle Board, gate, /log, /settings, /login, /progress, forms
-- [ ] 13. Every route at 390 + 1280, API with and without auth, docs, push, Vercel green
+- [x] 1. Removed the 14 Apple HIG skills, `skills-lock.json`, `.higauditignore`, the hig-doctor rule (CLAUDE.md, DESIGN.md), the v6 mockups (`docs/design-reference/`), every v6 token, and dead code: sidebar, phone home, header chip, Card, SectionHeading, Habits / In progress / Tasks / Today / Season tiles, the old weight chart builder (knip clean)
+- [x] 2. Soft bento tokens in one `@theme` block; Inter + JetBrains Mono via next/font; 3px blue focus ring; reduced motion; dark text on every peach/blue fill (fixed white-on-peach on Done/Save buttons, white tick on blue)
+- [x] 3. Overview bento (`bento` grid areas, 4 → 2 → phone columns): Winter Arc hero (90 squares, today outlined), Next up (3 tasks, owner + due chip with a word), Money (accounts + left to spend + "updated"), Check-in (✓ Logged), Today (shift / Weekend off + current phase from the day plan), Weight (14 days), 1RK fund (goal with "1RK" in its name), Diet (meal chips), TYBBA study, Claude's jobs. Empty states, no fake numbers on the real app
+- [x] 4. One SVG `LineChart` (no library): weight on Overview + Health, steps and sleep (wake − lights out, else Sleep hours) on Health with 14/30/90 days, daily consistency (0–100) on Winter Arc
+- [x] 5. Own pages /winter-arc, /board, /money, /health, /gallery and /demo twins; top bar from 561px, 6-tab bar on the phone; signed-out visitors go to /login
+- [x] 6. Layout cleanup verified: Check-in is a nav item (top bar pill), no Log Today button in a page header, no banner, no My Day (day plan data kept for the feeds and the Today tile)
+- [x] 7. M4: + Weight in the check-in (typed kg, decimals fixed), migration `20261030000002_weight_tracker.sql`; the rest checked on /demo/log (lights out, wake, 7 meals Planned/Swapped/Skipped, reading page, BP morning + evening, steps); one Save; blank boxes aren't saved
+- [x] 8. M5 exam mode: plan data posted 29 Oct; the code (`from`/`until` phases) builds and is unchanged. Live check left for the Mac (see Local steps)
+- [x] 9. M10 PWA: "Y" mark icons (192, 512, maskable 512, apple-touch 180), theme/background `#FFF5E6`, worker v2 caches only `/_next/static`, `/icons` and the offline card (never pages, /api or auth), no reload on reopen. Chrome's installability check: no errors
+- [x] 10. M11 calendar feeds build unchanged; M12 Gallery restyled; `POST /api/gallery` without `GALLERY_TOKEN` → 503 "Gallery key not set" (the API_TOKEN-derived fallback key is removed)
+- [x] 11. Claude's jobs: status dot + word, "Last run 2h ago" (worked out in the browser); /api/claude-jobs unchanged
+- [x] 12. Restyled Board, check-in, workout, body, goals, settings (checked on a throwaway page), login, share card, offline. Blocking action gate replaced by reminder toasts (Yasir, 30 Oct): tap to answer, Esc / ✕ closes, one at a time on the phone
+- [x] 13. Every demo route + /, /login, /offline, /progress at 390 and 1280: no sideways scroll, no phone targets under 44px, no console errors. APIs: no key → 503, wrong key → 401. build, lint, tsc, knip clean
+
+## Local steps (for the Mac session)
+Migrations not yet applied (this cloud session can't reach Supabase). Run in order in the Supabase SQL editor:
+1. `supabase/migrations/20261030000001_day_plan_log.sql` (lights out, wake, 7 meals, BP, reading page; adds `group_name`)
+2. `supabase/migrations/20261030000002_weight_tracker.sql` (weight in the check-in)
+
+Vercel env vars:
+3. Add `GALLERY_TOKEN` (Production) = the key in `~/Claude/yasiros-gallery-key.txt` (the one Claude's gallery uploads already use), then redeploy. Until then `POST /api/gallery` answers 503.
+
+Live checks (signed in):
+4. `/`, `/winter-arc`, `/board`, `/money`, `/health`, `/gallery`, `/log`, `/settings` load at laptop and phone size, no console errors
+5. `/log`: no "Update pending" note after step 1–2; save a check-in with weight and meals; Overview Diet + Weight update
+6. Today tile shows the weekday shift from the day plan and "Weekend off" on Sat/Sun; M5: from 2 Nov the morning shows Exam revision, 17–21 Nov Walk + Leave 9:40
+7. Reminder toasts on Overview: answer one, it's gone until tomorrow (and in `gate_log`)
+8. iPhone: Add to Home Screen (Y icon, cream bar), sign in with a code from /settings, airplane mode → offline card
+9. Rename meal slots if needed (they're placeholders: Pre-gym, Breakfast, Lunch, Snack 1, Dinner, Snack 2, Night)
+10. M12: upload a 3000 px+ PNG through the API and compare the bytes; Vercel deployment green
