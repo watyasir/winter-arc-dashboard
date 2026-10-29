@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { CheckIn } from "@/components/checkin/CheckIn";
 import { MoreLogs } from "@/components/checkin/MoreLogs";
 import { currentOwner, requireUser } from "@/lib/auth";
-import { loadTrackers } from "@/lib/tracker-store";
+import { loadTrackersWithStatus } from "@/lib/tracker-store";
 import { addDays, formatDayLabel, startingValue, todayISO, type CheckInValues } from "@/lib/trackers";
 import { saveCheckIn } from "./actions";
 
@@ -28,7 +28,7 @@ async function TodayCheckIn() {
   if ("error" in data) {
     return <p className="p-6 text-center text-[15px] text-coral-text">Couldn&apos;t load your trackers. Refresh to try again.</p>;
   }
-  const { trackers, initial, dayLabel } = data;
+  const { trackers, initial, dayLabel, pending } = data;
 
   return (
     <CheckIn
@@ -37,6 +37,7 @@ async function TodayCheckIn() {
       dayLabel={dayLabel}
       cancelHref="/"
       onSave={saveCheckIn}
+      notice={pending ? "Update pending: lights out, wake, meals, blood pressure and reading appear here once the database update is run." : undefined}
       footer={
         <>
           <MoreLogs workoutHref="/log/workout" bodyHref="/log/body" settingsHref="/settings" />
@@ -65,15 +66,16 @@ async function loadCheckIn() {
 
   // Latest value per tracker over the last 2 weeks: today's if logged, otherwise the most recent day.
   const today = todayISO();
-  const [trackers, { data: recent }] = await Promise.all([
-    loadTrackers(supabase),
+  const [loaded, { data: recent }] = await Promise.all([
+    loadTrackersWithStatus(supabase),
     supabase
       .from("entries")
       .select("tracker_id, entry_date, value")
       .gte("entry_date", addDays(today, -14))
       .order("entry_date", { ascending: false }),
   ]);
-  if (!trackers) return { error: true as const };
+  if (!loaded) return { error: true as const };
+  const { trackers, pending } = loaded;
 
   const latest = new Map<string, { date: string; value: number }>();
   for (const e of recent ?? []) {
@@ -84,5 +86,5 @@ async function loadCheckIn() {
     const last = latest.get(t.id);
     initial[t.id] = last?.date === today ? last.value : startingValue(t, last?.value);
   }
-  return { trackers, initial, dayLabel: formatDayLabel(today) };
+  return { trackers, initial, dayLabel: formatDayLabel(today), pending };
 }

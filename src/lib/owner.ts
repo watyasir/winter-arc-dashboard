@@ -5,8 +5,8 @@ import { BODY_WEEKS } from "@/lib/dashboard/body";
 import { buildDashboardData, type SeasonRow } from "@/lib/dashboard/build";
 import { loadEntries } from "@/lib/dashboard/load";
 import { createServiceClient } from "@/lib/supabase/service";
-import { TRACKER_COLUMNS } from "@/lib/tracker-store";
-import { addDays, todayISO, type Tracker } from "@/lib/trackers";
+import { loadOwnerTrackers } from "@/lib/tracker-store";
+import { addDays, todayISO } from "@/lib/trackers";
 
 /*
   Reads for the owner with no one signed in: the public share card and the API for
@@ -42,12 +42,12 @@ export async function ownerClient(): Promise<{ supabase: ServiceClient; ownerId:
 export async function loadOwnerDashboard(supabase: ServiceClient, ownerId: string) {
   const today = todayISO();
   const [trackers, seasonResult, workouts, bodyChecks] = await Promise.all([
-    supabase.from("trackers").select(TRACKER_COLUMNS).eq("user_id", ownerId).eq("archived", false).order("sort_order").returns<Tracker[]>(),
+    loadOwnerTrackers(supabase, ownerId),
     supabase.from("seasons").select("name, start_date, length_days, targets").eq("user_id", ownerId).eq("is_active", true).maybeSingle<SeasonRow>(),
     loadWorkouts(supabase, { since: addDays(today, -7), userId: ownerId }),
     loadBodyChecks(supabase, BODY_WEEKS + 2, ownerId),
   ]);
-  if (trackers.error || seasonResult.error || !workouts || !bodyChecks) return undefined;
+  if (!trackers || seasonResult.error || !workouts || !bodyChecks) return undefined;
   const season = seasonResult.data;
 
   // The whole season (for the best streak), and at least this week for workouts.
@@ -57,7 +57,7 @@ export async function loadOwnerDashboard(supabase: ServiceClient, ownerId: strin
   if (!entries) return undefined;
 
   const data = buildDashboardData({
-    trackers: trackers.data,
+    trackers,
     entries,
     season,
     today,
@@ -69,5 +69,5 @@ export async function loadOwnerDashboard(supabase: ServiceClient, ownerId: strin
     goalTracked: new Map(),
     ownerInitial: "",
   });
-  return { data, trackers: trackers.data, entries, today };
+  return { data, trackers, entries, today };
 }

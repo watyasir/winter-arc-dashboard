@@ -27,6 +27,7 @@ export function CheckIn({
   dayLabel,
   cancelHref,
   onSave,
+  notice,
   footer,
 }: {
   trackers: Tracker[];
@@ -34,6 +35,8 @@ export function CheckIn({
   dayLabel: string;
   cancelHref: string;
   onSave: (values: CheckInValues) => Promise<SaveResult>;
+  /** A quiet note above the trackers (a database update still to run). */
+  notice?: string;
   footer?: ReactNode;
 }) {
   const [values, setValues] = useState(initialValues);
@@ -86,6 +89,8 @@ export function CheckIn({
           {status.error}
         </p>
       )}
+
+      {notice && <p className="m-0 rounded-2xl bg-fill-strong px-4 py-3 text-[15px] text-sub">{notice}</p>}
 
       {trackers.length === 0 && (
         <p className="m-0 text-[15px] text-sub">No trackers yet. They&apos;ll appear here once they&apos;re set up.</p>
