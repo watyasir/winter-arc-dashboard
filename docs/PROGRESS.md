@@ -269,20 +269,22 @@ Baseline: `npm ci`, build, lint, `tsc --noEmit` all clean (30 Oct). M4 + M10 + a
 - [x] APIs live: /api/tasks 200 (73), /api/claude-jobs 200 (8), /api/day-plan 200, /api/summary 200, no key → 401; /api/money is POST-only (405 on GET, expected). All 9 calendar feeds 200 with the right names and colours, all-in-one feed 200, wrong token 404. Manifest, /sw.js, icons, /offline 200. build, lint, tsc, knip clean
 - Note: `.env.local` `SHARE_TOKEN` isn't the live one (Yasir set his own phrase in Vercel on 26 Oct); feed checks run from the signed-in /settings page
 
-## v9 "Playground" (30 Oct 2026, Mac session) — STOPPED MID-WAY by Yasir, saved, not pushed
+## v9 "Playground" (30 Oct 2026): started on the Mac, finished in the cloud session, merged to main
 Baseline before changes: build, lint, tsc, knip all clean.
 - [x] §1 Themes: Candy / Matcha / Sunset as `--th-*` on `[data-theme]` in globals.css, mapped by `@theme inline` (v8 names renamed: peach→pop, blue→accent-soft, blue-text→accent, sub→soft, surface→page). Bricolage 800 (`display`), Inter 500/600/700, JetBrains Mono 700 (`label`). `npm run contrast` (scripts/contrast.mjs). Committed f363b1f
-- [~] §2 Theme switch: `user_prefs` migration written (`…_user_prefs.sql`, NOT run in Supabase yet), `saveTheme` action, `loadTheme` (falls back to Candy), Appearance cards in /settings, cookie + `<head>` script sets data-theme before paint (root layout can't read cookies under cacheComponents), ThemeSync in the dashboard, demo = Candy
-- [~] §3 Overview: written, not yet built or tested in the browser: OverviewHeader (greeting, shift line, IST clock), HeroTile (90 round dots, scrub readout, streak flame), NextUpTile (tick → done, slide, confetti, Undo toast), MoneyTile (fanning wallet, count-up), CheckInTile (6 water cups → `setTodayEntry`, celebration once a day), TodayTile (score ring, `src/lib/score.ts` weights 30/30/20/20), WeightTile (scrub chart), Fund / Meals (toggle chips) / TYBBA / Claude tiles. Shared: Tile (tones + tilt), useTilt, useConfetti, useCountUp, useNow, Toast. Shift fix in `buildPlan`: only phases with cal "shift"
-- [ ] §4 Restyle other pages (only class renames done so far), remove leftover v8 code
-- [ ] §5 Test every route × 3 themes at 1280 and 390, live writes (put values back)
-- [ ] §6 Docs (DESIGN.md v9, BUILD_LOG, CLAUDE.md design rule), push, check Vercel
+- [x] §2 Theme switch (code; the migration is still for the Mac): `user_prefs` migration written (`…_user_prefs.sql`, NOT run in Supabase yet), `saveTheme` action, `loadTheme` (falls back to Candy), Appearance cards in /settings, cookie + `<head>` script sets data-theme before paint (root layout can't read cookies under cacheComponents), ThemeSync in the dashboard, demo = Candy
+- [x] §3 Overview (built and checked in the cloud session, fixes below): OverviewHeader (greeting, shift line, IST clock), HeroTile (90 round dots, scrub readout, streak flame), NextUpTile (tick → done, slide, confetti, Undo toast), MoneyTile (fanning wallet, count-up), CheckInTile (6 water cups → `setTodayEntry`, celebration once a day), TodayTile (score ring, `src/lib/score.ts` weights 30/30/20/20), WeightTile (scrub chart), Fund / Meals (toggle chips) / TYBBA / Claude tiles. Shared: Tile (tones + tilt), useTilt, useConfetti, useCountUp, useNow, Toast. Shift fix in `buildPlan`: only phases with cal "shift"
+- [x] §4 Rest of the app: Winter Arc, Health and Money tiles get v9 tones; reminder toasts in the v9 look; no v8 names or comments left; no hex outside globals.css (calendar feed colours and the theme-colour meta are data); big files split (CheckInRows, MoreSettings, RecentWorkouts)
+- [x] §5 Cloud checks: build, lint, tsc, knip, contrast (49 pairs × 3 themes) clean; every /demo route + /, /login, /offline at 1280 and 390 in Candy, Matcha and Sunset: no sideways scroll, no clipped tiles, no phone target under 44px, no console errors. Demo interactions: hero scrub, task tick + Undo toast + confetti, water cups up/down, all meals → "All meals in" toast, confetti canvas removed after. Theme save failing (no user_prefs table) → back to Candy + error toast, no crash. Live writes are left for the Mac
+- [x] §6 Docs: DESIGN.md v9 (+ changelog), CLAUDE.md design rule, README, BUILD_LOG; merged into main and pushed
 
 ### Cloud session (30 Oct 2026, continuing on `v9-playground`)
-- [x] Baseline fixed: Weight tile change line in ink (▲/▼ kept), contrast 41 pairs ≥ 4.5:1 in all 3 themes; unused exports removed; build, lint, tsc, knip clean
+- [x] Baseline fixed: Weight tile change line in ink (▲/▼ kept), contrast ≥ 4.5:1 in all 3 themes; unused exports removed; build, lint, tsc, knip clean
+- [x] Overview fixes: header shift line follows the dashboard's day (demo Sunday = "Weekend off."), demo plan has shift times; wallet cards 22px apart (fan 48px) so all names show; Check-in fits its 158px row with 44px controls; Today ring stacks on phones; Claude job rows wrap on phones; meal chips have aria-pressed
 
-### Next session (continue from here)
-1. `npx tsc --noEmit` was clean at the stop; run `npm run build`, `npm run lint`, `npx knip` and fix.
-2. `npm run contrast` fails 3 pairs: green ▲ text (`text-ok`) on the Weight tile fill. Fix: show the ▲ change in ink (or a darker green) in WeightTile, then rerun.
-3. Run `…_user_prefs.sql` in the Supabase SQL editor (see memory: set text via getEditors()[0]).
-4. Then §4–§6 above. Nothing is pushed: main on Vercel is still v8.
+### Next session
+1. **Live:** v9 Playground is on main (Vercel): the bento Overview with live tiles, every page in the v9 look, reminder toasts, three themes; /demo shows it all on fake data in Candy.
+2. **Theme switch:** built and safe without the database table (falls back to Candy; saving shows an error toast and switches back). It saves for real once the user_prefs migration is run.
+3. **Not done here, and why:** no signed-in tests against real data (this session can't sign in or reach Supabase), so water cups, meal chips, task tick + Undo and theme saving are only tested on /demo.
+4. **Mac session must:** (a) run `supabase/migrations/20261031000001_user_prefs.sql` in the Supabase SQL editor; (b) signed in, tap a water cup, a meal chip, tick a task and Undo it, then put each value back; (c) switch the theme on the laptop and check it on the phone.
+5. **iPhone:** open the home-screen app: Overview fits with no sideways scroll, tab bar works, one reminder toast at a time, water cups and meal chips are easy to tap, the theme you picked shows with no flash of Candy.

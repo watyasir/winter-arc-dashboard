@@ -1,67 +1,69 @@
 # Yasir OS: design spec
 
-**Status:** v8 "Soft bento", 30 Oct 2026. Light only. This file is the whole spec; the code follows the latest changelog entry (§9). Apple HIG and v6 "Teal and grey" are retired.
+**Status:** v9 "Playground", 30 Oct 2026. Light only, three themes. This file is the whole spec; the code follows the latest changelog entry (§9). Apple HIG, v6 "Teal and grey" and v8 "Soft bento" are retired.
 
 ## 1. Look in one paragraph
 
-Warm cream page, white tiles with a thin sand border and one soft shadow, rounded 20px. Two soft brand fills (peach for the main thing on a page, blue for the check-in and "selected"), always with near-black text. Numbers in JetBrains Mono, words in Inter. Calm and readable at a glance; colour always comes with a word or symbol.
+A playful bento: a warm page, one dark hero tile and a different soft colour for every Overview tile. Bricolage for big headings and numbers, Inter for words, JetBrains Mono for small uppercase labels. Things move a little when you touch them (tilt, a count-up, confetti for a finished day), never enough to get in the way, and nothing moves with reduced motion on.
 
-## 2. Tokens (all in the one `@theme` block in `src/app/globals.css`)
+## 2. Themes and tokens
 
-| Token | Value | Use |
-|---|---|---|
-| `surface` | `#FFF5E6` | page background |
-| `card` | `#FFFFFF` | tiles |
-| `fill` / `fill-strong` | `#FFF5E6` / `#F8E7CC` | inputs, inner items, tracks |
-| `line` / `line-strong` | `#F1E3CC` / `#E2CBA6` | 1px borders / handles, empty boxes |
-| `ink` / `sub` | `#111827` / `#5B6474` | text / secondary text |
-| `peach` / `peach-strong` | `#FAD4C0` / `#F6C1A6` | primary fill (dark text), its hover |
-| `blue` / `blue-soft` | `#80A1C1` / `#E3EBF3` | secondary fill (dark text): check-in, selected segment, switch on |
-| `blue-text` / `blue-hover` | `#3E5F7F` / `#2C4660` | links, focus ring, chart line |
-| `ok`, `warn`, `danger` (+ `-soft`) | `#15803D` `#B45309` `#B91C1C` / `#DCFCE7` `#FEF3C7` `#FEE2E2` | states: text / fill |
-| `claude` / `yasir` | `#D97757` (dark text) / `#3E5F7F` (white text) | owner tags |
-| `radius-tile` / `radius-item` | 20px / 12px | tiles / inner items; pills 999px |
-| `shadow-tile` | `0 1px 2px rgb(17 24 39/.06), 0 8px 24px -12px rgb(17 24 39/.12)` | the only shadow |
+Three themes, picked in /settings → Appearance (saved per account in `user_prefs`; Candy until picked; the demo is always Candy). Each theme sets raw `--th-*` values on `<html data-theme="candy|matcha|sunset">` in `src/app/globals.css`; an `@theme inline` block maps them to Tailwind colours. Components only use the colour names, never a hex.
 
-Type: Inter 500 body, 600 labels, 800 headings; JetBrains Mono 500/700 for numbers; scale 12/14/16/20/24/32. Spacing 4/8/12/16/24/32. Tile padding 20px (16 on phone), gap 16px (12 on phone).
+| Token (class) | Candy | Matcha | Sunset | Use |
+|---|---|---|---|---|
+| `page` | `#F5F1EA` | `#EFF2EA` | `#FBF0EA` | page |
+| `ink` / `soft` | `#17152B` / `#55516A` | `#17221A` / `#4F5B4A` | `#2A1613` / `#674B44` | text / secondary text |
+| `hero` / `hero-soft` | `#2D2A70` / `#CFCBFF` | `#1F3D2B` / `#C3E5CB` | `#8A2D3B` / `#FFD3CB` | the dark hero tile / its secondary text |
+| `dot-on` | `#FFD84D` | `#E6F07A` | `#FFC857` | logged days, Undo, highlights |
+| `accent` | = hero | = hero | = hero | links, focus ring, chart line, selected |
+| `t-tasks` `t-money` `t-check` `t-today` `t-weight` `t-fund` `t-diet` `t-study` `t-claude` | one per Overview tile, see globals.css | | | Tile `tone` fills |
+
+Fixed in every theme: `card` white, `claude` `#D97757`, states `ok` `#15803D`/`#DCFCE7`, `warn` `#B45309`/`#FEF3C7`, `danger` `#B91C1C`/`#FEE2E2`. Radius 20px tiles (`tile`), 12px items (`item`), pills 999px. Shadows: `tile` (resting) and `lift` (hover, toasts).
+
+Type: `display` = Bricolage Grotesque 800 (headings, big numbers); Inter 500/600/700 (body, labels in sentences); `label` = JetBrains Mono 700, uppercase 11px, 0.08em tracking (tile headings, small labels). All via `next/font`.
+
+`npm run contrast` (scripts/contrast.mjs) reads globals.css and checks every text/background pair in all three themes (ink, soft and accent on every tile fill, the hero, chips, buttons): all ≥ 4.5:1. The saturated check-in fill uses ink for secondary text too.
 
 ## 3. Layout
 
-- One fluid layout, max 1240px. Top bar from 561px: "Y" mark + Yasir OS, page links (Overview, Winter Arc, Board, Money, Health, Gallery), blue Check-in pill. 560px and under: brand only on top, a 6-tab bar at the bottom.
-- Every page has its own address, and the same under `/demo`.
-- **Overview is the only bento** (`bento` utility): desktop 4 columns × 150px rows
-  `"hero hero tasks money" "hero hero tasks money" "check today weight weight" "fund diet study claude"`;
-  960px and under 2 columns; 560px and under a 2-column widget grid (hero, check-in + today, tasks, money, weight, fund + diet, study + claude). Tiles are written in priority order; no `grid-flow-dense`.
-- Other pages: a simple 1–3 column grid of tiles, tops aligned.
+- One fluid layout, max 1240px. Top bar from 561px ("Y" mark, page links, Check-in pill); 560px and under a 6-tab bar at the bottom. Every page has its own address and again under `/demo`.
+- **Overview header:** greeting by the hour in India ("Up late" before 5, "Morning" before 12, "Afternoon" before 17, "Evening" before 22, else "Night") + ", Yasir."; one line: weekdays before the shift "Shift at 1:30 PM.", during it "On shift till 10:30 PM.", after "Shift done. Wind down.", Sat/Sun "Weekend off."; a live IST clock and date on the right (hidden on phones).
+- **Overview bento** (the only bento, `bento` utility): desktop 4 columns × 158px rows, gap 14px:
+  `"hero hero tasks money" "hero hero tasks money" "check today weight weight" "fund diet study claude"`. 960px and under: 2 columns. 560px and under: a 2-column widget grid, gap 12px: hero, check-in + today, tasks, money, weight, fund + meals, study + claude. Tiles are written in priority order (no `grid-flow-dense`).
+- Other pages: a 1–3 column grid of Tiles with tones, tops aligned. Board stays a full kanban.
 
-## 4. Components
+## 4. Overview tiles
 
-- **Tile** (`src/components/Tile.tsx`): every tile. Heading = the tile's one link to its full page ("Title →"). Fills: card, peach (Winter Arc hero), blue (Check-in).
-- **LineChart** (`src/components/LineChart.tsx`): zero-dependency SVG. 2px blue line, soft blue area, 3 faint grid lines, the last point as a dot, start date + min/max on one scale under it, one-line summary for screen readers. Weight (Overview 14 days; Health 14/30/90), steps, sleep (wake − lights out), Winter Arc consistency (0–100).
-- **Hero:** Day N of 90, days left, check-ins, finish date, 90 squares (30 per row, 15 on phone): filled = logged, today outlined.
-- **Chips:** words with colour: "! Overdue" danger, "Today" warn, a date neutral; meals ✓ / ~ / ✕.
-- **Reminder toasts:** tasks due within 3 days (overdue first, at most 3) in the corner (one at a time above the phone tab bar, "1 of 3"). Tap opens the task card (dialog: Esc, ✕ or outside closes) with Done · Doing it now · Snooze to tomorrow · Move date. ✕ on a toast hides it for this visit. Nothing is ever blocked.
-- **Claude's jobs:** status dot + word (OK, Failed, Running, Scheduled, Paused), "Last run 2h ago".
-- Segmented controls: track `fill-strong`, selected `blue`. Primary buttons peach; "Saved ✓" green with white text.
+- **Hero** (dark): Day N / 90, streak with a flame, 90 round dots (30 a row, 15 on phones): full = `dot-on`, partial = half, today = pulsing ring. Hover or drag across: "Day 12 · Fri 6 Nov · full check-in / partial / missed / ahead". Legend + "N days to <finish>".
+- **Next up:** 3 open tasks, overdue first, a round 44px tick. Tick → done, the row slides out, small confetti, toast "Nice. N left." with Undo (reopens it). None left: "All clear." + Board link.
+- **Money:** up to 3 bank cards back to front ("All banks" without per-bank data), 22px apart; hover, focus or tap fans them. Total counts up once, then "Updated 8:45 PM".
+- **Check-in:** 6 water cups on the Water tracker (0.5 L each, 3 L target). Cup N = N × 0.5 L; tapping the last full cup takes one away; each tap saves. "Finish check-in" → /log, or "✓ Logged today". The first save of the day: big confetti + "Day N logged. Streak X." (once a day per device).
+- **Today:** score ring + % + word (<40 "Getting started", ≥40 "Good pace", ≥75 "Almost there", 100 "Perfect day"; weights in src/lib/score.ts), the shift, "Now: <phase>".
+- **Weight:** latest kg, the 14-day change (▲/▼ in ink), a scrub chart resting on the last point ("58.2 kg · 12 Nov"). Under 2 days: "Log 2 days to see the trend".
+- **1RK fund:** % with a growing bar and "₹X of ₹Y · date", else an empty state.
+- **Meals:** 7 chips; a tap toggles planned ↔ skipped and saves; "5/7"; all 7 planned → confetti + "All meals in. Diet day done.".
+- **TYBBA:** study hours this week, items due and the next one, Board link. **Claude's jobs:** up to 3 jobs, status dot + word, last run or schedule.
 
 ## 5. Interaction and motion
 
-Hover and press in CSS only (`press`: scale .99). No animation library. `prefers-reduced-motion` turns transitions off. Visible 3px `blue-text` focus ring on every control.
+Tilt (max 2.5°) + glare + 4px lift on mouse devices only; touch uses `:active` scale .96. Confetti ≤ 120 pieces on a canvas that removes itself. One toast at a time, bottom centre, 4.5 s, optional Undo. Reminder toasts (tasks due within 3 days, at most 3, one at a time on phones) open the task card to answer. No animation library. `prefers-reduced-motion` turns off tilt, confetti, count-ups and pulses. Every write is optimistic, rolls back with an error toast, and never double-saves.
 
 ## 6. Accessibility
 
-All text ≥ 4.5:1 on its background (dark text on peach and blue). Tap targets ≥ 44px on the phone. Charts say their point in words. Never colour alone.
+Text ≥ 4.5:1 in every theme (checked by `npm run contrast`). Every control is a real button or link with a label, a visible 3px `accent` focus ring and a 44px target (meal chips are 28px on mouse devices, 44px on touch). Charts say their point in words. Never colour alone: states have a word or symbol.
 
 ## 7. Copy rules
 
-Plain, short words. Empty states say what to do next ("Log your weight on 2 days to see the trend"); never fake numbers on the real app. Money as ₹1,25,000, dates as 18 Oct 2026, India time.
+Plain, short, friendly. Empty states say what to do next; never fake numbers on the real app. Money ₹1,25,000, dates 18 Oct 2026, India time.
 
 ## 8. Phone
 
-Designed at 390px first. No sideways scroll. The check-in stays under a minute: big inputs, defaults filled in, one Save.
+Designed at 390px first; no sideways scroll; the check-in stays under a minute.
 
 ## 9. Changelog (Claude Code: apply the latest entry if the code doesn't match)
 
+- **v9, 30 Oct 2026: "Playground".** Three themes (Candy, Matcha, Sunset) as `--th-*` variables mapped by `@theme inline`; switch in /settings (saved in `user_prefs`, cookie + head script so there's no flash; falls back to Candy). Bricolage display type and mono labels. Overview: greeting header with the shift line and IST clock, a colour per tile, live tiles (task tick + Undo, water cups, meal chips, score ring, fanning wallet, scrub charts, the 90-dot hero) with confetti and toasts. The rest of the app uses the same Tile tones. v8 names renamed (peach → pop, blue → accent-soft, blue-text → accent, sub → soft, surface → page).
 - **v8, 30 Oct 2026: "Soft bento".** Replaces v6 everywhere. Tokens in §2, layout in §3. Overview becomes the bento (hero, next up, money, check-in, today, weight, 1RK fund, diet, TYBBA study, Claude's jobs); Winter Arc, Board, Money, Health and Gallery are their own pages with a top bar and phone tab bar (the sidebar, phone home, header chip, Habits and In-progress tiles are gone). One `Tile`, one `LineChart`. The blocking action gate becomes reminder toasts. Apple HIG skills, hig-doctor and the v6 mockups removed.
 
 ### History (retired designs)

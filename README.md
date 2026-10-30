@@ -41,7 +41,7 @@ All taken from `/demo` (sample data):
 | Hosting | Vercel (Mumbai region) | Auto-deploys from GitHub, runs next to the database |
 | Money data | Snapshots pushed to `POST /api/money` | Money already lives in a finance sheet; a Claude task reads it, so the app needs no Google access |
 
-The look is "Soft bento": a warm cream page, white tiles with soft shadows, a peach Winter Arc hero and a bento-grid Overview, Inter for words and JetBrains Mono for numbers. All text passes 4.5:1 contrast, tap targets are 44px, focus is always visible and reduced motion is respected. Charts are one small hand-written SVG component, no chart library. Full spec in [`docs/DESIGN.md`](docs/DESIGN.md).
+The look is "Playground" (v9): a bento-grid Overview with one dark hero tile and a soft colour per tile, in three themes (Candy, Matcha, Sunset) you can switch in Settings. Bricolage for headings, Inter for words, JetBrains Mono for labels. Tiles tilt a little under the mouse, finished days get confetti, and all of it switches off with reduced motion. Every text colour passes 4.5:1 in all three themes (checked by `npm run contrast`), tap targets are 44px and focus is always visible. Charts are one small hand-written SVG component, no chart library. Full spec in [`docs/DESIGN.md`](docs/DESIGN.md).
 
 ## How it grows
 
@@ -62,7 +62,7 @@ The repo is public; the data isn't. Real data lives only in Supabase, locked to 
 
 Every session followed the same loop: one phase per session, a short prompt from me, Claude Code builds and checks it in a real browser, then logs what happened. A few things that stood out:
 
-- **Design first, in chat.** Four design passes on a canvas before any code (editorial → Apple HIG → light "Winter dawn" → a card layout inspired by my Obsidian theme), then "Teal and grey" (v6) once the app was real, and finally the "Soft bento" redesign (v8). The spec lives in `docs/DESIGN.md` and the code follows its changelog.
+- **Design first, in chat.** Four design passes on a canvas before any code (editorial → Apple HIG → light "Winter dawn" → a card layout inspired by my Obsidian theme), then "Teal and grey" (v6) once the app was real, then "Soft bento" (v8), and finally "Playground" (v9) with three themes. The spec lives in `docs/DESIGN.md` and the code follows its changelog.
 - **Fake data first.** Phase 1 built the whole dashboard on made-up data at `/demo`. Every later phase swapped real data into the same tiles, so the demo never broke.
 - **A privacy scare, caught early.** Before the first push, a check found real details in the design mockups (names, a card number, amounts). They were replaced before anything went public, and the pre-commit privacy check came out of it.
 - **Bugs found by looking, not guessing.** A "Log Today" button had teal text on a teal background because a global link rule won; the weight chart's labels shrank too small on phones; a 30-per-row season strip turned into dots on a phone (now 15 per row).

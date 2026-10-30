@@ -52,17 +52,16 @@ Everything is built from a few generic pieces, so new things are added as data, 
 
 Workouts, tasks, goals and money get their own tables because their shape is different.
 
-## Design rule: Soft bento (v8, 30 Oct 2026)
+## Design rule: v9 Playground (30 Oct 2026)
 
-**Read `docs/DESIGN.md` before any UI work.** It is the full spec and has a changelog; if the code doesn't match the latest entry, update the code. Apple HIG and the v6 "Teal and grey" look are retired: don't bring them back.
+**Read `docs/DESIGN.md` before any UI work.** It is the full spec and has a changelog; if the code doesn't match the latest entry, update the code. Apple HIG, v6 "Teal and grey" and v8 "Soft bento" are retired: don't bring them back.
 
 Short version:
-- **Light only, no dark mode.** Page `#FFF5E6`, white cards with a 1px `#F1E3CC` border, 20px tile corners, 12px inner items, 999px pills, one soft shadow. No hard shadows.
-- **Fills, not text:** primary peach `#FAD4C0` and secondary blue `#80A1C1`, always with dark text (`#111827`). Blue as text/links/focus is `#3E5F7F`. States: success `#15803D`/`#DCFCE7`, warning `#B45309`/`#FEF3C7`, danger `#B91C1C`/`#FEE2E2`. Owner tags: Claude `#D97757` (dark text), Yasir `#3E5F7F` (white text). Never colour alone: every state also has a word or symbol.
-- **Type:** Inter (500 body, 600 labels, 800 headings), JetBrains Mono for numbers, via `next/font`. Scale 12/14/16/20/24/32.
-- **Every token lives in the one `@theme` block in `src/app/globals.css`.** No hex values in components.
-- **Accessibility:** all text ≥ 4.5:1, 3px `#3E5F7F` focus ring, tap targets ≥ 44px, `prefers-reduced-motion` respected, hover/press in CSS only (`press` = scale .99), no animation library.
-- **Components:** one `Tile` for every tile (`src/components/Tile.tsx`), one SVG `LineChart` (no chart library). Keep files under ~250 lines.
+- **Light only, three themes:** Candy (default), Matcha, Sunset. Each theme is a set of `--th-*` variables on `[data-theme]` in `src/app/globals.css`, mapped to Tailwind colours by `@theme inline` (`page`, `ink`, `soft`, `hero`, `accent`, `dot-on`, `t-tasks`, `t-money`, ...). Never a hex value in a component. The demo is always Candy.
+- **Contrast:** every text/background pair ≥ 4.5:1 in all three themes. Run `npm run contrast` after any colour change.
+- **Type:** `display` (Bricolage 800) for headings and big numbers, Inter for words, `label` (JetBrains Mono 700, uppercase 11px) for tile headings. All via `next/font`.
+- **Components:** one `Tile` (tones + tilt), one SVG `LineChart`, one `useConfetti`, one `Toast`. No chart or animation library. Files under ~250 lines.
+- **Behaviour:** tilt and glare on mouse devices only; confetti ≤ 120 pieces; one toast at a time with optional Undo; `prefers-reduced-motion` turns motion off; every control a labelled button or link with a 44px target and a visible focus ring; every write optimistic with rollback and an error toast.
 - **Pages:** Overview (the only bento), Winter Arc, Board (full kanban + Claude's jobs), Money, Health, Gallery, each at its own address and again under `/demo`. Tasks due soon show as reminder toasts (never a blocking pop-up).
 
 ## Folder layout (target)

@@ -330,3 +330,16 @@ How the Winter Arc Dashboard was built, session by session, by directing Claude 
 **Screenshot to take:** /settings → Calendar with the 9 coloured feeds.
 **Next:** Add to Home Screen on the iPhone; subscribe to the 9 feeds.
 
+## Session 20 — 30 Oct 2026 — v9 "Playground"
+**Goal:** Finish the playful redesign started on the Mac: three themes, a live Overview, the rest of the app in the same look.
+**What I asked Claude Code to do:** "Check out v9-playground, fix what's broken, check the Overview against the spec, restyle the rest of the app, test all three themes, update the docs, merge to main and check Vercel."
+**What got built:**
+- Three themes (Candy, Matcha, Sunset) you can pick in Settings; the page never flashes the wrong one.
+- An Overview that does things: tick a task (with Undo), tap water cups, tap meal chips, scrub the weight chart and the 90-day dots, and get confetti when the day or the meals are done.
+- Winter Arc, Health and Money use the same coloured tiles; the reminder toasts match.
+- A contrast check that now covers links on every tile colour, in all three themes.
+**What broke and how we fixed it:** Green text on the Weight tile failed contrast, so the change line is ink with ▲/▼. The wallet's back cards hid behind the front one, so they now sit 22px apart. The demo's header said nothing because its fake plan had no shift times, and it used today's real weekday instead of the demo's Sunday. The Check-in tile was 6px too tall for its row. A meal test failed because the chips didn't say whether they were on, so they now do (better for screen readers too).
+**What Yasir had to do himself:** Nothing in this session. The Mac session runs the user_prefs migration and the live tests.
+**Screenshot to take:** `/demo` in all three themes at 1280, and the phone Overview with a toast.
+**Next:** the 3 Mac items in PROGRESS.md "Next session".
+
