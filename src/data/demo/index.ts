@@ -31,6 +31,7 @@ function demoTask(
 }
 
 export const demoData: DashboardData = {
+  theme: "candy",
   ownerLine: "Life, tracked",
   basePath: "/demo",
   todayISO: DEMO_TODAY,

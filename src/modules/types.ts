@@ -1,6 +1,7 @@
 import type { ClaudeJob } from "@/lib/claude-jobs";
 import type { GateChoice } from "@/lib/gate";
 import type { GalleryItem } from "@/lib/gallery";
+import type { ThemeId } from "@/lib/theme";
 import type { Tone } from "@/lib/tones";
 import type { NewTask, Owner, Task, TaskStatus } from "@/lib/tasks";
 
@@ -21,6 +22,9 @@ export interface Point {
 }
 
 export type SeasonDay = "all" | "most" | "missed" | "today" | "upcoming";
+
+/** A Winter Arc dot: full or partial check-in, missed, today with nothing saved yet, or still ahead. */
+export type HeroDay = "full" | "partial" | "missed" | "today" | "ahead";
 
 /** One bank account or card in the Money wallet stack. Card balances are negative (amount owed). */
 export interface Account {
@@ -49,6 +53,9 @@ export interface TodayItem {
 /** Saves a tap on a Today row. Only the real dashboard passes one; the demo just flips the box. */
 export type ToggleTodayAction = (trackerId: string, done: boolean) => Promise<{ ok: boolean }>;
 
+/** Saves one of today's values from an Overview tile; null clears it. Only the real dashboard passes one. */
+export type SetEntryAction = (trackerId: string, value: number | null) => Promise<{ ok: boolean }>;
+
 /** Saves task changes. Only the real dashboard passes these; the demo changes stay on the page. */
 /** Reads and deletes gallery files. Only the real dashboard passes these; the demo uses data.gallery. */
 export interface GalleryActions {
@@ -70,6 +77,8 @@ export interface TaskActions {
   null / empty lists mean "show the empty state", which tells you what to log.
 */
 export interface DashboardData {
+  /** The saved theme (Candy on the demo). */
+  theme: ThemeId;
   ownerLine: string;
   /** YYYY-MM-DD the dashboard counts as today (fixed on the demo). */
   todayISO: string;
@@ -104,21 +113,36 @@ export interface DashboardData {
     /** Season days so far with anything logged. */
     checkIns: number;
     finishLabel: string;
-    /** One per season day: anything logged that day. */
-    logged: boolean[];
+    /** Day 1, YYYY-MM-DD. */
+    start: string;
+    /** One per season day. */
+    days: HeroDay[];
+    /** Days in a row with a saved check-in, up to today (or yesterday while today is empty). */
+    streak: number;
     /** -1 outside the season. */
     todayIndex: number;
   } | null;
   /** Anything logged today. */
   checkedIn: boolean;
   /** From the day plan. null = no plan sent yet. */
-  plan: { shift: string; now: string | null } | null;
+  plan: {
+    /** "1:30–10:30 PM", "Weekend off", "No shift today". */
+    shift: string;
+    now: string | null;
+    /** The shift phase in minutes after midnight (India); null on a day off. */
+    shiftStart: number | null;
+    shiftEnd: number | null;
+  } | null;
   /** Last 90 days (Health toggles 14 / 30 / 90). */
   steps: Point[];
   /** Hours: wake time minus lights out, else the Sleep tracker. */
   sleep: Point[];
   /** Today's meal slots. status = the logged option ("Planned", "Swapped", "Skipped"), null = not logged. */
-  meals: { name: string; status: string | null }[];
+  meals: { name: string; status: string | null; trackerId?: string }[];
+  /** Today's water in litres (the cups on the check-in tile). null = no Water tracker. */
+  water: { trackerId?: string; litres: number | null; target: number; step: number } | null;
+  /** Check-in fields filled today, for the score. `water` = water is one of the filled ones. */
+  checkInFields: { filled: number; total: number; water: boolean };
   /** Today's readings, "118/76". */
   bp: { label: string; value: string | null }[];
   /** The goal whose name has "1RK" in it. null = no such goal yet. */

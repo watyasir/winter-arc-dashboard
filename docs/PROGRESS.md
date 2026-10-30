@@ -268,3 +268,18 @@ Baseline: `npm ci`, build, lint, `tsc --noEmit` all clean (30 Oct). M4 + M10 + a
 - [x] 10. M12: 3200×2400 PNG (multipart) and 3000×1000 PNG (9 MB, upload link) uploaded; downloads byte-identical (same SHA-256); both test uploads deleted. Wrong key → 401
 - [x] APIs live: /api/tasks 200 (73), /api/claude-jobs 200 (8), /api/day-plan 200, /api/summary 200, no key → 401; /api/money is POST-only (405 on GET, expected). All 9 calendar feeds 200 with the right names and colours, all-in-one feed 200, wrong token 404. Manifest, /sw.js, icons, /offline 200. build, lint, tsc, knip clean
 - Note: `.env.local` `SHARE_TOKEN` isn't the live one (Yasir set his own phrase in Vercel on 26 Oct); feed checks run from the signed-in /settings page
+
+## v9 "Playground" (30 Oct 2026, Mac session) — STOPPED MID-WAY by Yasir, saved, not pushed
+Baseline before changes: build, lint, tsc, knip all clean.
+- [x] §1 Themes: Candy / Matcha / Sunset as `--th-*` on `[data-theme]` in globals.css, mapped by `@theme inline` (v8 names renamed: peach→pop, blue→accent-soft, blue-text→accent, sub→soft, surface→page). Bricolage 800 (`display`), Inter 500/600/700, JetBrains Mono 700 (`label`). `npm run contrast` (scripts/contrast.mjs). Committed f363b1f
+- [~] §2 Theme switch: `user_prefs` migration written (`…_user_prefs.sql`, NOT run in Supabase yet), `saveTheme` action, `loadTheme` (falls back to Candy), Appearance cards in /settings, cookie + `<head>` script sets data-theme before paint (root layout can't read cookies under cacheComponents), ThemeSync in the dashboard, demo = Candy
+- [~] §3 Overview: written, not yet built or tested in the browser: OverviewHeader (greeting, shift line, IST clock), HeroTile (90 round dots, scrub readout, streak flame), NextUpTile (tick → done, slide, confetti, Undo toast), MoneyTile (fanning wallet, count-up), CheckInTile (6 water cups → `setTodayEntry`, celebration once a day), TodayTile (score ring, `src/lib/score.ts` weights 30/30/20/20), WeightTile (scrub chart), Fund / Meals (toggle chips) / TYBBA / Claude tiles. Shared: Tile (tones + tilt), useTilt, useConfetti, useCountUp, useNow, Toast. Shift fix in `buildPlan`: only phases with cal "shift"
+- [ ] §4 Restyle other pages (only class renames done so far), remove leftover v8 code
+- [ ] §5 Test every route × 3 themes at 1280 and 390, live writes (put values back)
+- [ ] §6 Docs (DESIGN.md v9, BUILD_LOG, CLAUDE.md design rule), push, check Vercel
+
+### Next session (continue from here)
+1. `npx tsc --noEmit` was clean at the stop; run `npm run build`, `npm run lint`, `npx knip` and fix.
+2. `npm run contrast` fails 3 pairs: green ▲ text (`text-ok`) on the Weight tile fill. Fix: show the ▲ change in ink (or a darker green) in WeightTile, then rerun.
+3. Run `…_user_prefs.sql` in the Supabase SQL editor (see memory: set text via getEditors()[0]).
+4. Then §4–§6 above. Nothing is pushed: main on Vercel is still v8.

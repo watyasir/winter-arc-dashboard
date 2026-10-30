@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/auth";
 import { createSignInCode } from "@/lib/signin-code";
 import type { SaveResult } from "@/lib/body";
 import { SEASON_DAYS, SEASON_NAME, seasonProblem, slugify, trackerProblem, type SeasonInput, type TrackerInput } from "@/lib/settings";
+import { isTheme, type ThemeId } from "@/lib/theme";
 
 const FAILED: SaveResult = { ok: false, message: "Couldn't save. Check your connection and try again." };
 
@@ -78,4 +79,12 @@ export async function makeSignInCode(): Promise<{ ok: true; code: string; expire
   const { user } = await requireUser();
   const made = await createSignInCode(user.id);
   return made ? { ok: true, ...made } : { ok: false, message: "Couldn't make a code. The site needs SUPABASE_SERVICE_ROLE_KEY." };
+}
+
+/** Appearance: saves the chosen theme (user_prefs). The page has already switched; this keeps it on every device. */
+export async function saveTheme(theme: ThemeId): Promise<{ ok: boolean }> {
+  if (!isTheme(theme)) return { ok: false };
+  const { supabase, user } = await requireUser();
+  const { error } = await supabase.from("user_prefs").upsert({ user_id: user.id, theme, updated_at: new Date().toISOString() });
+  return { ok: !error };
 }

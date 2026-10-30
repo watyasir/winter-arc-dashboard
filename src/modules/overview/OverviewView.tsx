@@ -1,24 +1,24 @@
 "use client";
 
 import { HeroTile } from "./HeroTile";
-import { CheckInTile, PlanTile } from "./DayTiles";
-import { ClaudeTile, DietTile, FundTile, StudyTile } from "./LifeTiles";
-import { MoneyGlance } from "./MoneyGlance";
+import { CheckInTile, TodayTile } from "./DayTiles";
+import { ClaudeTile, FundTile, MealsTile, StudyTile } from "./LifeTiles";
+import { MoneyTile } from "./MoneyTile";
 import { NextUpTile } from "./NextUpTile";
 import { WeightTile } from "./WeightTile";
 
-/** Overview: the bento of glances (globals.css `bento`). Each tile's heading opens its full page. */
+/** Overview: the colour-blocked bento (globals.css `bento`), tiles in priority order. Each heading opens its full page. */
 export function OverviewView() {
   return (
     <div className="bento">
       <HeroTile />
-      <NextUpTile />
-      <MoneyGlance />
       <CheckInTile />
-      <PlanTile />
+      <TodayTile />
+      <NextUpTile />
+      <MoneyTile />
       <WeightTile />
       <FundTile />
-      <DietTile />
+      <MealsTile />
       <StudyTile />
       <ClaudeTile />
     </div>

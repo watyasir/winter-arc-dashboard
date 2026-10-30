@@ -7,6 +7,8 @@ import { fieldClass, StatusMessages, type Status } from "@/components/body/Sheet
 import { Field, Group } from "@/components/FormGroup";
 import { parseNumber, type SaveResult } from "@/lib/body";
 import { CALENDARS } from "@/lib/calendar";
+import type { ThemeId } from "@/lib/theme";
+import { AppearanceSection } from "./AppearanceSection";
 import { SEASON_DAYS, seasonProblem, TRACKER_TYPES, trackerProblem, type SeasonInput, type TrackerInput } from "@/lib/settings";
 import { AREA_ORDER, formatDayLabel, type Tracker, type TrackerArea, type TrackerType } from "@/lib/trackers";
 
@@ -20,6 +22,7 @@ interface SettingsActions {
   addTracker: (t: TrackerInput) => Promise<SaveResult>;
   resetTestData: () => Promise<SaveResult>;
   makeSignInCode: () => Promise<{ ok: true; code: string; expiresAt: number } | { ok: false; message: string }>;
+  saveTheme: (t: ThemeId) => Promise<{ ok: boolean }>;
 }
 
 /** What a daily target means for each type, shown next to the box. */
@@ -32,6 +35,7 @@ export function SettingsForm({
   defaultStart,
   actions,
   calendarPath,
+  theme,
 }: {
   trackers: Tracker[];
   /** The active season, if there is one. */
@@ -41,6 +45,8 @@ export function SettingsForm({
   actions: SettingsActions;
   /** /api/calendar.ics?token=…; null = SHARE_TOKEN isn't set. */
   calendarPath: string | null;
+  /** The saved theme (Candy until one is picked). */
+  theme: ThemeId;
 }) {
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col gap-[18px] px-4 pt-6 pb-8">
@@ -50,6 +56,7 @@ export function SettingsForm({
           Done
         </Link>
       </header>
+      <AppearanceSection theme={theme} save={actions.saveTheme} />
       <SeasonSection trackers={trackers} season={season} defaultStart={defaultStart} save={actions.saveSeason} />
       <NewTrackerSection add={actions.addTracker} />
       <CalendarSection path={calendarPath} />

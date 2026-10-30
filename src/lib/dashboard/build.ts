@@ -10,7 +10,8 @@ import { buildGoals } from "./goals";
 import { buildArc, fullDate } from "./arc";
 import { daysBetween, headerDate, shortDate } from "./dates";
 import { dailyTarget, todayRows } from "./today";
-import { buildBp, buildConsistency, buildHero, buildMeals, buildPlan, buildSeries, buildStudy } from "./extras";
+import { buildBp, buildCheckInFields, buildConsistency, buildHero, buildMeals, buildPlan, buildSeries, buildStudy, buildWater } from "./extras";
+import { DEFAULT_THEME, type ThemeId } from "@/lib/theme";
 
 /*
   Turns the real rows (trackers, entries, the active season) into the same DashboardData
@@ -53,6 +54,8 @@ interface BuildInput {
   /** The latest money snapshot. Null/missing = none pushed yet. */
   money?: MoneySnapshot | null;
   claudeJobs?: ClaudeJob[];
+  /** The saved theme; Candy when none. */
+  theme?: ThemeId;
 }
 
 
@@ -74,6 +77,7 @@ export function buildDashboardData({
   goalTracked,
   money,
   claudeJobs,
+  theme,
 }: BuildInput): DashboardData {
   const values = new Map<string, number>();
   for (const e of entries) values.set(`${e.tracker_id}|${e.entry_date}`, Number(e.value));
@@ -123,8 +127,10 @@ export function buildDashboardData({
   const series = buildSeries(trackers, valueOn, bodyChecks, today);
   const goalTiles = buildGoals(goals, goalTracked, trackers, today);
   const fund = goalTiles.find((g) => /1\s*rk/i.test(g.name));
+  const consistency = buildConsistency(season, trackers, valueOn, today);
 
   return {
+    theme: theme ?? DEFAULT_THEME,
     ownerLine: "Life, tracked",
     basePath: "",
     todayISO: today,
@@ -152,16 +158,18 @@ export function buildDashboardData({
     navBadges: open.length ? { board: String(open.length) } : {},
     season: season ? buildSeason(season, today, dayStatus, counts, dailyGoals.length) : null,
     arc: season ? buildArc(season, today, trackers, dailyGoals, hitOn) : null,
-    hero: buildHero(season, today, loggedDays),
+    hero: buildHero(season, today, loggedDays, consistency),
     checkedIn: loggedDays.has(today),
     plan: buildPlan(dayPlan, today, nowMinutes),
     steps: series.steps,
     sleep: series.sleep,
     meals: buildMeals(trackers, valueOn, today),
+    water: buildWater(trackers, valueOn, today),
+    checkInFields: buildCheckInFields(trackers, valueOn, today),
     bp: buildBp(trackers, valueOn, today),
     fund: fund ? { name: fund.name, progress: fund.progress, pct: fund.pct, by: fund.by } : null,
     study: buildStudy(trackers, valueOn, today),
-    consistency: buildConsistency(season, trackers, valueOn, today),
+    consistency,
     today: todayItems.rows,
     money: money ? toMoneyTile(money) : null,
     workoutHref: "/log/workout",

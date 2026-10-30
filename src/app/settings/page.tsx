@@ -6,7 +6,8 @@ import { shareToken } from "@/lib/share-store";
 import { weekStart } from "@/lib/dashboard/dates";
 import { loadTrackers } from "@/lib/tracker-store";
 import { addDays, todayISO } from "@/lib/trackers";
-import { addTracker, makeSignInCode, resetTestData, saveSeason } from "./actions";
+import { loadTheme } from "@/lib/theme-store";
+import { addTracker, makeSignInCode, resetTestData, saveSeason, saveTheme } from "./actions";
 
 export const metadata: Metadata = { title: "Settings · Yasir OS" };
 
@@ -20,9 +21,10 @@ export default function SettingsPage() {
 
 async function Settings() {
   const { supabase } = await requireUser();
-  const [trackers, season] = await Promise.all([
+  const [trackers, season, theme] = await Promise.all([
     loadTrackers(supabase),
     supabase.from("seasons").select("start_date, targets").eq("is_active", true).maybeSingle<{ start_date: string; targets: Record<string, number> }>(),
+    loadTheme(supabase),
   ]);
   if (!trackers || season.error) {
     return <p className="p-6 text-center text-[15px] text-danger">Couldn&apos;t load your settings. Refresh to try again.</p>;
@@ -32,7 +34,8 @@ async function Settings() {
       trackers={trackers}
       season={season.data ? { start: season.data.start_date, targets: season.data.targets } : null}
       defaultStart={addDays(weekStart(todayISO()), 7)}
-      actions={{ saveSeason, addTracker, resetTestData, makeSignInCode }}
+      actions={{ saveSeason, addTracker, resetTestData, makeSignInCode, saveTheme }}
+      theme={theme}
       calendarPath={calendarPath()}
     />
   );

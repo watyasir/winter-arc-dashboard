@@ -1,9 +1,9 @@
 import { addDays } from "@/lib/trackers";
-import type { DashboardData, Point } from "@/modules/types";
+import type { DashboardData, HeroDay, Point } from "@/modules/types";
 import { DEMO_TODAY } from "./body";
 
 /*
-  Made-up numbers for the Soft bento tiles and charts on /demo. "Today" is 18 Oct 2026,
+  Made-up numbers for the Overview tiles and charts on /demo. "Today" is 18 Oct 2026,
   day 23 of a season that started 26 Sep. Nothing here is real.
 */
 
@@ -17,16 +17,19 @@ function daily(days: number, value: (i: number) => number | null): Point[] {
 }
 
 const SEASON_START = "2026-09-26";
-// Days 8 and 16 were missed; everything else up to today has a check-in.
-const logged = Array.from({ length: 90 }, (_, i) => i < 23 && i !== 7 && i !== 15);
+// Days 8 and 16 were missed; every third day was partial; everything else up to today is a full check-in.
+const days: HeroDay[] = Array.from({ length: 90 }, (_, i) => (i > 22 ? "ahead" : i === 7 || i === 15 ? "missed" : i % 3 === 2 ? "partial" : "full"));
 
 export const demoBento: Pick<
   DashboardData,
-  "hero" | "checkedIn" | "plan" | "steps" | "sleep" | "meals" | "bp" | "fund" | "study" | "consistency" | "weight"
+  "hero" | "checkedIn" | "plan" | "steps" | "sleep" | "meals" | "water" | "checkInFields" | "bp" | "fund" | "study" | "consistency" | "weight"
 > = {
-  hero: { day: 23, length: 90, startsIn: 0, daysLeft: 67, checkIns: 21, finishLabel: "24 Dec", logged, todayIndex: 22 },
+  hero: { day: 23, length: 90, startsIn: 0, daysLeft: 67, checkIns: 21, finishLabel: "24 Dec", start: SEASON_START, days, streak: 7, todayIndex: 22 },
   checkedIn: true,
-  plan: { shift: "Weekend off", now: "Rest and review till 9:00 PM" },
+  // 18 Oct 2026 is a Sunday.
+  plan: { shift: "Weekend off", now: "Rest and review till 9:00 PM", shiftStart: null, shiftEnd: null },
+  water: { litres: 1.5, target: 3, step: 0.5 },
+  checkInFields: { filled: 9, total: 16, water: true },
   weight: {
     unit: "kg",
     goal: 76,

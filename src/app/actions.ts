@@ -5,7 +5,7 @@ import { requireUser } from "@/lib/auth";
 import { fileNameFor, type GalleryItem, type GalleryMime } from "@/lib/gallery";
 import { canSnooze, GATE_CHOICES, nextMidnightIST, type GateChoice } from "@/lib/gate";
 import { TASK_STATUSES, taskProblem, type NewTask, type TaskStatus } from "@/lib/tasks";
-import { todayISO } from "@/lib/trackers";
+import { assertValidValue, todayISO } from "@/lib/trackers";
 
 /** A tap on a yes/no Today row: saves today's entry, then sends the dashboard fresh numbers. */
 export async function toggleTodayTracker(trackerId: string, done: boolean): Promise<{ ok: boolean }> {
@@ -21,6 +21,33 @@ export async function toggleTodayTracker(trackerId: string, done: boolean): Prom
       { onConflict: "tracker_id,entry_date" },
     );
   if (error) return { ok: false };
+  refresh();
+  return { ok: true };
+}
+
+/**
+ * One of today's values from an Overview tile (water cups, a meal chip). null clears it
+ * (no cups left = nothing logged). Only the user's own trackers, checked like the check-in.
+ */
+export async function setTodayEntry(trackerId: string, value: number | null): Promise<{ ok: boolean }> {
+  const { supabase, user } = await requireUser();
+  const { data: tracker } = await supabase.from("trackers").select("id, name, type").eq("id", trackerId).maybeSingle();
+  if (!tracker) return { ok: false };
+  const today = todayISO();
+  if (value === null) {
+    const { error } = await supabase.from("entries").delete().eq("tracker_id", trackerId).eq("entry_date", today);
+    if (error) return { ok: false };
+  } else {
+    try {
+      assertValidValue(tracker, value);
+    } catch {
+      return { ok: false };
+    }
+    const { error } = await supabase
+      .from("entries")
+      .upsert({ user_id: user.id, tracker_id: trackerId, entry_date: today, value }, { onConflict: "tracker_id,entry_date" });
+    if (error) return { ok: false };
+  }
   refresh();
   return { ok: true };
 }

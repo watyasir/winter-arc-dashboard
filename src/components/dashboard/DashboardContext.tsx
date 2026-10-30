@@ -1,9 +1,10 @@
 "use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useRef, useState, type ReactNode } from "react";
+import { useToast } from "@/components/Toast";
 import { nextMidnightIST, type GateChoice } from "@/lib/gate";
 import type { NewTask, Task, TaskStatus } from "@/lib/tasks";
-import type { DashboardData, GalleryActions, TaskActions, ToggleTodayAction, ViewId } from "@/modules/types";
+import type { DashboardData, GalleryActions, SetEntryAction, TaskActions, ToggleTodayAction, ViewId } from "@/modules/types";
 
 interface DashboardState {
   data: DashboardData;
@@ -25,6 +26,16 @@ interface DashboardState {
   taskError: string | null;
   /** Real dashboard only: lists and deletes gallery files. */
   galleryActions?: GalleryActions;
+  /** Today's values changed on the Overview (water, meals), by tracker id; undefined = as loaded. */
+  entries: Record<string, number | null>;
+  /**
+   * Shows a new value for today at once and saves it. Fast taps never double-save: one save per
+   * tracker runs at a time and only the latest value goes next. A failed save rolls back and
+   * shows an error toast. `onSaved` runs once the value is in the database.
+   */
+  setEntry: (key: string, trackerId: string | undefined, value: number | null, label: string, onSaved?: () => void) => void;
+  /** Anything saved today, including taps on the Overview. */
+  checkedIn: boolean;
 }
 
 /** A saved sheet as it shows on the Board straight away. */
@@ -48,6 +59,7 @@ export function DashboardProvider({
   onToggleToday,
   taskActions,
   galleryActions,
+  onSetEntry,
   children,
 }: {
   data: DashboardData;
@@ -57,8 +69,11 @@ export function DashboardProvider({
   /** Real dashboard only: saves task changes. */
   taskActions?: TaskActions;
   galleryActions?: GalleryActions;
+  /** Real dashboard only: saves one of today's values (water, a meal). */
+  onSetEntry?: SetEntryAction;
   children: ReactNode;
 }) {
+  const toast = useToast();
   const [todayDone, setTodayDone] = useState(() => data.today.map((t) => t.done));
   const [todayError, setTodayError] = useState<string | null>(null);
   // Fresh data from the server (after a save) replaces the local ticks.
@@ -102,6 +117,7 @@ export function DashboardProvider({
         if (res.ok) return;
         setTasks(before);
         setTaskError(`${failMsg} Check your connection and try again.`);
+        toast({ text: `${failMsg} Try again.`, tone: "danger" });
       });
   };
   const addTask = (task: NewTask) =>
@@ -133,6 +149,53 @@ export function DashboardProvider({
     );
   };
 
+  // ---- today's values from the Overview tiles
+  const [entries, setEntries] = useState<Record<string, number | null>>({});
+  const [shownData, setShownData] = useState(data);
+  if (shownData !== data) {
+    // Fresh server data includes the saved values.
+    setShownData(data);
+    setEntries({});
+  }
+  const saved = useRef<Record<string, number | null | undefined>>({});
+  const wanted = useRef<Record<string, number | null>>({});
+  const busy = useRef<Set<string>>(new Set());
+  const [savedToday, setSavedToday] = useState(false);
+
+  const setEntry = (key: string, trackerId: string | undefined, value: number | null, label: string, onSaved?: () => void) => {
+    setEntries((e) => ({ ...e, [key]: value }));
+    if (!onSetEntry || !trackerId) {
+      onSaved?.();
+      return;
+    }
+    if (!(key in saved.current)) saved.current[key] = undefined;
+    wanted.current[key] = value;
+    if (busy.current.has(key)) return;
+    busy.current.add(key);
+    void (async () => {
+      while (wanted.current[key] !== saved.current[key]) {
+        const next = wanted.current[key];
+        const res = await onSetEntry(trackerId, next).catch(() => ({ ok: false }));
+        if (!res.ok) {
+          const back = saved.current[key];
+          wanted.current[key] = back === undefined ? null : back;
+          setEntries((e) => {
+            const copy = { ...e };
+            if (back === undefined) delete copy[key];
+            else copy[key] = back;
+            return copy;
+          });
+          toast({ text: `Couldn't save ${label}. Check your connection.`, tone: "danger" });
+          break;
+        }
+        saved.current[key] = next;
+        if (next !== null) setSavedToday(true);
+        if (wanted.current[key] === next) onSaved?.();
+      }
+      busy.current.delete(key);
+    })();
+  };
+
   const value: DashboardState = {
     data,
     view,
@@ -147,6 +210,9 @@ export function DashboardProvider({
     answerGate,
     taskError,
     galleryActions,
+    entries,
+    setEntry,
+    checkedIn: data.checkedIn || savedToday || (!onSetEntry && Object.values(entries).some((v) => v !== null)),
   };
 
   return <DashboardContext.Provider value={value}>{children}</DashboardContext.Provider>;

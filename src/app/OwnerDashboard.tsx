@@ -4,7 +4,7 @@ import { Dashboard } from "@/components/dashboard/Dashboard";
 import { currentOwner } from "@/lib/auth";
 import { loadDashboardData } from "@/lib/dashboard/load";
 import type { ViewId } from "@/modules/types";
-import { addTask, answerGate, deleteGalleryItem, deleteTask, listGallery, moveTask, toggleTodayTracker, updateTask } from "./actions";
+import { addTask, answerGate, deleteGalleryItem, deleteTask, listGallery, moveTask, setTodayEntry, toggleTodayTracker, updateTask } from "./actions";
 
 /**
  * One page of the real app, signed in as the owner. Every page reads the same data, so moving
@@ -39,6 +39,7 @@ async function Content({ view, signedOut }: { view: ViewId; signedOut?: React.Re
       data={data}
       view={view}
       onToggleToday={toggleTodayTracker}
+      onSetEntry={setTodayEntry}
       taskActions={{ add: addTask, update: updateTask, move: moveTask, remove: deleteTask, gate: answerGate }}
       galleryActions={{ list: listGallery, remove: deleteGalleryItem }}
     />

@@ -4,6 +4,7 @@ import { loadBodyChecks, loadWeightGoal, loadWorkouts } from "@/lib/body-store";
 import { JOB_COLUMNS } from "@/lib/claude-jobs";
 import { MONEY_COLUMNS, type MoneySnapshot } from "@/lib/money";
 import { loadGoals, loadTasks } from "@/lib/task-store";
+import { loadTheme } from "@/lib/theme-store";
 import { loadTrackers } from "@/lib/tracker-store";
 import { addDays, todayISO } from "@/lib/trackers";
 import type { DashboardData } from "@/modules/types";
@@ -42,7 +43,7 @@ export async function loadEntries(supabase: Supabase, from: string, to: string, 
 export async function loadDashboardData(supabase: Supabase): Promise<DashboardData | null> {
   const today = todayISO();
   const historyStart = addDays(today, -CHART_DAYS);
-  const [trackers, seasonResult, workouts, bodyChecks, weightGoal, tasks, goals, recent, moneyResult, jobsResult, planResult] = await Promise.all([
+  const [trackers, seasonResult, workouts, bodyChecks, weightGoal, tasks, goals, recent, moneyResult, jobsResult, planResult, theme] = await Promise.all([
     loadTrackers(supabase),
     supabase.from("seasons").select("name, start_date, length_days, targets").eq("is_active", true).maybeSingle<SeasonRow>(),
     loadWorkouts(supabase, { since: addDays(today, -BODY_WEEKS * 7) }),
@@ -58,6 +59,8 @@ export async function loadDashboardData(supabase: Supabase): Promise<DashboardDa
     supabase.from("claude_jobs").select(JOB_COLUMNS).order("next_run", { ascending: true, nullsFirst: false }).order("name"),
     // Not fatal: no plan sent yet = the Today tile says so.
     supabase.from("day_plans").select("plan").maybeSingle<{ plan: DayPlan }>(),
+    // Not fatal: no saved theme = Candy.
+    loadTheme(supabase),
   ]);
   if (!trackers || seasonResult.error || !workouts || !bodyChecks || weightGoal === undefined || !tasks || !goals || !recent) return null;
   const season = seasonResult.data;
@@ -84,6 +87,7 @@ export async function loadDashboardData(supabase: Supabase): Promise<DashboardDa
     goals: goals.goals,
     goalTracked: goals.tracked,
     money: moneyResult.error ? null : moneyResult.data,
+    theme,
     claudeJobs: (jobsResult.data ?? []).map((j) => ({ name: j.name, schedule: j.schedule, status: j.status, lastRun: j.last_run, nextRun: j.next_run })),
   });
 }

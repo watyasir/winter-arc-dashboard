@@ -1,23 +1,40 @@
+"use client";
+
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { useTilt } from "./useTilt";
 
-const fills = {
+/** Tile fills (v9): white, the dark hero, or one colour per Overview tile. Ink text on all but the hero. */
+const tones = {
   card: "bg-card text-ink",
-  pop: "bg-pop text-ink",
-  accent: "bg-accent-soft text-ink",
+  hero: "bg-hero text-white",
+  tasks: "bg-t-tasks text-ink",
+  money: "bg-t-money text-ink",
+  // Saturated: secondary text is ink here too (scripts/contrast.mjs).
+  check: "bg-t-check text-ink [--th-soft:var(--th-ink)]",
+  today: "bg-t-today text-ink",
+  weight: "bg-t-weight text-ink",
+  fund: "bg-t-fund text-ink",
+  diet: "bg-t-diet text-ink",
+  study: "bg-t-study text-ink",
+  claude: "bg-t-claude text-ink",
 };
 
+export type TileTone = keyof typeof tones;
+
 /**
- * The one tile every page uses (Soft bento): 20px corners, 1px border, soft shadow,
- * 16px padding on the phone and 20px from 640px up. The heading is the tile's one link
- * to its full page. `area` places it in the Overview bento grid.
+ * The one tile every page uses (v9 Playground): 28px corners (24 on the phone), soft shadow,
+ * 16px padding on the phone and 20px from 640px up. The heading is a mono label and the tile's
+ * one link to its full page. `area` places it in the Overview bento; `tilt` (Overview) leans it
+ * toward the mouse.
  */
 export function Tile({
   title,
   href,
   aside,
-  fill = "card",
+  tone = "card",
   area,
+  tilt = false,
   className = "",
   children,
 }: {
@@ -26,19 +43,22 @@ export function Tile({
   href?: string;
   /** Right of the heading: a count, a chip. */
   aside?: ReactNode;
-  fill?: keyof typeof fills;
+  tone?: TileTone;
   area?: string;
+  tilt?: boolean;
   className?: string;
   children: ReactNode;
 }) {
+  const tiltProps = useTilt(tilt);
   return (
     <section
       aria-label={title}
       style={area ? { gridArea: area } : undefined}
-      className={`flex min-w-0 flex-col gap-3 overflow-hidden rounded-tile border border-line p-4 shadow-tile sm:p-5 ${fills[fill]} ${className}`}
+      {...tiltProps}
+      className={`relative flex min-w-0 flex-col gap-3 overflow-hidden rounded-tile p-4 shadow-tile sm:p-5 ${tilt ? "tilt" : ""} ${tones[tone]} ${className}`}
     >
       <div className="flex min-h-6 items-center justify-between gap-2">
-        <h2 className="m-0 text-sm font-semibold">
+        <h2 className={`label m-0 ${tone === "hero" ? "text-hero-soft" : "text-soft"}`}>
           {href ? (
             <Link href={href} prefetch className="-m-2 inline-flex min-h-11 items-center gap-1 rounded-item p-2 text-inherit no-underline hover:underline">
               {title}
@@ -55,10 +75,10 @@ export function Tile({
   );
 }
 
-/** A big number with its unit: "58.4 kg". Numbers are JetBrains Mono. */
+/** A big number with its unit: "58.4 kg", in the display font. */
 export function BigNumber({ value, unit, size = "lg" }: { value: string; unit?: string; size?: "md" | "lg" }) {
   return (
-    <span className={`font-mono leading-none font-bold tracking-[-0.02em] ${size === "lg" ? "text-[32px]" : "text-2xl"}`}>
+    <span className={`display leading-none ${size === "lg" ? "text-[36px]" : "text-[28px]"}`}>
       {value}
       {unit && <span className="ml-1 font-sans text-sm font-semibold tracking-normal text-soft">{unit}</span>}
     </span>

@@ -1,8 +1,8 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
 import { EmptyNote } from "@/components/EmptyNote";
 import { Tile } from "@/components/Tile";
+import { timeAgo, useNow } from "@/components/useNow";
 import { useDashboard } from "@/components/dashboard/DashboardContext";
 import type { JobStatus } from "@/lib/claude-jobs";
 
@@ -14,25 +14,6 @@ const STATUS: Record<JobStatus, { dot: string; label: string }> = {
   scheduled: { dot: "bg-line-strong", label: "Scheduled" },
   paused: { dot: "bg-line-strong", label: "Paused" },
 };
-
-/*
-  The current minute, read in the browser only: pages are pre-rendered without a clock,
-  so relative times fill in once the page is open (and stay the same within a minute).
-*/
-const minuteNow = () => Math.floor(Date.now() / 60_000) * 60_000;
-const noSubscribe = () => () => {};
-const useNow = () => useSyncExternalStore(noSubscribe, minuteNow, () => null);
-
-/** "just now", "12 min ago", "2h ago", "3 days ago"; "in 2h" for the future. */
-function timeAgo(iso: string | null, now: number): string {
-  if (!iso) return "never";
-  const mins = Math.round((now - Date.parse(iso)) / 60_000);
-  const future = mins < 0;
-  const m = Math.abs(mins);
-  const text = m < 1 ? "just now" : m < 60 ? `${m} min` : m < 48 * 60 ? `${Math.round(m / 60)}h` : `${Math.round(m / 1440)} days`;
-  if (text === "just now") return text;
-  return future ? `in ${text}` : `${text} ago`;
-}
 
 /**
  * Claude's scheduled tasks, beside the Board and kept apart from Yasir's tasks: own tile,
