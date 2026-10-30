@@ -17,6 +17,7 @@ export function useConfetti() {
     if (reducedMotion()) return;
     const style = getComputedStyle(document.documentElement);
     const colours = TOKENS.map((t) => style.getPropertyValue(t).trim()).filter(Boolean);
+    if (colours.length === 0) return;
     const canvas = document.createElement("canvas");
     canvas.setAttribute("aria-hidden", "true");
     canvas.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:60";
@@ -40,7 +41,7 @@ export function useConfetti() {
         size: 5 + Math.random() * 5,
         spin: Math.random() * Math.PI,
         vspin: (Math.random() - 0.5) * 0.3,
-        colour: colours[Math.floor(Math.random() * colours.length)] || "#999",
+        colour: colours[Math.floor(Math.random() * colours.length)],
       };
     });
 

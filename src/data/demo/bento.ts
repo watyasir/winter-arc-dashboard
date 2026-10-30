@@ -27,7 +27,7 @@ export const demoBento: Pick<
   hero: { day: 23, length: 90, startsIn: 0, daysLeft: 67, checkIns: 21, finishLabel: "24 Dec", start: SEASON_START, days, streak: 7, todayIndex: 22 },
   checkedIn: true,
   // 18 Oct 2026 is a Sunday.
-  plan: { shift: "Weekend off", now: "Rest and review till 9:00 PM", shiftStart: null, shiftEnd: null },
+  plan: { shift: "Weekend off", now: "Rest and review till 9:00 PM", shiftStart: 810, shiftEnd: 1350 },
   water: { litres: 1.5, target: 3, step: 0.5 },
   checkInFields: { filled: 9, total: 16, water: true },
   weight: {

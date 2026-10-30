@@ -41,7 +41,7 @@ export function ArcStreaksTile() {
   const { arc } = useDashboard().data;
   if (!arc) return null;
   return (
-    <Tile title="Streaks" aside={<span className="text-xs text-soft">days in a row</span>}>
+    <Tile title="Streaks" tone="tasks" aside={<span className="text-xs text-soft">days in a row</span>}>
       {arc.streaks.length === 0 && <EmptyNote>No targets yet, so no streaks. Switch trackers on for Winter Arc in settings.</EmptyNote>}
       <dl className="m-0 grid grid-cols-2 gap-2.5">
         {arc.streaks.map((s) => (

@@ -46,13 +46,13 @@ export function Reminders() {
             const chip = gateChip(t.due!, data.todayISO);
             return (
               // Phone: one toast at a time (the next shows once it's answered or hidden), with the count.
-              <li key={t.id} className={`flex items-center rounded-item border border-line bg-card shadow-tile ${i > 0 ? "max-[560px]:hidden" : ""}`}>
+              <li key={t.id} className={`flex items-center rounded-tile bg-card shadow-lift ${i > 0 ? "max-[560px]:hidden" : ""}`}>
                 <button
                   type="button"
                   onClick={() => setOpenId(t.id)}
-                  className="press flex min-h-14 min-w-0 flex-1 cursor-pointer flex-col items-start justify-center gap-0.5 rounded-item border-0 bg-transparent px-4 py-2 text-left"
+                  className="press flex min-h-14 min-w-0 flex-1 cursor-pointer flex-col items-start justify-center gap-1 rounded-tile border-0 bg-transparent px-4 py-2.5 text-left"
                 >
-                  <span className="flex w-full justify-between gap-2 text-xs font-semibold">
+                  <span className="label flex w-full justify-between gap-2">
                     <span className={chipText[chip.tone]}>{chip.label}</span>
                     {i === 0 && shown.length > 1 && <span className="text-soft min-[561px]:hidden">1 of {shown.length}</span>}
                   </span>

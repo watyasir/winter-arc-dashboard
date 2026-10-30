@@ -54,7 +54,7 @@ export function CheckInTile() {
       tone="check"
       area="check"
       tilt
-      className="gap-2 sm:p-4!"
+      className="gap-1.5 sm:p-3!"
       aside={water && <span className="label">{litres(filled)} / {litres(cups)} L</span>}
     >
       {water ? (
@@ -83,7 +83,7 @@ export function CheckInTile() {
       <Link
         href={data.logHref}
         prefetch
-        className="press mt-auto flex min-h-11 items-center justify-center rounded-full bg-ink px-3 text-sm font-bold text-white no-underline sm:min-h-10"
+        className="press mt-auto flex min-h-11 items-center justify-center rounded-full bg-ink px-3 text-sm font-bold text-white no-underline"
       >
         {checkedIn ? "✓ Logged today" : "Finish check-in"}
       </Link>
@@ -111,7 +111,7 @@ export function TodayTile() {
   const length = 2 * Math.PI * r;
   return (
     <Tile title="Today" tone="today" area="today" tilt className="gap-2 sm:p-4!">
-      <div className="flex min-h-0 flex-1 items-center gap-3">
+      <div className="flex min-h-0 flex-1 items-center gap-3 max-[560px]:flex-col max-[560px]:items-start max-[560px]:gap-2">
         <div className="relative size-[72px] shrink-0">
           <svg viewBox="0 0 64 64" className="size-full -rotate-90" role="img" aria-label={`Today's score ${score} out of 100: ${scoreMessage(score)}`}>
             <circle cx="32" cy="32" r={r} fill="none" strokeWidth={7} className="stroke-white/70" />

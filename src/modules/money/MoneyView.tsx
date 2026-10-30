@@ -29,7 +29,7 @@ export function MoneyView() {
   }
   return (
     <div className="grid items-start gap-4 min-[861px]:grid-cols-2">
-      <Tile title={`Wallet · ${money.month}`} aside={<span className="text-xs text-soft">Updated {money.updated}</span>}>
+      <Tile title={`Wallet · ${money.month}`} tone="money" aside={<span className="text-xs text-soft">Updated {money.updated}</span>}>
         <WalletStack accounts={money.accounts} spendable={money.spendable} savedThisMonth={money.income - money.spent} />
       </Tile>
       <Tile title="This month">

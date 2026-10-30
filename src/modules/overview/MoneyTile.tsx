@@ -46,13 +46,13 @@ export function MoneyTile() {
         className="relative min-h-[160px] w-full flex-1 cursor-pointer rounded-item border-0 bg-transparent p-0 text-left text-ink"
       >
         {cards.map((c, i) => {
-          // i = 0 is the front card. Stacked: 8px apart. Fanned: a full card height apart, slightly turned.
+          // The last card is the front one. Stacked: 22px apart (each name shows). Fanned: 48px apart, slightly turned.
           const back = cards.length - 1 - i;
-          const y = fanned ? -back * 40 : -back * 8;
+          const y = fanned ? -back * 48 : -back * 22;
           return (
             <span
               key={c.name}
-              style={{ transform: `translateY(${y}px) rotate(${fanned ? (back - 1) * -2 : 0}deg) scale(${1 - back * (fanned ? 0.02 : 0.05)})`, zIndex: 3 - back }}
+              style={{ transform: `translateY(${y}px) rotate(${fanned ? (back - 1) * -2 : 0}deg) scale(${1 - back * (fanned ? 0.02 : 0.04)})`, zIndex: 3 - back }}
               className={`absolute inset-x-0 bottom-0 flex h-[72px] flex-col justify-between rounded-item px-3.5 py-2.5 shadow-tile transition-transform duration-300 ease-out ${CARD[back]}`}
             >
               <span className="label text-soft">{c.name}</span>

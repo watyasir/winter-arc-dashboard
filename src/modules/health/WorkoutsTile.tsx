@@ -14,7 +14,7 @@ export function WorkoutsTile() {
   const pct = weekTarget ? Math.min(100, Math.round((weekCount / weekTarget) * 100)) : 0;
 
   return (
-    <Tile title="Workouts" aside={<span className="text-xs text-soft">This week</span>}>
+    <Tile title="Workouts" tone="diet" aside={<span className="text-xs text-soft">This week</span>}>
       <div className="flex flex-col gap-1.5">
         <span className="flex items-baseline gap-1">
           <span className="font-mono text-2xl display">{weekCount}</span>

@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useId, useState, useTransition, type ReactNode } from "react";
 import { Button } from "@/components/Button";
-import { formatSet, groupSets, kg, parseNumber, workoutProblem, workoutSummary, type SaveResult, type Workout, type WorkoutInput } from "@/lib/body";
+import { groupSets, kg, parseNumber, workoutProblem, workoutSummary, type SaveResult, type Workout, type WorkoutInput } from "@/lib/body";
 import { formatDayLabel } from "@/lib/trackers";
+import { RecentWorkouts } from "./RecentWorkouts";
 import { SheetHeader, StatusMessages, fieldClass, type Status } from "./Sheet";
 
 /*
@@ -253,45 +254,7 @@ export function WorkoutForm({
         ))}
       </datalist>
 
-      {recent.length > 0 && (
-        <section aria-labelledby={`${ids}-recent`} className="flex flex-col gap-1.5">
-          <h2 id={`${ids}-recent`} className="m-0 ml-4 text-[13px] font-medium text-soft">
-            Recent workouts
-          </h2>
-          <ul className="m-0 list-none rounded-[14px] border border-line bg-card px-4 py-0 [&>li:first-child]:border-t-0">
-            {recent.map((w) => (
-              <li key={w.id} className="flex items-center justify-between gap-3 border-t border-line py-2.5">
-                <details className="min-w-0 flex-1">
-                  <summary className="cursor-pointer list-none">
-                    <span className="block truncate text-[15px] font-semibold">{w.name}</span>
-                    <span className="text-[13px] text-soft">
-                      {formatDayLabel(w.date)} · {workoutSummary(w.sets)}
-                    </span>
-                  </summary>
-                  <ul className="m-0 mt-1.5 list-none p-0 text-[13px] text-soft">
-                    {groupSets(w.sets).map((g) => (
-                      <li key={g.exercise}>
-                        <span className="text-ink">{g.exercise}</span> · {g.sets.map(formatSet).join(", ")}
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-                {onDelete && (
-                  <button
-                    type="button"
-                    disabled={deleting}
-                    onClick={() => remove(w)}
-                    aria-label={`Delete ${w.name} from ${formatDayLabel(w.date)}`}
-                    className="min-h-11 shrink-0 cursor-pointer self-start rounded-full border-0 bg-transparent px-3 text-[15px] text-danger hover:bg-fill"
-                  >
-                    Delete
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <RecentWorkouts recent={recent} deleting={deleting} onDelete={onDelete ? remove : undefined} />
 
       <Link href={cancelHref} className="flex min-h-11 items-center self-center text-[15px]">
         Back to dashboard

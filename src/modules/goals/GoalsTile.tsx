@@ -9,7 +9,7 @@ import { useDashboard } from "@/components/dashboard/DashboardContext";
 export function GoalsTile() {
   const { goals, goalsHref } = useDashboard().data;
   return (
-    <Tile title="Goals" href={goalsHref}>
+    <Tile title="Goals" href={goalsHref} tone="fund">
       {goals.length === 0 && <EmptyNote>No goals yet. Add one with a target and a date, and its progress shows here.</EmptyNote>}
       {goals.map((g, i) => (
         <div key={`${i}-${g.name}`} className="flex flex-col gap-[5px]">

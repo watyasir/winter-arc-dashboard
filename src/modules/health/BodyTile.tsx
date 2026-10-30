@@ -11,7 +11,7 @@ import { kg } from "@/lib/body";
 export function BodyTile() {
   const { bodyCheck, bodyHref, weight } = useDashboard().data;
   return (
-    <Tile title="Body check" aside={bodyCheck.due && bodyCheck.lastLabel ? <Chip tone="warn">Due</Chip> : undefined}>
+    <Tile title="Body check" tone="fund" aside={bodyCheck.due && bodyCheck.lastLabel ? <Chip tone="warn">Due</Chip> : undefined}>
       {bodyCheck.measures.length === 0 ? (
         <EmptyNote>No measurements yet. Do the weekly body check and waist, chest and arms show here.</EmptyNote>
       ) : (

@@ -74,6 +74,7 @@ export function MealsTile() {
               <button
                 type="button"
                 onClick={() => tap(i)}
+                aria-pressed={m.status === "Planned"}
                 aria-label={`${m.name}: ${m.status ?? "not logged"}. Tap to mark ${m.status === "Planned" ? "skipped" : "as planned"}`}
                 className={`press min-h-7 cursor-pointer rounded-full border-0 px-2.5 text-xs font-semibold pointer-coarse:min-h-11 ${m.status ? CHIP[m.status] : "bg-white/70 text-ink"}`}
               >
@@ -125,16 +126,16 @@ export function ClaudeTile() {
   const order = { running: 0, failed: 1, ok: 2, scheduled: 3, paused: 4 };
   const jobs = [...data.claudeJobs].sort((a, b) => order[a.status] - order[b.status]).slice(0, 3);
   return (
-    <Tile title="Claude is on it" href={viewHref(data.basePath, "board")} tone="claude" area="claude" tilt aside={<span aria-hidden="true" className="size-2.5 rounded-full bg-claude" />}>
+    <Tile title="Claude's jobs" href={viewHref(data.basePath, "board")} tone="claude" area="claude" tilt aside={<span aria-hidden="true" className="size-2.5 rounded-full bg-claude" />}>
       {jobs.length === 0 ? (
         <EmptyNote>No jobs reported yet.</EmptyNote>
       ) : (
         <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
           {jobs.map((j) => (
-            <li key={j.name} className="flex min-w-0 items-center gap-2 text-xs">
+            <li key={j.name} className="flex min-w-0 flex-wrap items-center gap-x-2 text-xs">
               <span aria-hidden="true" className={`size-2 shrink-0 rounded-full ${j.status === "running" ? "bg-ok" : j.status === "failed" ? "bg-danger" : "bg-line-strong"}`} />
               <span className="min-w-0 flex-1 truncate font-semibold">{j.name}</span>
-              <span className={`shrink-0 ${j.status === "failed" ? "font-semibold text-danger" : "text-soft"}`}>
+              <span className={`shrink-0 max-[560px]:w-full max-[560px]:pl-4 ${j.status === "failed" ? "font-semibold text-danger" : "text-soft"}`}>
                 {j.status === "running" ? "Running" : j.status === "failed" ? "Failed" : j.lastRun && now != null ? timeAgo(j.lastRun, now) : j.schedule || "Idle"}
               </span>
             </li>

@@ -20,13 +20,14 @@ function greeting(minutes: number) {
  * and a live clock with the date on the right (hidden on phones).
  */
 export function OverviewHeader() {
-  const { plan } = useDashboard().data;
+  const { plan, todayISO } = useDashboard().data;
   const now = useNow(1000);
   const ist = now == null ? null : istParts(now);
 
   let line: string | null = null;
   if (ist) {
-    const weekend = ["sat", "sun"].includes(dayKeyOf(ist.iso));
+    // The dashboard's day (today in India; fixed on the demo), so the line agrees with the Today tile.
+    const weekend = ["sat", "sun"].includes(dayKeyOf(todayISO));
     if (weekend) line = "Weekend off.";
     else if (plan?.shiftStart != null && plan.shiftEnd != null) {
       if (ist.minutes < plan.shiftStart) line = `Shift at ${clockLabel(plan.shiftStart)}.`;
