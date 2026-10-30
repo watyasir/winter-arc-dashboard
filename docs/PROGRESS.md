@@ -288,3 +288,11 @@ Baseline before changes: build, lint, tsc, knip all clean.
 3. **Not done here, and why:** no signed-in tests against real data (this session can't sign in or reach Supabase), so water cups, meal chips, task tick + Undo and theme saving are only tested on /demo.
 4. **Mac session must:** (a) run `supabase/migrations/20261031000001_user_prefs.sql` in the Supabase SQL editor; (b) signed in, tap a water cup, a meal chip, tick a task and Undo it, then put each value back; (c) switch the theme on the laptop and check it on the phone.
 5. **iPhone:** open the home-screen app: Overview fits with no sideways scroll, tab bar works, one reminder toast at a time, water cups and meal chips are easy to tap, the theme you picked shows with no flash of Candy.
+
+### Mac session, live checks (30 Oct 2026, afternoon)
+- [x] `…_user_prefs.sql` run in the Supabase SQL editor by Claude: success (row-level security on, 1 policy)
+- [x] Vercel deploy of 759b238 green; live Overview shows the shift as 1:30–10:30 PM and "Shift at 1:30 PM." in the header
+- [x] Signed in on yasiros.vercel.app (Chrome, 1440): water cups 4 → 3 → 2 → 1 → 0 each saved, first save showed "Day 5 logged. Streak 1."; meal chip Pre-gym → Planned → Skipped, both survive a reload; task tick → "Nice. 31 left." + Undo, task back to To do after a reload (done_at cleared); theme Matcha saved, came back from the database with the cookie cleared, then set back to Candy. No error toasts, no sideways scroll
+- [x] Put back: today's test entry and the theme row deleted (0 entries today, 0 user_prefs rows, as before); this browser's "celebrated today" flag cleared
+- [ ] One oddity, not reproduced: the very first water test showed 3 cups after a reload when 2 were saved; slow step-by-step taps were right every time. Watch for it on the phone
+- [ ] iPhone check (Yasir): home-screen app, Overview fits, cups and meal chips easy to tap, pick a theme and check it shows on the laptop too
