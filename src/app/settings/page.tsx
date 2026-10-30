@@ -12,7 +12,7 @@ export const metadata: Metadata = { title: "Settings · Yasir OS" };
 
 export default function SettingsPage() {
   return (
-    <Suspense fallback={<p className="p-6 text-center text-[15px] text-sub">Loading settings…</p>}>
+    <Suspense fallback={<p className="p-6 text-center text-[15px] text-soft">Loading settings…</p>}>
       <Settings />
     </Suspense>
   );

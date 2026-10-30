@@ -75,14 +75,14 @@ export function GoalsForm({
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col gap-[18px] px-4 pt-6 pb-8">
       <header className="flex items-center justify-between">
-        <h1 className="m-0 text-[34px] leading-[1.1] font-extrabold tracking-[-0.02em]">Goals</h1>
-        <Link href={backHref} prefetch className="flex min-h-11 items-center text-[17px] text-blue-text no-underline hover:text-blue-hover">
+        <h1 className="m-0 text-[34px] leading-[1.1] display tracking-[-0.02em]">Goals</h1>
+        <Link href={backHref} prefetch className="flex min-h-11 items-center text-[17px] text-accent no-underline hover:text-accent-strong">
           Done
         </Link>
       </header>
 
       <Group title="Your goals">
-        {rows.length === 0 && <p className="m-0 py-3.5 text-[15px] text-sub">No goals yet. Add your first one below.</p>}
+        {rows.length === 0 && <p className="m-0 py-3.5 text-[15px] text-soft">No goals yet. Add your first one below.</p>}
         {rows.map((r) => (
           <GoalItem key={r.goal.id} row={r} actions={actions} />
         ))}
@@ -113,7 +113,7 @@ export function GoalsForm({
           <span className="flex items-center gap-2">
             <input inputMode="decimal" value={target} placeholder="–" onChange={(e) => setTarget(e.target.value.replace(/[^\d.,]/g, ""))} className={`${fieldClass} w-24 text-right`} />
             {linked ? (
-              <span className="w-[72px] text-[15px] text-sub">{unitFor(linked)}</span>
+              <span className="w-[72px] text-[15px] text-soft">{unitFor(linked)}</span>
             ) : (
               <input aria-label="Unit" value={unit} maxLength={12} placeholder="unit" onChange={(e) => setUnit(e.target.value)} className={`${fieldClass} w-[72px] px-3`} />
             )}
@@ -124,7 +124,7 @@ export function GoalsForm({
         </Field>
       </Group>
       {linked && (
-        <p className="m-0 mx-4 -mt-3 text-[13px] text-sub">
+        <p className="m-0 mx-4 -mt-3 text-[13px] text-soft">
           Counts your {linked.name.toLowerCase()} {linked.type === "checkbox" ? "days" : "total"} from today on.
         </p>
       )}
@@ -160,11 +160,11 @@ function GoalItem({ row, actions }: { row: GoalRow; actions: GoalActions }) {
     <div className="flex flex-col gap-1.5 py-3">
       <div className="flex items-baseline justify-between gap-2">
         <span className="text-[17px] font-semibold">{goal.title}</span>
-        <span className="text-right text-[13px] text-sub">{row.progress}</span>
+        <span className="text-right text-[13px] text-soft">{row.progress}</span>
       </div>
       <div className="flex items-center gap-2">
         {row.trackerName ? (
-          <span className="flex-1 text-[13px] text-sub">From {row.trackerName}, updates itself</span>
+          <span className="flex-1 text-[13px] text-soft">From {row.trackerName}, updates itself</span>
         ) : (
           <>
             <input
@@ -174,7 +174,7 @@ function GoalItem({ row, actions }: { row: GoalRow; actions: GoalActions }) {
               onChange={(e) => setNow(e.target.value.replace(/[^\d.,]/g, ""))}
               className={`${fieldClass} w-24 text-right`}
             />
-            <span className="text-[15px] text-sub">{goal.unit}</span>
+            <span className="text-[15px] text-soft">{goal.unit}</span>
             <Button onClick={save} disabled={busy} className="ml-auto">
               Update
             </Button>

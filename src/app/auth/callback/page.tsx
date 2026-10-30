@@ -29,7 +29,7 @@ export default function AuthCallbackPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center p-4">
-      <p role="status" className="m-0 text-[15px] text-sub">
+      <p role="status" className="m-0 text-[15px] text-soft">
         Signing you in…
       </p>
     </main>

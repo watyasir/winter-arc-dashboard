@@ -62,19 +62,19 @@ export function CheckIn({
     <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col gap-[18px] px-4 pt-2 pb-8">
       <div aria-hidden="true" className="h-[5px] w-9 self-center rounded-full bg-line-strong" />
       <header className="grid grid-cols-[1fr_auto_1fr] items-center">
-        <Link href={cancelHref} prefetch className="flex min-h-11 items-center text-[17px] text-blue-text no-underline hover:text-blue-hover">
+        <Link href={cancelHref} prefetch className="flex min-h-11 items-center text-[17px] text-accent no-underline hover:text-accent-strong">
           Cancel
         </Link>
         <div className="flex flex-col items-center">
           <h1 className="m-0 text-[17px] font-semibold">Check-in</h1>
-          <span className="text-xs text-sub">{dayLabel}</span>
+          <span className="text-xs text-soft">{dayLabel}</span>
         </div>
         <button
           type="button"
           onClick={save}
           disabled={saving}
           className={`min-h-11 cursor-pointer justify-self-end rounded-full border-0 px-4 text-[17px] font-semibold transition-colors motion-reduce:transition-none ${
-            saved ? "bg-ok text-white" : "bg-peach text-ink hover:bg-peach-strong"
+            saved ? "bg-ok text-white" : "bg-pop text-ink hover:bg-pop-strong"
           }`}
         >
           {saving ? "Saving…" : saved ? "Saved ✓" : "Done"}
@@ -90,10 +90,10 @@ export function CheckIn({
         </p>
       )}
 
-      {notice && <p className="m-0 rounded-2xl bg-fill-strong px-4 py-3 text-[15px] text-sub">{notice}</p>}
+      {notice && <p className="m-0 rounded-2xl bg-fill-strong px-4 py-3 text-[15px] text-soft">{notice}</p>}
 
       {trackers.length === 0 && (
-        <p className="m-0 text-[15px] text-sub">No trackers yet. They&apos;ll appear here once they&apos;re set up.</p>
+        <p className="m-0 text-[15px] text-soft">No trackers yet. They&apos;ll appear here once they&apos;re set up.</p>
       )}
 
       {areas.map((area) => {
@@ -104,7 +104,7 @@ export function CheckIn({
         const groups = [...new Set(inArea.map((t) => t.group_name).filter((g) => g != null))];
         return (
           <section key={area} aria-labelledby={`area-${area}`} className="flex flex-col gap-1.5">
-            <h2 id={`area-${area}`} className="m-0 ml-4 text-[13px] font-medium text-sub">
+            <h2 id={`area-${area}`} className="m-0 ml-4 text-[13px] font-medium text-soft">
               {area}
             </h2>
             {listRows.length > 0 && (
@@ -155,7 +155,7 @@ function NumberRow({
         <div className="text-[17px]">
           {t.step ? t.name : <label htmlFor={`n-${t.id}`}>{t.name}</label>}
         </div>
-        <div className="text-[13px] text-sub">
+        <div className="text-[13px] text-soft">
           {/* A typed-in number is already visible in its box, so only the goal goes here. */}
           {t.step ? `${formatValue(t, value ?? 0)}${goalText(t)}` : goalText(t).replace(/^ · g/, "G")}
         </div>
@@ -225,7 +225,7 @@ function TimeRow({
           {t.name}
         </label>
         {/* The time is in its box; only say when it's missing. */}
-        {value === undefined && <div className="text-[13px] text-sub">Not set</div>}
+        {value === undefined && <div className="text-[13px] text-soft">Not set</div>}
       </div>
       <input
         id={`t-${t.id}`}
@@ -263,7 +263,7 @@ function GroupCard({
     <div role="group" aria-labelledby={`g-${name}`} className="flex flex-col gap-1.5">
       <span id={`g-${name}`} className="ml-4 text-[15px] font-semibold">
         {name}
-        {unit && <span className="font-medium text-sub"> · {unit}</span>}
+        {unit && <span className="font-medium text-soft"> · {unit}</span>}
       </span>
       <div className="rounded-[14px] border border-line bg-card px-4 [&>*:first-child]:border-t-0">
         {rest.map((t) =>
@@ -291,7 +291,7 @@ function GroupCard({
           <div className={`grid grid-cols-2 gap-x-3 gap-y-2 py-3 ${rest.length ? "border-t border-line" : ""}`}>
             {typed.map((t) => (
               <label key={t.id} className="flex flex-col gap-1">
-                <span className="ml-1 text-[13px] text-sub">{t.name}</span>
+                <span className="ml-1 text-[13px] text-soft">{t.name}</span>
                 <NumberInput aria-label={t.name} value={values[t.id]} onChange={(v) => set(t.id, v)} className="w-full" />
               </label>
             ))}

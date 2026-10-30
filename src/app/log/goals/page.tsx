@@ -12,7 +12,7 @@ export const metadata: Metadata = { title: "Goals · Yasir OS" };
 
 export default function GoalsPage() {
   return (
-    <Suspense fallback={<p className="p-6 text-center text-[15px] text-sub">Loading your goals…</p>}>
+    <Suspense fallback={<p className="p-6 text-center text-[15px] text-soft">Loading your goals…</p>}>
       <Goals />
     </Suspense>
   );

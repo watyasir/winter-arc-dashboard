@@ -14,15 +14,15 @@ export function HeroTile({ onPage = false }: { onPage?: boolean }) {
   const href = onPage ? undefined : viewHref(data.basePath, "arc");
   if (!hero) {
     return (
-      <Tile title="Winter Arc" href={href} fill="peach" area={onPage ? undefined : "hero"}>
+      <Tile title="Winter Arc" href={href} fill="pop" area={onPage ? undefined : "hero"}>
         <p className="m-0 text-sm">Set the start date in Settings to begin the 90 days.</p>
       </Tile>
     );
   }
   const started = hero.day >= 1;
   return (
-    <Tile title="Winter Arc" href={href} fill="peach" area={onPage ? undefined : "hero"} className={onPage ? "min-h-[300px]" : "min-h-[300px] min-[561px]:min-h-0"}>
-      <p className="m-0 text-[32px] leading-none font-extrabold tracking-[-0.02em]">
+    <Tile title="Winter Arc" href={href} fill="pop" area={onPage ? undefined : "hero"} className={onPage ? "min-h-[300px]" : "min-h-[300px] min-[561px]:min-h-0"}>
+      <p className="m-0 text-[32px] leading-none display tracking-[-0.02em]">
         {started ? (
           <>
             Day <span className="font-mono">{hero.day}</span> <span className="text-xl font-semibold">of {hero.length}</span>

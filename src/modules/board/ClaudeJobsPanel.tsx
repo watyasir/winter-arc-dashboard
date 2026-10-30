@@ -10,7 +10,7 @@ import type { JobStatus } from "@/lib/claude-jobs";
 const STATUS: Record<JobStatus, { dot: string; label: string }> = {
   ok: { dot: "bg-ok", label: "OK" },
   failed: { dot: "bg-danger", label: "Failed" },
-  running: { dot: "bg-blue-text", label: "Running" },
+  running: { dot: "bg-accent", label: "Running" },
   scheduled: { dot: "bg-line-strong", label: "Scheduled" },
   paused: { dot: "bg-line-strong", label: "Paused" },
 };
@@ -43,7 +43,7 @@ export function ClaudeJobsPanel() {
   const now = useNow();
   return (
     <Tile title="Claude's scheduled tasks" aside={<span aria-hidden="true" className="size-2.5 rounded-full bg-claude" />} className="self-start">
-      <p className="m-0 -mt-1 text-xs text-sub">Run by Claude on a timer. Not on your Board.</p>
+      <p className="m-0 -mt-1 text-xs text-soft">Run by Claude on a timer. Not on your Board.</p>
       {jobs.length === 0 && <EmptyNote>None reported yet. Claude adds them through the API (POST /api/claude-jobs).</EmptyNote>}
       <ul className="m-0 flex list-none flex-col gap-2 p-0">
         {jobs.map((j) => (
@@ -55,9 +55,9 @@ export function ClaudeJobsPanel() {
                 {STATUS[j.status].label}
               </span>
             </span>
-            {j.schedule && <span className="text-xs text-sub">{j.schedule}</span>}
+            {j.schedule && <span className="text-xs text-soft">{j.schedule}</span>}
             {now != null && (
-              <span className="flex flex-wrap gap-x-3 font-mono text-xs text-sub">
+              <span className="flex flex-wrap gap-x-3 font-mono text-xs text-soft">
                 <span>Last run {timeAgo(j.lastRun, now)}</span>
                 {j.nextRun && <span>Next {timeAgo(j.nextRun, now)}</span>}
               </span>

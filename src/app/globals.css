@@ -1,38 +1,113 @@
 @import "tailwindcss";
 
 /*
-  Design tokens: "Soft bento" (v8), see docs/DESIGN.md. Light theme only, no dark mode.
-  Every colour, font, radius and shadow lives here. Components use the classes these create
-  (bg-card, text-sub, border-line, bg-peach, ...) and never a raw hex value.
+  Design tokens: v9 "Playground", see docs/DESIGN.md. Light only, three themes (Candy, Matcha,
+  Sunset). Each theme sets raw --th-* values on <html data-theme="…"> (or any element, for the
+  theme previews in /settings); the `@theme inline` block maps them to Tailwind colours, so components use bg-page, text-soft, bg-t-money, ... and never a hex.
+  scripts/contrast.mjs reads this file and checks every text/background pair in all 3 themes.
 */
-@theme {
+:root,
+[data-theme="candy"] {
+  --th-bg: #f5f1ea;
+  --th-ink: #17152b;
+  --th-soft: #55516a;
+  --th-hero: #2d2a70;
+  --th-hero-soft: #cfcbff;
+  --th-dot-on: #ffd84d;
+  --th-tasks: #ffe7a3;
+  --th-money: #c8f0da;
+  --th-check: #ff8a66;
+  --th-today: #d3e6ff;
+  --th-weight: #e3d9ff;
+  --th-fund: #ffd5c2;
+  --th-diet: #e2f3b5;
+  --th-study: #ffd3e6;
+  --th-claude: #ffffff;
+  --th-accent: #2d2a70;
+}
+
+[data-theme="matcha"] {
+  --th-bg: #eff2ea;
+  --th-ink: #17221a;
+  --th-soft: #4f5b4a;
+  --th-hero: #1f3d2b;
+  --th-hero-soft: #c3e5cb;
+  --th-dot-on: #e6f07a;
+  --th-tasks: #f3e8c3;
+  --th-money: #d5eacb;
+  --th-check: #e6f07a;
+  --th-today: #dcebe3;
+  --th-weight: #e7e1d1;
+  --th-fund: #f2dbc2;
+  --th-diet: #cde6b5;
+  --th-study: #e7e1f0;
+  --th-claude: #ffffff;
+  --th-accent: #1f3d2b;
+}
+
+[data-theme="sunset"] {
+  --th-bg: #fbf0ea;
+  --th-ink: #2a1613;
+  --th-soft: #674b44;
+  --th-hero: #8a2d3b;
+  --th-hero-soft: #ffd3cb;
+  --th-dot-on: #ffc857;
+  --th-tasks: #ffe1b5;
+  --th-money: #ffd2c2;
+  --th-check: #ffc857;
+  --th-today: #f9d8e6;
+  --th-weight: #ead7f5;
+  --th-fund: #ffe8d4;
+  --th-diet: #f1e5b5;
+  --th-study: #d8e7ff;
+  --th-claude: #ffffff;
+  --th-accent: #8a2d3b;
+}
+
+@theme inline {
   --color-*: initial;
   --color-white: #ffffff;
   --color-transparent: transparent;
 
   /* Surfaces */
-  --color-surface: #fff5e6; /* the page */
+  --color-page: var(--th-bg);
   --color-card: #ffffff;
-  --color-fill: #fff5e6; /* inputs and inner items on a card */
-  --color-fill-strong: #f8e7cc; /* pressed / selected-off segments, empty cells */
-  --color-line: #f1e3cc; /* 1px card borders and separators */
-  --color-line-strong: #e2cba6; /* handles, input borders */
+  --color-fill: var(--th-bg); /* inputs and inner items on a white card */
+  --color-fill-strong: color-mix(in srgb, var(--th-ink) 9%, var(--th-bg)); /* tracks, selected-off segments */
+  --color-line: color-mix(in srgb, var(--th-ink) 11%, var(--th-bg)); /* 1px borders */
+  --color-line-strong: color-mix(in srgb, var(--th-ink) 24%, var(--th-bg));
 
-  /* Text (all ≥ 4.5:1 on card and surface) */
-  --color-ink: #111827;
-  --color-sub: #5b6474;
-  --color-disabled: #8a93a3; /* disabled controls only, never content */
+  /* Text */
+  --color-ink: var(--th-ink);
+  --color-soft: var(--th-soft);
+  --color-disabled: color-mix(in srgb, var(--th-ink) 45%, #ffffff); /* disabled controls only */
 
-  /* Brand fills: dark text on both */
-  --color-peach: #fad4c0;
-  --color-peach-strong: #f6c1a6; /* hover / pressed peach */
-  --color-blue: #80a1c1;
-  --color-blue-soft: #e3ebf3;
-  /* Blue as text, links and the focus ring */
-  --color-blue-text: #3e5f7f;
-  --color-blue-hover: #2c4660;
+  /* The dark hero tile and the text on it */
+  --color-hero: var(--th-hero);
+  --color-hero-soft: var(--th-hero-soft);
+  --color-dot-on: var(--th-dot-on);
 
-  /* States: text colour + soft fill */
+  /* Tile fills (ink text on all of them) */
+  --color-t-tasks: var(--th-tasks);
+  --color-t-money: var(--th-money);
+  --color-t-check: var(--th-check);
+  --color-t-today: var(--th-today);
+  --color-t-weight: var(--th-weight);
+  --color-t-fund: var(--th-fund);
+  --color-t-diet: var(--th-diet);
+  --color-t-study: var(--th-study);
+  --color-t-claude: var(--th-claude);
+
+  /* Accent: links, focus ring, chart line, the Yasir tag, selected things (white text on it) */
+  --color-accent: var(--th-accent);
+  --color-accent-strong: color-mix(in srgb, var(--th-accent) 80%, #000000);
+  --color-accent-soft: var(--th-hero-soft); /* selected segment, switch on (ink text) */
+  --color-accent-faint: color-mix(in srgb, var(--th-accent) 10%, #ffffff);
+  /* Primary buttons: the check-in colour with ink text */
+  --color-pop: var(--th-check);
+  --color-pop-strong: color-mix(in srgb, var(--th-check) 88%, var(--th-ink));
+
+  /* States: text colour + soft fill (same in every theme) */
   --color-ok: #15803d;
   --color-ok-soft: #dcfce7;
   --color-warn: #b45309;
@@ -40,20 +115,28 @@
   --color-danger: #b91c1c;
   --color-danger-soft: #fee2e2;
 
-  /* Owner tags: Claude (dark text on it), Yasir (white text on it) */
+  /* Owner tags: Claude (ink text on it), Yasir = accent (white text on it) */
   --color-claude: #d97757;
-  --color-yasir: #3e5f7f;
+  --color-yasir: var(--th-accent);
+}
 
-  /* Shape */
-  --radius-tile: 20px;
-  --radius-item: 12px;
-  --shadow-tile: 0 1px 2px rgb(17 24 39 / 0.06), 0 8px 24px -12px rgb(17 24 39 / 0.12);
+@theme {
+  /* Shape: 28px tiles (24px on the phone, below), 16px inner items, pills 999px */
+  --radius-tile: 28px;
+  --radius-item: 16px;
+  --shadow-tile: 0 1px 2px rgb(0 0 0 / 0.04), 0 12px 32px -16px rgb(0 0 0 / 0.2);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.05), 0 22px 40px -18px rgb(0 0 0 / 0.28);
 
-  /* Type: Inter for words, JetBrains Mono for numbers (loaded in src/app/layout.tsx) */
+  /* Type (loaded in src/app/layout.tsx): Bricolage for big numbers and headings, Inter for words,
+     JetBrains Mono for labels */
+  --font-display: var(--font-bricolage), var(--font-inter), system-ui, sans-serif;
   --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", Menlo, monospace;
 
   --animate-indeterminate: indeterminate 1.4s ease-in-out infinite;
+  --animate-pulse-ring: pulse-ring 1.8s ease-out infinite;
+  --animate-flame: flame 1.2s ease-in-out infinite alternate;
+  --animate-toast-in: toast-in 220ms ease-out;
 
   @keyframes indeterminate {
     0% {
@@ -63,19 +146,59 @@
       transform: translateX(250%);
     }
   }
+  @keyframes pulse-ring {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--th-dot-on) 80%, transparent);
+    }
+    100% {
+      box-shadow: 0 0 0 7px transparent;
+    }
+  }
+  @keyframes flame {
+    from {
+      transform: scale(1) rotate(-4deg);
+    }
+    to {
+      transform: scale(1.12) rotate(4deg);
+    }
+  }
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
 }
 
-/* The wallet front card's semicircle notch at top centre. */
-@utility notch-top {
-  -webkit-mask: radial-gradient(circle 26px at 50% 0, transparent 25px, #000 26px);
-  mask: radial-gradient(circle 26px at 50% 0, transparent 25px, #000 26px);
+@media (max-width: 560px) {
+  :root {
+    --radius-tile: 24px;
+  }
 }
 
-/* Press feedback for tappable tiles and buttons: CSS only, off with reduced motion. */
+/* Labels: JetBrains Mono 700, uppercase, 11px, 0.08em tracking. */
+@utility label {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Big numbers and headings: Bricolage 800, tight, tabular numbers. */
+@utility display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Press feedback for tappable things: CSS only, off with reduced motion. */
 @utility press {
   transition: transform 120ms ease;
   &:active {
-    transform: scale(0.99);
+    transform: scale(0.96);
   }
   @media (prefers-reduced-motion: reduce) {
     transition: none;
@@ -85,31 +208,60 @@
   }
 }
 
+/*
+  Overview tiles tilt toward the pointer (max 2.5°) with a soft glare and a 4px lift, on mouse
+  devices only. src/components/useTilt.ts sets --rx, --ry, --gx, --gy; phones get the press scale.
+*/
+@utility tilt {
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 180ms ease;
+    background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgb(255 255 255 / 0.35), transparent 55%);
+  }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    &[data-tilt] {
+      transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-4px);
+      box-shadow: var(--shadow-lift);
+    }
+    &[data-tilt]::after {
+      opacity: 1;
+    }
+  }
+}
+
 html {
-  background: var(--color-surface);
+  background: var(--th-bg);
 }
 
 body {
   margin: 0;
-  background: var(--color-surface);
-  color: var(--color-ink);
+  background: var(--th-bg);
+  color: var(--th-ink);
   font-family: var(--font-sans);
   font-weight: 500;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Visible focus on every control: 3px blue ring. */
+/* Visible focus on every control: 3px accent ring. */
 :where(button, a, input, select, textarea, [role="switch"], [tabindex]):focus-visible {
-  outline: 3px solid var(--color-blue-text);
+  outline: 3px solid var(--th-accent);
   outline-offset: 2px;
 }
 
-/* Plain links are blue. Styled links (buttons, tiles) set their own colour. */
+/* Plain links use the accent. Styled links (buttons, tiles) set their own colour. */
 a:not([class]) {
-  color: var(--color-blue-text);
+  color: var(--th-accent);
 }
 a:not([class]):hover {
-  color: var(--color-blue-hover);
+  color: color-mix(in srgb, var(--th-accent) 80%, #000000);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -117,20 +269,21 @@ a:not([class]):hover {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
 
 /*
   The Overview bento (the only bento page). Tiles are written in priority order and placed by
-  area name. Desktop 4 columns × 150px rows; 960px and under 2 columns; 560px and under a
-  2-column widget grid with the big tiles full width.
+  area name. Desktop 4 columns × 158px rows; 960px and under 2 columns; 560px and under a
+  2-column widget grid.
 */
 @utility bento {
   display: grid;
-  gap: 16px;
+  gap: 14px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-auto-rows: 150px;
+  grid-auto-rows: 158px;
   grid-template-areas:
     "hero  hero  tasks  money"
     "hero  hero  tasks  money"
@@ -150,7 +303,7 @@ a:not([class]):hover {
   }
   @media (max-width: 560px) {
     gap: 12px;
-    grid-auto-rows: minmax(132px, auto);
+    grid-auto-rows: minmax(140px, auto);
     grid-template-areas:
       "hero   hero"
       "check  today"

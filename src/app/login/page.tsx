@@ -16,9 +16,9 @@ export default function LoginPage({ searchParams }: PageProps<"/login">) {
     <main className="flex min-h-screen items-center justify-center p-4">
       <div className="flex w-full max-w-sm flex-col gap-5 rounded-[20px] border border-line bg-card p-6">
         <div className="flex flex-col gap-1">
-          <h1 className="m-0 text-[28px] leading-tight font-extrabold tracking-[-0.02em]">Sign in</h1>
-          <p className="m-0 text-[15px] text-sub">Yasir OS is private. Just looking around?</p>
-          <Link href="/demo" className="-my-2 inline-flex min-h-11 items-center self-start text-base font-semibold text-blue-text hover:text-blue-hover">
+          <h1 className="m-0 text-[28px] leading-tight display tracking-[-0.02em]">Sign in</h1>
+          <p className="m-0 text-[15px] text-soft">Yasir OS is private. Just looking around?</p>
+          <Link href="/demo" className="-my-2 inline-flex min-h-11 items-center self-start text-base font-semibold text-accent hover:text-accent-strong">
             See the demo instead
           </Link>
         </div>

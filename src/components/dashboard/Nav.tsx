@@ -22,8 +22,8 @@ export function TopBar() {
   const { data, view } = useDashboard();
   return (
     <header className="flex flex-wrap items-center gap-x-5 gap-y-3">
-      <Link href={viewHref(data.basePath, "overview")} prefetch className="flex min-h-11 items-center gap-2.5 text-xl font-extrabold tracking-[-0.01em] text-ink no-underline">
-        <span aria-hidden="true" className="grid size-8 place-items-center rounded-item bg-peach font-mono text-sm font-bold shadow-tile">
+      <Link href={viewHref(data.basePath, "overview")} prefetch className="flex min-h-11 items-center gap-2.5 text-xl display tracking-[-0.01em] text-ink no-underline">
+        <span aria-hidden="true" className="grid size-8 place-items-center rounded-item bg-pop font-mono text-sm font-bold shadow-tile">
           Y
         </span>
         Yasir OS
@@ -36,18 +36,18 @@ export function TopBar() {
             prefetch
             aria-current={view === n.id ? "page" : undefined}
             className={`flex min-h-11 items-center gap-1.5 rounded-full px-3 text-sm font-semibold no-underline ${
-              view === n.id ? "border border-line bg-card text-ink shadow-tile" : "text-sub hover:text-ink"
+              view === n.id ? "border border-line bg-card text-ink shadow-tile" : "text-soft hover:text-ink"
             }`}
           >
             {n.label}
-            {n.id === "board" && data.navBadges.board && <span className="font-mono text-xs text-sub">{data.navBadges.board}</span>}
+            {n.id === "board" && data.navBadges.board && <span className="font-mono text-xs text-soft">{data.navBadges.board}</span>}
           </Link>
         ))}
       </nav>
       <Link
         href={data.logHref}
         prefetch
-        className="ml-auto hidden min-h-11 items-center rounded-full bg-blue px-4 text-sm font-semibold text-ink no-underline hover:brightness-95 min-[561px]:flex press"
+        className="ml-auto hidden min-h-11 items-center rounded-full bg-accent-soft px-4 text-sm font-semibold text-ink no-underline hover:brightness-95 min-[561px]:flex press"
       >
         Check-in
       </Link>
@@ -67,9 +67,9 @@ export function TabBar() {
               href={viewHref(data.basePath, n.id)}
               prefetch
               aria-current={view === n.id ? "page" : undefined}
-              className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-semibold no-underline ${view === n.id ? "text-ink" : "text-sub"}`}
+              className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-semibold no-underline ${view === n.id ? "text-ink" : "text-soft"}`}
             >
-              <span className={`grid h-7 w-11 place-items-center rounded-full ${view === n.id ? "bg-peach" : ""}`}>
+              <span className={`grid h-7 w-11 place-items-center rounded-full ${view === n.id ? "bg-pop" : ""}`}>
                 <Icon name={n.icon} size={18} strokeWidth={2} />
               </span>
               {n.short}

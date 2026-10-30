@@ -45,8 +45,8 @@ export function SettingsForm({
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col gap-[18px] px-4 pt-6 pb-8">
       <header className="flex items-center justify-between">
-        <h1 className="m-0 text-[34px] leading-[1.1] font-extrabold tracking-[-0.02em]">Settings</h1>
-        <Link href="/" prefetch className="flex min-h-11 items-center text-[17px] text-blue-text no-underline hover:text-blue-hover">
+        <h1 className="m-0 text-[34px] leading-[1.1] display tracking-[-0.02em]">Settings</h1>
+        <Link href="/" prefetch className="flex min-h-11 items-center text-[17px] text-accent no-underline hover:text-accent-strong">
           Done
         </Link>
       </header>
@@ -84,7 +84,7 @@ function SignInCodeSection({ make }: { make: SettingsActions["makeSignInCode"] }
     <>
       <Group id="signin-code" title="Sign in on another device">
         <div className="flex flex-col gap-2 py-3">
-          <span className="text-[15px] text-sub">
+          <span className="text-[15px] text-soft">
             For the home-screen app on your iPhone: on its sign-in page, tap &ldquo;Have a code?&rdquo; and type this code.
           </span>
           {code && (
@@ -92,7 +92,7 @@ function SignInCodeSection({ make }: { make: SettingsActions["makeSignInCode"] }
               <span className="font-mono text-[28px] font-semibold tracking-[0.12em]" aria-label={`Code ${code.code.split("").join(" ")}`}>
                 {code.code.slice(0, 4)}-{code.code.slice(4)}
               </span>
-              <span className="text-[13px] text-sub">Works once, until {until}. Making a new one ends this one.</span>
+              <span className="text-[13px] text-soft">Works once, until {until}. Making a new one ends this one.</span>
             </div>
           )}
           <Button onClick={run} disabled={busy} className="self-start">
@@ -126,7 +126,7 @@ function CalendarSection({ path }: { path: string | null }) {
 
   return (
     <Group id="calendar" title="Calendar">
-      {!path && <p className="m-0 py-3 text-[15px] text-sub">The feeds need SHARE_TOKEN in the site&apos;s settings.</p>}
+      {!path && <p className="m-0 py-3 text-[15px] text-soft">The feeds need SHARE_TOKEN in the site&apos;s settings.</p>}
       {path &&
         CALENDARS.map((c) => (
           <div key={c.key} className="flex min-h-[52px] items-center gap-3 py-1.5">
@@ -147,7 +147,7 @@ function CalendarSection({ path }: { path: string | null }) {
             </Button>
           </div>
         ))}
-      {path && <p className="m-0 py-3 text-[13px] text-sub">Tap a name to subscribe in Calendar, or copy its link.</p>}
+      {path && <p className="m-0 py-3 text-[13px] text-soft">Tap a name to subscribe in Calendar, or copy its link.</p>}
     </Group>
   );
 }
@@ -213,7 +213,7 @@ function SeasonSection({
           <input type="date" value={start} onChange={(e) => e.target.value && (setStart(e.target.value), setStatus("editing"))} className={fieldClass} />
         </Field>
       </Group>
-      <p className="m-0 mx-4 -mt-3 text-[13px] text-sub">
+      <p className="m-0 mx-4 -mt-3 text-[13px] text-soft">
         {formatDayLabel(start)}. Until then the dashboard counts down to it.
       </p>
 
@@ -234,7 +234,7 @@ function SeasonSection({
                     onChange={(e) => change(t.slug, { text: e.target.value.replace(/[^\d.,]/g, "") })}
                     className={`${fieldClass} w-20 text-right`}
                   />
-                  <span className="w-10 text-[13px] text-sub">{targetUnit(t)}</span>
+                  <span className="w-10 text-[13px] text-soft">{targetUnit(t)}</span>
                 </span>
               )}
               <button
@@ -248,7 +248,7 @@ function SeasonSection({
                 <span
                   aria-hidden="true"
                   className={`flex h-7 w-[46px] items-center rounded-full p-0.5 transition-colors motion-reduce:transition-none ${
-                    row.on ? "justify-end bg-blue" : "justify-start bg-fill-strong"
+                    row.on ? "justify-end bg-accent-soft" : "justify-start bg-fill-strong"
                   }`}
                 >
                   <span className="size-6 rounded-full bg-white" />
@@ -258,7 +258,7 @@ function SeasonSection({
           );
         })}
       </Group>
-      <p className="m-0 mx-4 -mt-3 text-[13px] text-sub">A day counts as &quot;all targets&quot; when every switched-on tracker hits its target.</p>
+      <p className="m-0 mx-4 -mt-3 text-[13px] text-soft">A day counts as &quot;all targets&quot; when every switched-on tracker hits its target.</p>
 
       <StatusMessages status={status} savedText={season ? "Season saved." : "Winter Arc is set. See you on day 1."} />
       <Button variant="primary" onClick={submit} disabled={saving} className="min-h-[50px] text-[17px] sm:min-h-[50px]">
@@ -340,7 +340,7 @@ function NewTrackerSection({ add }: { add: SettingsActions["addTracker"] }) {
                 onChange={(e) => setTarget(e.target.value.replace(/[^\d.,]/g, ""))}
                 className={`${fieldClass} w-28 text-right`}
               />
-              <span className="w-10 text-[13px] text-sub">{type === "checkbox" ? "" : targetUnit({ type, unit: unit || null })}</span>
+              <span className="w-10 text-[13px] text-soft">{type === "checkbox" ? "" : targetUnit({ type, unit: unit || null })}</span>
             </span>
           </Field>
         )}
@@ -371,7 +371,7 @@ function ResetSection({ reset }: { reset: SettingsActions["resetTestData"] }) {
     <>
       <Group id="reset" title="Test data">
         <div className="flex flex-col gap-2 py-3">
-          <span className="text-[15px] text-sub">
+          <span className="text-[15px] text-soft">
             Deletes all your entries, workouts, body checks, tasks and goals. Trackers, Winter Arc and your goal weight stay.
           </span>
           {!confirming ? (

@@ -3,7 +3,7 @@ import { formatAmount, shortDate, type Tracker } from "@/lib/trackers";
 import type { Goal } from "@/lib/tasks";
 import type { DashboardData } from "@/modules/types";
 
-const GOAL_TONES: Tone[] = ["blue", "peach"];
+const GOAL_TONES: Tone[] = ["accent", "pop"];
 
 /** How far each goal is, as the Goals tile shows it. `tracked` = linked tracker totals by goal id. */
 export function buildGoals(goals: Goal[], tracked: Map<string, number>, trackers: Tracker[], today: string): DashboardData["goals"] {

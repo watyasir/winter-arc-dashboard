@@ -1,7 +1,7 @@
 import type { ComponentPropsWithoutRef } from "react";
 
 const variants = {
-  primary: "bg-peach text-ink hover:bg-peach-strong",
+  primary: "bg-pop text-ink hover:bg-pop-strong",
   plain: "border border-solid border-line bg-card text-ink hover:bg-fill-strong",
 };
 

@@ -8,7 +8,7 @@ import type { ShareCard } from "@/lib/share";
 
 /*
   The shareable Winter Arc card: portrait, sized to fill a phone screenshot.
-  One peach hero card with the numbers, then "Copy link" underneath (outside the card,
+  One hero card with the numbers, then "Copy link" underneath (outside the card,
   so a cropped screenshot stays clean).
 */
 export function ProgressCard({
@@ -41,7 +41,7 @@ function Card({ card, demo }: { card: ShareCard; demo: boolean }) {
   const { targets, workouts, weight } = card;
 
   return (
-    <section aria-label={`${card.name} progress`} className="flex flex-col gap-6 rounded-tile bg-peach p-6 text-ink">
+    <section aria-label={`${card.name} progress`} className="flex flex-col gap-6 rounded-tile bg-pop p-6 text-ink">
       <header className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
           <span className="flex size-[34px] items-center justify-center rounded-[11px] bg-card/60">
@@ -57,7 +57,7 @@ function Card({ card, demo }: { card: ShareCard; demo: boolean }) {
       <div className="flex flex-col gap-3">
         <div className="flex items-baseline gap-2">
           {!waiting && <span className="text-[22px] font-semibold text-ink">Day</span>}
-          <span className="font-mono text-[88px] leading-[0.9] font-extrabold tracking-[-0.04em]">{waiting ? card.startsIn : card.day}</span>
+          <span className="font-mono text-[88px] leading-[0.9] display tracking-[-0.04em]">{waiting ? card.startsIn : card.day}</span>
           <span className="text-[22px] font-semibold text-ink">
             {waiting ? (card.startsIn === 1 ? "day to go" : "days to go") : `of ${card.length}`}
           </span>
@@ -136,7 +136,7 @@ function Stat({
     <div className={`flex min-w-0 flex-col gap-1 rounded-[18px] bg-card/60 px-4 py-3.5 ${wide ? "col-span-2" : ""}`}>
       <dt className="text-[13px] font-semibold text-ink">{label}</dt>
       <dd className="m-0 flex flex-wrap items-baseline gap-1">
-        <span className={`font-mono text-[30px] leading-tight font-extrabold ${valueClass}`}>{value}</span>
+        <span className={`font-mono text-[30px] leading-tight display ${valueClass}`}>{value}</span>
         {unit && <span className="text-[15px] font-semibold text-ink">{unit}</span>}
         {note && <span className="w-full text-xs text-ink">{note}</span>}
       </dd>
@@ -146,9 +146,9 @@ function Stat({
 
 function NoSeason() {
   return (
-    <section aria-label="Winter Arc progress" className="flex flex-col gap-1.5 rounded-tile bg-peach p-6 text-ink">
+    <section aria-label="Winter Arc progress" className="flex flex-col gap-1.5 rounded-tile bg-pop p-6 text-ink">
       <span className="text-[13px] font-semibold text-ink">Winter Arc · 90 days</span>
-      <span className="text-[22px] font-extrabold">No season running yet</span>
+      <span className="text-[22px] display">No season running yet</span>
       <span className="text-[15px] text-ink">The progress card fills in once Winter Arc has a start date.</span>
     </section>
   );
@@ -186,7 +186,7 @@ function ShareActions({ sharePath, calendarHref, backHref }: { sharePath: string
           Subscribe in Calendar
         </Link>
       )}
-      <p role="status" className="m-0 text-center text-[13px] text-sub">
+      <p role="status" className="m-0 text-center text-[13px] text-soft">
         {status === "copied" && "Anyone with the link sees only this card."}
         {status === "failed" && link && (
           <>
@@ -195,7 +195,7 @@ function ShareActions({ sharePath, calendarHref, backHref }: { sharePath: string
         )}
       </p>
       {backHref && (
-        <Link href={backHref} className="flex min-h-11 items-center text-[15px] font-semibold text-blue-text hover:text-blue-hover">
+        <Link href={backHref} className="flex min-h-11 items-center text-[15px] font-semibold text-accent hover:text-accent-strong">
           Back to dashboard
         </Link>
       )}
@@ -204,5 +204,5 @@ function ShareActions({ sharePath, calendarHref, backHref }: { sharePath: string
 }
 
 function Note({ children }: { children: ReactNode }) {
-  return <p className="m-0 text-center text-[13px] text-sub">{children}</p>;
+  return <p className="m-0 text-center text-[13px] text-soft">{children}</p>;
 }

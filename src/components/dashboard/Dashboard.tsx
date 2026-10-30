@@ -44,8 +44,8 @@ export function Dashboard({
       <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-5 px-4 pt-4 pb-28 sm:px-6 min-[561px]:pb-12">
         <TopBar />
         <div className="flex flex-col gap-1">
-          <h1 className="m-0 text-2xl font-extrabold tracking-[-0.02em] text-balance sm:text-[32px]">{title}</h1>
-          <p className="m-0 text-sm text-sub">{subtitle}</p>
+          <h1 className="m-0 text-2xl display tracking-[-0.02em] text-balance sm:text-[32px]">{title}</h1>
+          <p className="m-0 text-sm text-soft">{subtitle}</p>
         </div>
         <main className="min-w-0">
           <View />

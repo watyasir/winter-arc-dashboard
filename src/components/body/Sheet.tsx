@@ -5,7 +5,7 @@ import Link from "next/link";
 export type Status = "editing" | "saved" | { error: string };
 
 /** 44px pill text box, like the check-in's number boxes. */
-export const fieldClass = "h-11 rounded-full border-0 bg-fill-strong px-4 text-[17px] text-ink placeholder:text-sub";
+export const fieldClass = "h-11 rounded-full border-0 bg-fill-strong px-4 text-[17px] text-ink placeholder:text-soft";
 
 /** Cancel · title and date · Save (the one primary button; turns sage "Saved ✓"). */
 export function SheetHeader({
@@ -27,19 +27,19 @@ export function SheetHeader({
     <>
       <div aria-hidden="true" className="h-[5px] w-9 self-center rounded-full bg-line-strong" />
       <header className="grid grid-cols-[1fr_auto_1fr] items-center">
-        <Link href={cancelHref} prefetch className="flex min-h-11 items-center text-[17px] text-blue-text no-underline hover:text-blue-hover">
+        <Link href={cancelHref} prefetch className="flex min-h-11 items-center text-[17px] text-accent no-underline hover:text-accent-strong">
           Cancel
         </Link>
         <div className="flex flex-col items-center">
           <h1 className="m-0 text-[17px] font-semibold">{title}</h1>
-          <span className="text-xs text-sub">{subtitle}</span>
+          <span className="text-xs text-soft">{subtitle}</span>
         </div>
         <button
           type="button"
           onClick={onSave}
           disabled={saving}
           className={`min-h-11 cursor-pointer justify-self-end rounded-full border-0 px-4 text-[17px] font-semibold transition-colors motion-reduce:transition-none ${
-            saved ? "bg-ok text-white" : "bg-peach text-ink hover:bg-peach-strong"
+            saved ? "bg-ok text-white" : "bg-pop text-ink hover:bg-pop-strong"
           }`}
         >
           {saving ? "Saving…" : saved ? "Saved ✓" : "Save"}

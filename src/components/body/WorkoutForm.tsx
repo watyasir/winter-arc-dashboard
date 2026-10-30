@@ -120,9 +120,9 @@ export function WorkoutForm({
       {last && (
         <section aria-label="Last workout" className="flex items-center justify-between gap-3 rounded-[14px] border border-line bg-card px-4 py-3">
           <div className="min-w-0">
-            <div className="text-[13px] text-sub">Last workout · {formatDayLabel(last.date)}</div>
+            <div className="text-[13px] text-soft">Last workout · {formatDayLabel(last.date)}</div>
             <div className="truncate text-[17px] font-semibold">{last.name}</div>
-            <div className="text-[13px] text-sub">{workoutSummary(last.sets)}</div>
+            <div className="text-[13px] text-soft">{workoutSummary(last.sets)}</div>
           </div>
           <Button onClick={repeatLast} className="shrink-0">
             Repeat last workout
@@ -180,7 +180,7 @@ export function WorkoutForm({
 
           {ex.sets.map((s, si) => (
             <div key={s.key} role="group" aria-label={`Set ${si + 1}`} className="flex items-center gap-2">
-              <span className="w-12 shrink-0 text-[13px] text-sub">Set {si + 1}</span>
+              <span className="w-12 shrink-0 text-[13px] text-soft">Set {si + 1}</span>
               <input
                 aria-label={`Set ${si + 1} reps`}
                 inputMode="numeric"
@@ -191,7 +191,7 @@ export function WorkoutForm({
                 }
                 className={`${fieldClass} w-0 min-w-0 flex-1 text-right`}
               />
-              <span aria-hidden="true" className="text-sub">
+              <span aria-hidden="true" className="text-soft">
                 ×
               </span>
               <input
@@ -207,7 +207,7 @@ export function WorkoutForm({
                 }
                 className={`${fieldClass} w-0 min-w-0 flex-1 text-right`}
               />
-              <span aria-hidden="true" className="w-5 text-[13px] text-sub">
+              <span aria-hidden="true" className="w-5 text-[13px] text-soft">
                 kg
               </span>
               <button
@@ -215,7 +215,7 @@ export function WorkoutForm({
                 aria-label={`Remove set ${si + 1}`}
                 disabled={ex.sets.length === 1}
                 onClick={() => editExercise(ex.key, (x) => ({ ...x, sets: x.sets.filter((y) => y.key !== s.key) }))}
-                className="flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-xl text-sub hover:bg-fill disabled:cursor-default disabled:text-disabled disabled:hover:bg-transparent"
+                className="flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-xl text-soft hover:bg-fill disabled:cursor-default disabled:text-disabled disabled:hover:bg-transparent"
               >
                 −
               </button>
@@ -231,7 +231,7 @@ export function WorkoutForm({
                 return { ...x, sets: [...x.sets, newSet(prev?.reps, prev?.weight)] };
               })
             }
-            className="min-h-11 cursor-pointer self-start rounded-full border-0 bg-transparent px-3 text-[15px] font-semibold text-blue-text hover:bg-fill"
+            className="min-h-11 cursor-pointer self-start rounded-full border-0 bg-transparent px-3 text-[15px] font-semibold text-accent hover:bg-fill"
           >
             + Add set
           </button>
@@ -255,7 +255,7 @@ export function WorkoutForm({
 
       {recent.length > 0 && (
         <section aria-labelledby={`${ids}-recent`} className="flex flex-col gap-1.5">
-          <h2 id={`${ids}-recent`} className="m-0 ml-4 text-[13px] font-medium text-sub">
+          <h2 id={`${ids}-recent`} className="m-0 ml-4 text-[13px] font-medium text-soft">
             Recent workouts
           </h2>
           <ul className="m-0 list-none rounded-[14px] border border-line bg-card px-4 py-0 [&>li:first-child]:border-t-0">
@@ -264,11 +264,11 @@ export function WorkoutForm({
                 <details className="min-w-0 flex-1">
                   <summary className="cursor-pointer list-none">
                     <span className="block truncate text-[15px] font-semibold">{w.name}</span>
-                    <span className="text-[13px] text-sub">
+                    <span className="text-[13px] text-soft">
                       {formatDayLabel(w.date)} · {workoutSummary(w.sets)}
                     </span>
                   </summary>
-                  <ul className="m-0 mt-1.5 list-none p-0 text-[13px] text-sub">
+                  <ul className="m-0 mt-1.5 list-none p-0 text-[13px] text-soft">
                     {groupSets(w.sets).map((g) => (
                       <li key={g.exercise}>
                         <span className="text-ink">{g.exercise}</span> · {g.sets.map(formatSet).join(", ")}

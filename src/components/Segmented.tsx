@@ -27,7 +27,7 @@ export function Segmented<T extends string | number>({
             aria-label={o.ariaLabel}
             onClick={() => onChange(o.value)}
             className={`min-h-11 cursor-pointer rounded-full border-0 px-1 text-[13px] transition-colors motion-reduce:transition-none ${
-              on ? "bg-blue font-semibold text-ink" : "bg-transparent font-medium text-ink hover:bg-fill"
+              on ? "bg-accent-soft font-semibold text-ink" : "bg-transparent font-medium text-ink hover:bg-fill"
             }`}
           >
             {o.label}

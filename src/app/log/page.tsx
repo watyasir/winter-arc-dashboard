@@ -12,7 +12,7 @@ export const metadata: Metadata = { title: "Check-in · Yasir OS" };
 
 export default function LogPage() {
   return (
-    <Suspense fallback={<p className="p-6 text-center text-[15px] text-sub">Loading your check-in…</p>}>
+    <Suspense fallback={<p className="p-6 text-center text-[15px] text-soft">Loading your check-in…</p>}>
       <TodayCheckIn />
     </Suspense>
   );
@@ -42,7 +42,7 @@ async function TodayCheckIn() {
         <>
           <MoreLogs workoutHref="/log/workout" bodyHref="/log/body" settingsHref="/settings" />
           <form action="/auth/signout" method="post" className="flex justify-center pt-2">
-            <button type="submit" className="min-h-11 cursor-pointer rounded-full border-0 bg-transparent px-3 text-[15px] text-sub hover:text-ink">
+            <button type="submit" className="min-h-11 cursor-pointer rounded-full border-0 bg-transparent px-3 text-[15px] text-soft hover:text-ink">
               Sign out
             </button>
           </form>

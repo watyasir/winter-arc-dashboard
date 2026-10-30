@@ -7,7 +7,7 @@ import { WorkoutForm } from "./WorkoutForm";
 /* /demo versions of the workout log and body check: same screens, nothing is saved. */
 
 const pretendSave = () => new Promise<{ ok: true }>((resolve) => setTimeout(() => resolve({ ok: true }), 400));
-const note = <p className="m-0 mx-4 text-[13px] text-sub">Demo: nothing is saved. The real log stores each set in the database.</p>;
+const note = <p className="m-0 mx-4 text-[13px] text-soft">Demo: nothing is saved. The real log stores each set in the database.</p>;
 
 export function DemoWorkoutForm({ repeat }: { repeat: boolean }) {
   return (

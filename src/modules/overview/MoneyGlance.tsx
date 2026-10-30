@@ -8,8 +8,8 @@ import { formatRupees } from "@/lib/format";
 import type { Account } from "@/modules/types";
 
 const fills: Record<Account["kind"], string> = {
-  savings: "bg-blue",
-  current: "bg-peach",
+  savings: "bg-accent-soft",
+  current: "bg-pop",
   card: "bg-card",
   other: "bg-fill-strong",
 };
@@ -42,7 +42,7 @@ export function MoneyGlance() {
       </ul>
       <div className="mt-auto flex flex-col gap-1">
         <BigNumber value={formatRupees(money.spendable)} size="md" />
-        <span className="text-sm text-sub">Left to spend · updated {money.updated}</span>
+        <span className="text-sm text-soft">Left to spend · updated {money.updated}</span>
       </div>
     </Tile>
   );

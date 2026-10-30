@@ -15,10 +15,10 @@ export function GoalsTile() {
         <div key={`${i}-${g.name}`} className="flex flex-col gap-[5px]">
           <div className="flex justify-between gap-2 text-sm">
             <span className="font-semibold">{g.name}</span>
-            <span className="text-right text-xs text-sub">{g.progress}</span>
+            <span className="text-right text-xs text-soft">{g.progress}</span>
           </div>
           <ProgressBar pct={g.pct} tone={g.tone} label={`${g.name}: ${g.pct}%`} />
-          <span className="text-xs text-sub">{g.by}</span>
+          <span className="text-xs text-soft">{g.by}</span>
         </div>
       ))}
     </Tile>

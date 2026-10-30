@@ -5,7 +5,7 @@ import { useDashboard } from "@/components/dashboard/DashboardContext";
 import { gateChip, gateQueue, type GateChoice } from "@/lib/gate";
 import { ReminderCard } from "./ReminderCard";
 
-const chipText = { red: "text-danger", amber: "text-warn", teal: "text-blue-text" } as const;
+const chipText = { red: "text-danger", amber: "text-warn", teal: "text-accent" } as const;
 
 /**
  * Tasks due within 3 days (overdue first, at most 3) as toasts: stacked in the corner on a
@@ -54,7 +54,7 @@ export function Reminders() {
                 >
                   <span className="flex w-full justify-between gap-2 text-xs font-semibold">
                     <span className={chipText[chip.tone]}>{chip.label}</span>
-                    {i === 0 && shown.length > 1 && <span className="text-sub min-[561px]:hidden">1 of {shown.length}</span>}
+                    {i === 0 && shown.length > 1 && <span className="text-soft min-[561px]:hidden">1 of {shown.length}</span>}
                   </span>
                   <span className="w-full truncate text-sm font-semibold text-ink">{t.title}</span>
                 </button>
@@ -62,7 +62,7 @@ export function Reminders() {
                   type="button"
                   onClick={() => setGone((g) => [...g, t.id])}
                   aria-label={`Hide reminder: ${t.title}`}
-                  className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full border-0 bg-transparent text-base text-sub hover:bg-fill"
+                  className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-full border-0 bg-transparent text-base text-soft hover:bg-fill"
                 >
                   ✕
                 </button>

@@ -77,7 +77,7 @@ export function BodyCheckForm({
       <SheetHeader title="Body check" subtitle={formatDayLabel(date)} cancelHref={cancelHref} onSave={save} saving={saving} saved={status === "saved"} />
       <StatusMessages status={status} savedText="Body check saved. See you next week." />
 
-      <p className="m-0 mx-4 text-[13px] text-sub">
+      <p className="m-0 mx-4 text-[13px] text-soft">
         Once a week, same time of day. Fill in what you measured; empty boxes are skipped.
         {previous && ` Last check: ${formatDayLabel(previous.date)}.`}
       </p>
@@ -104,7 +104,7 @@ export function BodyCheckForm({
           }}
         />
       </Group>
-      <p className="m-0 mx-4 -mt-3 text-[13px] text-sub">Only a yes or no is saved. Your photo stays on your phone.</p>
+      <p className="m-0 mx-4 -mt-3 text-[13px] text-soft">Only a yes or no is saved. Your photo stays on your phone.</p>
 
       <Group title="Date">
         <label className="flex min-h-[52px] items-center justify-between gap-3">
@@ -124,7 +124,7 @@ export function BodyCheckForm({
 function Group({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section aria-label={title} className="flex flex-col gap-1.5">
-      <h2 className="m-0 ml-4 text-[13px] font-medium text-sub">{title}</h2>
+      <h2 className="m-0 ml-4 text-[13px] font-medium text-soft">{title}</h2>
       <div className="rounded-[14px] border border-line bg-card px-4 [&>*+*]:border-t [&>*+*]:border-solid [&>*+*]:border-line [&>*:first-child]:border-t-0">{children}</div>
     </section>
   );
@@ -147,7 +147,7 @@ function NumberField({
     <label className="flex min-h-[52px] items-center justify-between gap-3 py-1.5">
       <span className="min-w-0">
         <span className="block text-[17px]">{label}</span>
-        {hint && <span className="block text-[13px] text-sub">{hint}</span>}
+        {hint && <span className="block text-[13px] text-soft">{hint}</span>}
       </span>
       <span className="flex shrink-0 items-center gap-2">
         <input
@@ -158,7 +158,7 @@ function NumberField({
           onChange={(e) => onChange(e.target.value)}
           className={`${fieldClass} w-24 text-right`}
         />
-        <span className="w-6 text-[15px] text-sub">{unit}</span>
+        <span className="w-6 text-[15px] text-soft">{unit}</span>
       </span>
     </label>
   );

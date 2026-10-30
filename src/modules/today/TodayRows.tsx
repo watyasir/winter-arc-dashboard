@@ -14,7 +14,7 @@ export function TodayRows() {
     "flex min-h-11 w-full items-center gap-3 border-0 border-solid border-line bg-transparent p-0 text-left text-sm text-ink no-underline [&:not(:first-child)]:border-t";
 
   if (data.today.length === 0) {
-    return <p className="m-0 py-3 text-sm text-sub">No trackers yet. Open the check-in to start.</p>;
+    return <p className="m-0 py-3 text-sm text-soft">No trackers yet. Open the check-in to start.</p>;
   }
 
   return (
@@ -24,8 +24,8 @@ export function TodayRows() {
         const inner = (
           <>
             <CheckBox checked={done} />
-            <span className={`flex-1 ${done ? "text-sub" : ""}`}>{item.label}</span>
-            <span className="text-xs text-sub">{item.area}</span>
+            <span className={`flex-1 ${done ? "text-soft" : ""}`}>{item.label}</span>
+            <span className="text-xs text-soft">{item.area}</span>
           </>
         );
         if (item.href) {

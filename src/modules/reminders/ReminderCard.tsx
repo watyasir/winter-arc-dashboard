@@ -5,7 +5,7 @@ import { Chip } from "@/components/Chip";
 import { canSnooze, gateChip, gateDetails, type GateChoice } from "@/lib/gate";
 import type { Task } from "@/lib/tasks";
 
-const chipTone = { red: "danger", amber: "warn", teal: "blue" } as const;
+const chipTone = { red: "danger", amber: "warn", teal: "accent" } as const;
 
 const secondary =
   "min-h-11 cursor-pointer rounded-full border-0 bg-fill px-3 text-sm font-semibold text-ink hover:bg-fill-strong sm:min-h-10";
@@ -53,12 +53,12 @@ export function ReminderCard({
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="ml-auto grid size-11 cursor-pointer place-items-center rounded-full border-0 bg-transparent text-xl text-sub hover:bg-fill"
+          className="ml-auto grid size-11 cursor-pointer place-items-center rounded-full border-0 bg-transparent text-xl text-soft hover:bg-fill"
         >
           ✕
         </button>
       </div>
-      <h2 id="reminder-title" className="m-0 truncate text-base leading-[1.3] font-extrabold" title={task.title}>
+      <h2 id="reminder-title" className="m-0 truncate text-base leading-[1.3] display" title={task.title}>
         {task.title}
       </h2>
       {nextSteps && (
@@ -69,25 +69,25 @@ export function ReminderCard({
       )}
       {task.questions.length > 0 && (
         <div className="flex flex-col gap-1">
-          <ul className="m-0 flex list-disc flex-col gap-1 pl-5 text-sm leading-[1.4] text-sub">
+          <ul className="m-0 flex list-disc flex-col gap-1 pl-5 text-sm leading-[1.4] text-soft">
             {task.questions.slice(0, 2).map((q) => (
               <li key={q} className="truncate" title={q}>
                 {q}
               </li>
             ))}
           </ul>
-          {task.questions.length > 2 && <p className="m-0 text-xs text-sub">More questions in chat</p>}
+          {task.questions.length > 2 && <p className="m-0 text-xs text-soft">More questions in chat</p>}
         </div>
       )}
       {chatName && (
         <div className="flex items-center gap-2 border-t border-line pt-3">
-          <p className="m-0 line-clamp-2 min-w-0 flex-1 text-xs leading-[1.4] text-sub" title={chatName}>
+          <p className="m-0 line-clamp-2 min-w-0 flex-1 text-xs leading-[1.4] text-soft" title={chatName}>
             For more info, go to the chat &ldquo;{chatName}&rdquo;
           </p>
           <button
             type="button"
             onClick={copy}
-            className="min-h-11 shrink-0 cursor-pointer rounded-full border-0 bg-transparent px-2 text-xs font-semibold text-blue-text hover:bg-fill sm:min-h-8"
+            className="min-h-11 shrink-0 cursor-pointer rounded-full border-0 bg-transparent px-2 text-xs font-semibold text-accent hover:bg-fill sm:min-h-8"
           >
             <span aria-live="polite">{copied ? "Copied" : "Copy name"}</span>
           </button>
@@ -102,7 +102,7 @@ export function ReminderCard({
             if (date >= today) onAnswer("move", date);
           }}
         >
-          <label className="flex min-w-0 flex-1 flex-col gap-1 text-xs font-semibold text-sub">
+          <label className="flex min-w-0 flex-1 flex-col gap-1 text-xs font-semibold text-soft">
             New due date
             <input
               ref={dateField}
@@ -118,7 +118,7 @@ export function ReminderCard({
             <button type="button" onClick={() => setMoving(false)} className={`${secondary} flex-1`}>
               Back
             </button>
-            <button type="submit" className="min-h-11 flex-1 cursor-pointer rounded-full border-0 bg-peach px-4 text-sm font-semibold text-ink hover:bg-peach-strong sm:min-h-10">
+            <button type="submit" className="min-h-11 flex-1 cursor-pointer rounded-full border-0 bg-pop px-4 text-sm font-semibold text-ink hover:bg-pop-strong sm:min-h-10">
               Save date
             </button>
           </div>
@@ -129,7 +129,7 @@ export function ReminderCard({
             ref={first}
             type="button"
             onClick={() => onAnswer("done")}
-            className="min-h-11 cursor-pointer rounded-full border-0 bg-peach px-3 text-sm font-semibold text-ink hover:bg-peach-strong sm:min-h-10"
+            className="min-h-11 cursor-pointer rounded-full border-0 bg-pop px-3 text-sm font-semibold text-ink hover:bg-pop-strong sm:min-h-10"
           >
             Done
           </button>

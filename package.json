@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "prepare": "git config core.hooksPath scripts/hooks || true",
-    "privacy-check": "node scripts/privacy-check.mjs"
+    "privacy-check": "node scripts/privacy-check.mjs",
+    "contrast": "node scripts/contrast.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

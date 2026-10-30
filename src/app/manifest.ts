@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
+import { DEFAULT_THEME, THEME_BG } from "@/lib/theme";
 
-/** Install as a home-screen app (M10). Colours match the page (globals.css --color-surface). */
+/** Install as a home-screen app (M10). Colours match the page (Candy, the default theme). */
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Yasir OS",
@@ -11,8 +12,8 @@ export default function manifest(): MetadataRoute.Manifest {
     scope: "/",
     display: "standalone",
     orientation: "portrait",
-    background_color: "#fff5e6",
-    theme_color: "#fff5e6",
+    background_color: THEME_BG[DEFAULT_THEME],
+    theme_color: THEME_BG[DEFAULT_THEME],
     icons: [
       { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
       { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },

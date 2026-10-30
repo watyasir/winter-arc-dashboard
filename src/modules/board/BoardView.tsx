@@ -10,7 +10,7 @@ import { DueLabel } from "./DueLabel";
 import { OwnerChip } from "./OwnerChip";
 import { TaskSheet, type SheetTarget } from "./TaskSheet";
 
-const columnTone: Record<TaskStatus, Tone> = { todo: "neutral", doing: "blue", waiting: "warn", done: "ok" };
+const columnTone: Record<TaskStatus, Tone> = { todo: "neutral", doing: "accent", waiting: "warn", done: "ok" };
 
 /** How many done tasks show before "Show all". */
 const DONE_SHOWN = 20;
@@ -60,10 +60,10 @@ export function BoardView() {
                   if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOver(null);
                 }}
                 onDrop={(e) => drop(e, col.status)}
-                className={`flex min-w-0 flex-col gap-2 rounded-[20px] border bg-fill p-3 ${over === col.status ? "border-blue-text" : "border-line"}`}
+                className={`flex min-w-0 flex-col gap-2 rounded-[20px] border bg-fill p-3 ${over === col.status ? "border-accent" : "border-line"}`}
               >
                 <div className="flex items-center justify-between px-1.5 py-1">
-                  <h2 className="m-0 flex items-center gap-2 text-sm font-extrabold">
+                  <h2 className="m-0 flex items-center gap-2 text-sm display">
                     <span aria-hidden="true" className={`size-[9px] rounded-full ${toneBg[columnTone[col.status]]}`} />
                     {col.name}
                   </h2>
@@ -86,7 +86,7 @@ export function BoardView() {
                   <button
                     type="button"
                     onClick={() => setAllDone((a) => !a)}
-                    className="min-h-11 cursor-pointer rounded-xl border-0 bg-transparent text-xs font-semibold text-blue-text hover:bg-fill sm:min-h-[38px]"
+                    className="min-h-11 cursor-pointer rounded-xl border-0 bg-transparent text-xs font-semibold text-accent hover:bg-fill sm:min-h-[38px]"
                   >
                     {allDone ? `Show the latest ${DONE_SHOWN}` : `Show all ${all.length}`}
                   </button>
@@ -95,7 +95,7 @@ export function BoardView() {
                   <button
                     type="button"
                     onClick={() => setSheet({ status: col.status })}
-                    className="min-h-11 cursor-pointer rounded-xl border border-dashed border-line-strong bg-transparent text-xs font-semibold text-sub hover:bg-fill sm:min-h-[38px]"
+                    className="min-h-11 cursor-pointer rounded-xl border border-dashed border-line-strong bg-transparent text-xs font-semibold text-soft hover:bg-fill sm:min-h-[38px]"
                   >
                     Add task
                   </button>
@@ -140,11 +140,11 @@ function TaskCard({
       aria-label={`${done ? "Done: " : ""}${task.title}. Edit`}
       className={`flex w-full cursor-pointer flex-col gap-1.5 rounded-[10px] border border-line bg-card px-3 py-[11px] text-left text-ink hover:border-line-strong ${dragging ? "opacity-50" : ""}`}
     >
-      <span className={`text-[13px] leading-[1.35] font-medium ${done ? "text-sub line-through" : ""}`}>{task.title}</span>
-      {task.note && <span className="line-clamp-2 text-xs leading-[1.4] text-sub">{task.note}</span>}
+      <span className={`text-[13px] leading-[1.35] font-medium ${done ? "text-soft line-through" : ""}`}>{task.title}</span>
+      {task.note && <span className="line-clamp-2 text-xs leading-[1.4] text-soft">{task.note}</span>}
       <span className="mt-0.5 flex w-full flex-wrap items-center gap-1.5">
         <OwnerChip owner={task.owner} />
-        {task.area && <span className="text-xs text-sub">{task.area}</span>}
+        {task.area && <span className="text-xs text-soft">{task.area}</span>}
         <DueLabel task={task} today={data.todayISO} className="ml-auto" />
       </span>
     </button>

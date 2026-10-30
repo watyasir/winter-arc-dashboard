@@ -11,7 +11,7 @@ type Search = Promise<{ repeat?: string }>;
 
 export default function DemoWorkoutPage({ searchParams }: { searchParams: Search }) {
   return (
-    <Suspense fallback={<p className="p-6 text-center text-[15px] text-sub">Loading the workout log…</p>}>
+    <Suspense fallback={<p className="p-6 text-center text-[15px] text-soft">Loading the workout log…</p>}>
       <DemoWorkout searchParams={searchParams} />
     </Suspense>
   );

@@ -14,7 +14,7 @@ export function OwnerDashboard({ view, signedOut }: { view: ViewId; signedOut?: 
   return (
     <Suspense
       fallback={
-        <p role="status" className="m-0 p-6 text-center text-sm text-sub">
+        <p role="status" className="m-0 p-6 text-center text-sm text-soft">
           Loading…
         </p>
       }

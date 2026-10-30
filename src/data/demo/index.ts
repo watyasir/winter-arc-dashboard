@@ -161,11 +161,11 @@ export const demoData: DashboardData = {
   ...demoBody,
   ...demoBento,
   goals: [
-    { name: "1RK fund", progress: "₹42,000 of ₹1,00,000", pct: 42, by: "by 31 Jan 2027", tone: "blue" },
-    { name: "Gain 5 kg", progress: "2.1 of 5 kg", pct: 42, by: "by 24 Dec", tone: "blue" },
+    { name: "1RK fund", progress: "₹42,000 of ₹1,00,000", pct: 42, by: "by 31 Jan 2027", tone: "accent" },
+    { name: "Gain 5 kg", progress: "2.1 of 5 kg", pct: 42, by: "by 24 Dec", tone: "accent" },
     { name: "Bench press 70 kg", progress: "55 of 70", pct: 79, by: "by 31 Dec", tone: "ok" },
-    { name: "German A1", progress: "35%", pct: 35, by: "by 31 Mar 2027", tone: "blue" },
-    { name: "Travel fund", progress: "52%", pct: 52, by: "by 30 Apr 2027", tone: "blue" },
+    { name: "German A1", progress: "35%", pct: 35, by: "by 31 Mar 2027", tone: "accent" },
+    { name: "Travel fund", progress: "52%", pct: 52, by: "by 30 Apr 2027", tone: "accent" },
   ],
   tasks: [
     demoTask("t0", "Move to the new flat", "Both", "Home", "2026-10-20", "todo", { order: 10, note: "Book the movers, then pack the kitchen" }),

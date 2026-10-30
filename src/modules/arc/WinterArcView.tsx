@@ -38,7 +38,7 @@ function ConsistencyTile() {
   const avg = Math.round(points.reduce((n, p) => n + p.value, 0) / points.length);
   const today = points.at(-1)!.value;
   return (
-    <Tile title="Consistency" aside={<span className="text-xs text-sub">score out of 100</span>}>
+    <Tile title="Consistency" aside={<span className="text-xs text-soft">score out of 100</span>}>
       <p className="m-0 text-sm font-semibold">
         Today <span className="font-mono">{today}</span> · average <span className="font-mono">{avg}</span> over {points.length} days
       </p>
@@ -51,7 +51,7 @@ function ShareTile() {
   const { shareHref } = useDashboard().data;
   return (
     <Tile title="Share card" href={shareHref}>
-      <p className="m-0 text-sm text-sub">Day, streaks, targets and workouts as one card you can send.</p>
+      <p className="m-0 text-sm text-soft">Day, streaks, targets and workouts as one card you can send.</p>
     </Tile>
   );
 }

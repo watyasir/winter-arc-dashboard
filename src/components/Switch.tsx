@@ -23,7 +23,7 @@ export function SwitchRow({
       <span
         aria-hidden="true"
         className={`flex h-7 w-[46px] items-center rounded-full p-0.5 transition-colors motion-reduce:transition-none ${
-          on ? "justify-end bg-blue" : "justify-start bg-fill-strong"
+          on ? "justify-end bg-accent-soft" : "justify-start bg-fill-strong"
         }`}
       >
         <span className="size-6 rounded-full bg-white" />

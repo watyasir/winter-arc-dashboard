@@ -26,7 +26,7 @@ export function WeightTile() {
       <div className="flex min-h-0 flex-1 flex-col gap-3 min-[561px]:flex-row min-[561px]:items-end min-[561px]:gap-4">
         <div className="flex shrink-0 flex-col gap-1">
           <BigNumber value={latest.toLocaleString("en-IN", { maximumFractionDigits: 1 })} unit="kg" />
-          <span className="text-sm text-sub">{change === "no change" ? "No change" : `${change[0].toUpperCase()}${change.slice(1)}`} in 14 days</span>
+          <span className="text-sm text-soft">{change === "no change" ? "No change" : `${change[0].toUpperCase()}${change.slice(1)}`} in 14 days</span>
         </div>
         <LineChart points={points} unit="kg" summary={`Weight ${change} over 14 days, now ${latest} kg`} height={80} />
       </div>

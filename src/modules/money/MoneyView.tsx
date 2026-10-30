@@ -12,7 +12,7 @@ import { WalletStack } from "./WalletStack";
 type Money = NonNullable<DashboardData["money"]>;
 
 const SPLIT: { key: keyof Money["split"]; label: string; tone: Tone }[] = [
-  { key: "needs", label: "Needs", tone: "blue" },
+  { key: "needs", label: "Needs", tone: "accent" },
   { key: "wants", label: "Wants", tone: "warn" },
   { key: "savings", label: "Savings", tone: "ok" },
 ];
@@ -29,7 +29,7 @@ export function MoneyView() {
   }
   return (
     <div className="grid items-start gap-4 min-[861px]:grid-cols-2">
-      <Tile title={`Wallet · ${money.month}`} aside={<span className="text-xs text-sub">Updated {money.updated}</span>}>
+      <Tile title={`Wallet · ${money.month}`} aside={<span className="text-xs text-soft">Updated {money.updated}</span>}>
         <WalletStack accounts={money.accounts} spendable={money.spendable} savedThisMonth={money.income - money.spent} />
       </Tile>
       <Tile title="This month">
@@ -48,12 +48,12 @@ function SpendVsIncome({ money }: { money: Money }) {
     <div className="flex flex-col gap-1.5">
       <div className="flex justify-between gap-2 text-sm">
         <span className="font-semibold">Spent vs income</span>
-        <span className={`text-xs ${over ? "font-semibold text-danger" : "text-sub"}`}>
+        <span className={`text-xs ${over ? "font-semibold text-danger" : "text-soft"}`}>
           {formatRupees(money.spent)} of {formatRupees(money.income)}
           {over && " · over"}
         </span>
       </div>
-      <ProgressBar pct={Math.min(100, pct)} tone={over ? "danger" : "blue"} label={`Spent ${pct}% of income`} />
+      <ProgressBar pct={Math.min(100, pct)} tone={over ? "danger" : "accent"} label={`Spent ${pct}% of income`} />
     </div>
   );
 }
@@ -69,10 +69,10 @@ function SplitBars({ split }: { split: Money["split"] }) {
         return (
           <div key={key} className="flex flex-col gap-1">
             <div className="flex justify-between text-xs">
-              <span className="text-sub">{label}</span>
+              <span className="text-soft">{label}</span>
               <span>
                 <strong className="text-ink">{Math.round(actual)}%</strong>
-                <span className="text-sub"> / {target}%</span>
+                <span className="text-soft"> / {target}%</span>
               </span>
             </div>
             <div

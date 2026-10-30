@@ -16,8 +16,8 @@ export function FundTile() {
       {fund ? (
         <>
           <BigNumber value={`${fund.pct}%`} size="md" />
-          <ProgressBar pct={Math.min(100, fund.pct)} tone="blue" label={`${fund.name}: ${fund.pct}%`} />
-          <span className="text-sm text-sub">{fund.by ? `${fund.progress} · ${fund.by}` : fund.progress}</span>
+          <ProgressBar pct={Math.min(100, fund.pct)} tone="accent" label={`${fund.name}: ${fund.pct}%`} />
+          <span className="text-sm text-soft">{fund.by ? `${fund.progress} · ${fund.by}` : fund.progress}</span>
         </>
       ) : (
         <EmptyNote>Add a goal named &ldquo;1RK fund&rdquo; to track it here.</EmptyNote>
@@ -33,7 +33,7 @@ export function DietTile() {
   const { data } = useDashboard();
   const planned = data.meals.filter((m) => m.status === "Planned").length;
   return (
-    <Tile title="Diet" href={data.logHref} area="diet" aside={data.meals.length > 0 && <span className="font-mono text-xs text-sub">{planned}/{data.meals.length}</span>}>
+    <Tile title="Diet" href={data.logHref} area="diet" aside={data.meals.length > 0 && <span className="font-mono text-xs text-soft">{planned}/{data.meals.length}</span>}>
       {data.meals.length === 0 ? (
         <EmptyNote>Meal slots appear once the check-in update is run.</EmptyNote>
       ) : (
@@ -65,7 +65,7 @@ export function StudyTile() {
       ) : (
         <>
           <BigNumber value={hours(study.weekMin)} unit="hr this week" size="md" />
-          <span className="text-sm text-sub">
+          <span className="text-sm text-soft">
             Today {study.todayMin ?? 0} min{study.dailyTarget ? ` of ${study.dailyTarget}` : ""}
             {study.page != null && ` · page ${study.page}`}
           </span>
@@ -89,7 +89,7 @@ export function ClaudeTile() {
       ) : (
         <>
           <BigNumber value={String(running.length)} unit="running" size="md" />
-          <span className="line-clamp-2 text-sm text-sub">
+          <span className="line-clamp-2 text-sm text-soft">
             {failed > 0 && <span className="font-semibold text-danger">{failed} failed · </span>}
             {names.join(" · ")}
           </span>

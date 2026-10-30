@@ -20,7 +20,7 @@ export default function ProgressPage({ searchParams }: PageProps<"/progress">) {
   return (
     <Suspense
       fallback={
-        <p role="status" className="m-0 p-6 text-center text-[15px] text-sub">
+        <p role="status" className="m-0 p-6 text-center text-[15px] text-soft">
           Loading progress…
         </p>
       }

@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: "Body check · Yasir OS" };
 
 export default function BodyPage() {
   return (
-    <Suspense fallback={<p className="p-6 text-center text-[15px] text-sub">Loading your body check…</p>}>
+    <Suspense fallback={<p className="p-6 text-center text-[15px] text-soft">Loading your body check…</p>}>
       <BodyCheck />
     </Suspense>
   );

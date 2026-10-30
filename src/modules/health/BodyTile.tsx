@@ -18,10 +18,10 @@ export function BodyTile() {
         <dl className="m-0 grid grid-cols-3 gap-2">
           {bodyCheck.measures.map((m) => (
             <div key={m.label} className="flex min-w-0 flex-col rounded-item border border-line bg-fill p-3">
-              <dt className="text-xs text-sub">{m.label}</dt>
+              <dt className="text-xs text-soft">{m.label}</dt>
               <dd className="m-0 font-mono text-base font-bold">{m.value}</dd>
               {m.change != null && m.change !== 0 && (
-                <dd className="m-0 text-xs text-sub">
+                <dd className="m-0 text-xs text-soft">
                   {m.change > 0 ? "▲" : "▼"} {Math.abs(m.change)} cm
                 </dd>
               )}
@@ -30,7 +30,7 @@ export function BodyTile() {
         </dl>
       )}
       <div className="mt-auto flex flex-wrap items-center justify-between gap-2">
-        <span className="text-xs text-sub">
+        <span className="text-xs text-soft">
           {bodyCheck.lastLabel ? `Last check · ${bodyCheck.lastLabel}` : "No body check yet"}
           {weight.goal != null && ` · goal ${kg(weight.goal)} kg`}
         </span>

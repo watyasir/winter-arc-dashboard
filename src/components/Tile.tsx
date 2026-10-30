@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 
 const fills = {
   card: "bg-card text-ink",
-  peach: "bg-peach text-ink",
-  blue: "bg-blue text-ink",
+  pop: "bg-pop text-ink",
+  accent: "bg-accent-soft text-ink",
 };
 
 /**
@@ -60,7 +60,7 @@ export function BigNumber({ value, unit, size = "lg" }: { value: string; unit?: 
   return (
     <span className={`font-mono leading-none font-bold tracking-[-0.02em] ${size === "lg" ? "text-[32px]" : "text-2xl"}`}>
       {value}
-      {unit && <span className="ml-1 font-sans text-sm font-semibold tracking-normal text-sub">{unit}</span>}
+      {unit && <span className="ml-1 font-sans text-sm font-semibold tracking-normal text-soft">{unit}</span>}
     </span>
   );
 }

@@ -65,11 +65,11 @@ export function GalleryView() {
                 aria-pressed={current}
                 onClick={() => setFilter(c)}
                 className={`min-h-11 cursor-pointer rounded-full border border-solid px-4 text-[13px] font-semibold sm:min-h-9 ${
-                  current ? "border-peach-strong bg-peach text-ink" : "border-line bg-card text-ink hover:bg-fill"
+                  current ? "border-pop-strong bg-pop text-ink" : "border-line bg-card text-ink hover:bg-fill"
                 }`}
               >
                 {c}
-                <span className={`ml-1.5 font-medium ${current ? "text-ink" : "text-sub"}`}>{counts.get(c) ?? 0}</span>
+                <span className={`ml-1.5 font-medium ${current ? "text-ink" : "text-soft"}`}>{counts.get(c) ?? 0}</span>
               </button>
             );
           })}
@@ -77,7 +77,7 @@ export function GalleryView() {
       </div>
 
       {items === null && !failed && (
-        <p role="status" className="m-0 text-[15px] text-sub">
+        <p role="status" className="m-0 text-[15px] text-soft">
           Loading the gallery…
         </p>
       )}
@@ -104,7 +104,7 @@ export function GalleryView() {
                 <Thumb item={it} />
                 <span className="flex flex-col gap-0.5 px-1.5 pb-1">
                   <span className="truncate text-[13px] font-semibold">{it.title}</span>
-                  <span className="text-xs text-sub">
+                  <span className="text-xs text-soft">
                     {it.category} · {shortDate(it.createdAt.slice(0, 10))}
                   </span>
                 </span>
@@ -122,14 +122,14 @@ export function GalleryView() {
 function Thumb({ item }: { item: GalleryItem }) {
   if (item.mime === "application/pdf") {
     return (
-      <span className="flex aspect-square w-full items-center justify-center rounded-[14px] bg-mantle text-[13px] font-semibold text-sub">
+      <span className="flex aspect-square w-full items-center justify-center rounded-[14px] bg-fill-strong text-[13px] font-semibold text-soft">
         PDF
       </span>
     );
   }
   return (
     // eslint-disable-next-line @next/next/no-img-element -- signed links to private originals; next/image would re-encode them
-    <img src={item.url} alt="" loading="lazy" decoding="async" className="aspect-square w-full rounded-[14px] bg-mantle object-cover" />
+    <img src={item.url} alt="" loading="lazy" decoding="async" className="aspect-square w-full rounded-[14px] bg-fill-strong object-cover" />
   );
 }
 
@@ -194,7 +194,7 @@ function Viewer({ item, onClose, onDelete }: { item: GalleryItem; onClose: () =>
         </button>
         <div className="flex min-w-0 flex-1 flex-col">
           <span className="truncate text-[15px] font-semibold">{item.title}</span>
-          <span className="text-xs text-sub">
+          <span className="text-xs text-soft">
             {item.category} · {size}
           </span>
         </div>
@@ -217,7 +217,7 @@ function Viewer({ item, onClose, onDelete }: { item: GalleryItem; onClose: () =>
       </div>
 
       <footer className="flex flex-col gap-2 border-t border-line bg-card px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))]">
-        {item.description && <p className="m-0 text-[13px] text-sub">{item.description}</p>}
+        {item.description && <p className="m-0 text-[13px] text-soft">{item.description}</p>}
         {note && (
           <p role="status" className="m-0 text-[13px] text-danger">
             {note}
@@ -227,7 +227,7 @@ function Viewer({ item, onClose, onDelete }: { item: GalleryItem; onClose: () =>
           <a
             href={item.downloadUrl}
             download={item.fileName}
-            className="flex min-h-11 flex-1 items-center justify-center rounded-full bg-peach px-4 text-[13px] font-semibold text-ink no-underline hover:bg-peach-strong hover:text-ink sm:min-h-9"
+            className="flex min-h-11 flex-1 items-center justify-center rounded-full bg-pop px-4 text-[13px] font-semibold text-ink no-underline hover:bg-pop-strong hover:text-ink sm:min-h-9"
           >
             Download original
           </a>

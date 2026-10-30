@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: "Workout · Yasir OS" };
 
 export default function WorkoutPage({ searchParams }: { searchParams: Promise<{ repeat?: string }> }) {
   return (
-    <Suspense fallback={<p className="p-6 text-center text-[15px] text-sub">Loading your workouts…</p>}>
+    <Suspense fallback={<p className="p-6 text-center text-[15px] text-soft">Loading your workouts…</p>}>
       <WorkoutLog searchParams={searchParams} />
     </Suspense>
   );

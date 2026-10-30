@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Inter, JetBrains_Mono } from "next/font/google";
 import { ServiceWorker } from "@/components/ServiceWorker";
+import { DEFAULT_THEME, THEME_BG, THEME_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,19 +15,27 @@ export const metadata: Metadata = {
   },
 };
 
-// Self-hosted by next/font at build time. Body 500, labels 600, headings 800.
-const inter = Inter({ subsets: ["latin"], weight: ["500", "600", "800"], variable: "--font-inter", display: "swap" });
-const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-jetbrains", display: "swap" });
+// Self-hosted by next/font at build time. Display 800 (numbers, headings), body 500/600/700, labels 700.
+const bricolage = Bricolage_Grotesque({ subsets: ["latin"], weight: ["800"], variable: "--font-bricolage", display: "swap" });
+const inter = Inter({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-inter", display: "swap" });
+const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["700"], variable: "--font-jetbrains", display: "swap" });
 
 export const viewport: Viewport = {
-  // The page colour (globals.css --color-surface).
-  themeColor: "#fff5e6",
+  // Candy's page colour; the theme script swaps it for the chosen theme's.
+  themeColor: THEME_BG[DEFAULT_THEME],
   colorScheme: "light",
 };
 
+/**
+ * The theme comes from a cookie (mirroring Supabase). Pages are prerendered (cacheComponents), so
+ * a tiny blocking script in <head> sets data-theme before the first paint: no flash of Candy.
+ */
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`h-full ${inter.variable} ${mono.variable}`}>
+    <html lang="en" data-theme={DEFAULT_THEME} suppressHydrationWarning className={`h-full ${bricolage.variable} ${inter.variable} ${mono.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="min-h-full">
         {children}
         <ServiceWorker />

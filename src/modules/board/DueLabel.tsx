@@ -8,5 +8,5 @@ export function DueLabel({ task, today, className = "" }: { task: Task; today: s
   if (!task.due || task.status === "done") return null;
   const state = dueState(task, today);
   const text = state === "overdue" ? `Overdue · ${shortDate(task.due)}` : task.due === today ? "Due today" : `Due ${shortDate(task.due)}`;
-  return <span className={`text-[11px] font-semibold ${state ? dueColor[state] : "text-sub"} ${className}`}>{text}</span>;
+  return <span className={`text-[11px] font-semibold ${state ? dueColor[state] : "text-soft"} ${className}`}>{text}</span>;
 }

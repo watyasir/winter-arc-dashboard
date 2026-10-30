@@ -4,7 +4,7 @@ import { shortDate } from "@/lib/trackers";
 /**
  * One small line chart, no library: 2px line, soft area fill, 3 faint grid lines, the last
  * point emphasised, min and max on one scale, and a one-line summary for screen readers.
- * Theme colours only (stroke-blue-text, fill-blue). Points need not be every day: x is by date.
+ * Theme colours only (stroke-accent, fill-accent-soft). Points need not be every day: x is by date.
  */
 export function LineChart({
   points,
@@ -54,19 +54,19 @@ export function LineChart({
               vectorEffect="non-scaling-stroke"
             />
           ))}
-          {points.length > 1 && <polygon points={area} className="fill-blue/20" />}
+          {points.length > 1 && <polygon points={area} className="fill-accent-soft/20" />}
           {points.length > 1 && (
-            <polyline points={line} fill="none" className="stroke-blue-text" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+            <polyline points={line} fill="none" className="stroke-accent" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
           )}
         </svg>
         {/* The last point as an HTML dot, so it stays round when the chart stretches. */}
         <span
           aria-hidden="true"
-          className="absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-card bg-blue-text"
+          className="absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-card bg-accent"
           style={{ left: `${(x(last.date) / W) * 100}%`, top: `${(y(last.value) / H) * 100}%` }}
         />
       </div>
-      <figcaption aria-hidden="true" className="flex justify-between gap-2 font-mono text-xs text-sub">
+      <figcaption aria-hidden="true" className="flex justify-between gap-2 font-mono text-xs text-soft">
         <span>
           {shortDate(points[0].date)} · min {fmt(lo)}
         </span>

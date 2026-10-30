@@ -7,7 +7,7 @@ const tones = {
   ok: "bg-ok-soft text-ok",
   warn: "bg-warn-soft text-warn",
   danger: "bg-danger-soft text-danger",
-  blue: "bg-blue-soft text-blue-text",
+  accent: "bg-accent-faint text-accent",
 };
 
 export type ChipTone = keyof typeof tones;

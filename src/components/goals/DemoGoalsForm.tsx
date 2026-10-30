@@ -50,7 +50,7 @@ export function DemoGoalsForm() {
           return { ok: true };
         },
       }}
-      footer={<p className="m-0 mx-4 text-[13px] text-sub">Demo: nothing is saved. The real page stores goals in the database.</p>}
+      footer={<p className="m-0 mx-4 text-[13px] text-soft">Demo: nothing is saved. The real page stores goals in the database.</p>}
     />
   );
 }

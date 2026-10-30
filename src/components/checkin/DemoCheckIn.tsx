@@ -16,7 +16,7 @@ export function DemoCheckIn({ dayLabel }: { dayLabel: string }) {
       footer={
         <>
           <MoreLogs workoutHref="/demo/log/workout" bodyHref="/demo/log/body" />
-          <p className="m-0 mx-4 text-[13px] text-sub">Demo: nothing is saved. The real check-in stores each value in the database.</p>
+          <p className="m-0 mx-4 text-[13px] text-soft">Demo: nothing is saved. The real check-in stores each value in the database.</p>
         </>
       }
     />

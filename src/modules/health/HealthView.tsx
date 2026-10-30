@@ -55,7 +55,7 @@ function TrendTile({ title, points, unit, days, empty, digits = 1 }: { title: st
   const latest = points.at(-1)!.value;
   const change = changeWords(points, unit, digits);
   return (
-    <Tile title={title} aside={<span className="text-xs text-sub">{change}</span>}>
+    <Tile title={title} aside={<span className="text-xs text-soft">{change}</span>}>
       <BigNumber value={latest.toLocaleString("en-IN", { maximumFractionDigits: digits })} unit={unit} size="md" />
       <LineChart points={points} unit={unit} digits={digits} height={110} summary={`${title} ${change} over ${days} days, latest ${latest} ${unit}`} />
     </Tile>
@@ -66,13 +66,13 @@ function BpTile() {
   const { bp } = useDashboard().data;
   const any = bp.some((r) => r.value);
   return (
-    <Tile title="Blood pressure" aside={<span className="text-xs text-sub">today · mmHg</span>}>
+    <Tile title="Blood pressure" aside={<span className="text-xs text-soft">today · mmHg</span>}>
       {!any && <EmptyNote>Log morning and evening readings in the check-in.</EmptyNote>}
       {any && (
         <dl className="m-0 grid grid-cols-2 gap-2">
           {bp.map((r) => (
             <div key={r.label} className="flex flex-col rounded-item border border-line bg-fill p-3">
-              <dt className="text-xs text-sub">{r.label}</dt>
+              <dt className="text-xs text-soft">{r.label}</dt>
               <dd className="m-0 font-mono text-xl font-bold">{r.value ?? "–"}</dd>
             </div>
           ))}
