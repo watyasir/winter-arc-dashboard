@@ -6,7 +6,7 @@
     water:   litres against the water target (capped at the target)
     tasks:   tasks due today that are done (no tasks due today = full points)
 */
-export const SCORE_WEIGHTS = { checkIn: 30, meals: 30, water: 20, tasks: 20 };
+const SCORE_WEIGHTS = { checkIn: 30, meals: 30, water: 20, tasks: 20 };
 
 /** A season day is a "full check-in" on the Winter Arc dots at this consistency score (0-100) or more. */
 export const FULL_DAY = 75;

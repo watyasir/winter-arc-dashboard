@@ -13,7 +13,7 @@ export const THEMES = [
 export type ThemeId = (typeof THEMES)[number]["id"];
 
 export const DEFAULT_THEME: ThemeId = "candy";
-export const THEME_COOKIE = "theme";
+const THEME_COOKIE = "theme";
 
 export const isTheme = (v: unknown): v is ThemeId => THEMES.some((t) => t.id === v);
 

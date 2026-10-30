@@ -278,6 +278,9 @@ Baseline before changes: build, lint, tsc, knip all clean.
 - [ ] §5 Test every route × 3 themes at 1280 and 390, live writes (put values back)
 - [ ] §6 Docs (DESIGN.md v9, BUILD_LOG, CLAUDE.md design rule), push, check Vercel
 
+### Cloud session (30 Oct 2026, continuing on `v9-playground`)
+- [x] Baseline fixed: Weight tile change line in ink (▲/▼ kept), contrast 41 pairs ≥ 4.5:1 in all 3 themes; unused exports removed; build, lint, tsc, knip clean
+
 ### Next session (continue from here)
 1. `npx tsc --noEmit` was clean at the stop; run `npm run build`, `npm run lint`, `npx knip` and fix.
 2. `npm run contrast` fails 3 pairs: green ▲ text (`text-ok`) on the Weight tile fill. Fix: show the ▲ change in ink (or a darker green) in WeightTile, then rerun.

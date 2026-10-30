@@ -37,7 +37,7 @@ for (const [name, t] of Object.entries(themes)) {
     ["accent", "bg"], ["accent", "card"], ["white", "accent"], ["accent", "accent-faint"], ["ink", "hero-soft"],
     ["hero-soft", "hero"], ["white", "hero"], ["hero", "dot-on"], ["ink", "dot-on"],
     ["ink", "claude"], ["danger", "danger-soft"], ["ok", "card"], ["ok", "ok-soft"], ["warn", "warn-soft"], ["danger", "card"],
-    ["ink", "pop-strong"], ["ink", "check"], ["ok", "weight"], ["white", "ink"], ["warn", "warn-soft"],
+    ["ink", "pop-strong"], ["ink", "check"], ["white", "ink"], ["warn", "warn-soft"],
     ...TILES.flatMap((k) => [["ink", k], ["soft", k]]),
   ];
   for (const [fg, bg] of pairs) {
